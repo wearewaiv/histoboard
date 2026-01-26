@@ -1,0 +1,115 @@
+[
+  {
+    "id": "uni",
+    "name": "UNI",
+    "organization": "Mass General / Harvard",
+    "architecture": "ViT-L/16",
+    "params": "307M",
+    "pretrainingData": "100M+ patches",
+    "publicationDate": "2024-03",
+    "paperUrl": "https://www.nature.com/articles/s41591-024-02857-3",
+    "codeUrl": "https://github.com/mahmoodlab/UNI",
+    "weightsUrl": "https://huggingface.co/MahmoodLab/UNI"
+  },
+  {
+    "id": "virchow",
+    "name": "Virchow",
+    "organization": "Paige AI",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "1.5M WSIs",
+    "publicationDate": "2024-01",
+    "paperUrl": "https://arxiv.org/abs/2309.07778",
+    "weightsUrl": "https://huggingface.co/paige-ai/Virchow"
+  },
+  {
+    "id": "virchow2",
+    "name": "Virchow2",
+    "organization": "Paige AI",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "3M+ WSIs",
+    "publicationDate": "2024-08",
+    "paperUrl": "https://arxiv.org/abs/2408.00738",
+    "weightsUrl": "https://huggingface.co/paige-ai/Virchow2"
+  },
+  {
+    "id": "gigapath",
+    "name": "Prov-GigaPath",
+    "organization": "Microsoft / Providence",
+    "architecture": "ViT-G/14",
+    "params": "1.1B",
+    "pretrainingData": "1.3B patches, 171K WSIs",
+    "publicationDate": "2024-06",
+    "paperUrl": "https://www.nature.com/articles/s41586-024-07441-w",
+    "codeUrl": "https://github.com/prov-gigapath/prov-gigapath",
+    "weightsUrl": "https://huggingface.co/prov-gigapath/prov-gigapath"
+  },
+  {
+    "id": "hibou-l",
+    "name": "Hibou-L",
+    "organization": "Owkin",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "1M+ WSIs",
+    "publicationDate": "2024-06",
+    "paperUrl": "https://arxiv.org/abs/2406.05074",
+    "weightsUrl": "https://huggingface.co/owkin/hibou-L"
+  },
+  {
+    "id": "phikon",
+    "name": "Phikon",
+    "organization": "Owkin",
+    "architecture": "ViT-B/16",
+    "params": "86M",
+    "pretrainingData": "6K WSIs (TCGA)",
+    "publicationDate": "2023-11",
+    "paperUrl": "https://arxiv.org/abs/2311.03539",
+    "codeUrl": "https://github.com/owkin/HistoSSLscaling",
+    "weightsUrl": "https://huggingface.co/owkin/phikon"
+  },
+  {
+    "id": "phikon-v2",
+    "name": "Phikon-v2",
+    "organization": "Owkin",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "460M patches",
+    "publicationDate": "2024-09",
+    "paperUrl": "https://arxiv.org/abs/2409.09173",
+    "weightsUrl": "https://huggingface.co/owkin/phikon-v2"
+  },
+  {
+    "id": "ctranspath",
+    "name": "CTransPath",
+    "organization": "Tsinghua University",
+    "architecture": "Swin-T",
+    "params": "28M",
+    "pretrainingData": "15M patches (TCGA + PAIP)",
+    "publicationDate": "2022-04",
+    "paperUrl": "https://www.sciencedirect.com/science/article/pii/S1361841522002043",
+    "codeUrl": "https://github.com/Xiyue-Wang/TransPath"
+  },
+  {
+    "id": "resnet50-imagenet",
+    "name": "ResNet50 (ImageNet)",
+    "organization": "Baseline",
+    "architecture": "ResNet-50",
+    "params": "25M",
+    "pretrainingData": "ImageNet-1K",
+    "publicationDate": "2015-12",
+    "paperUrl": "https://arxiv.org/abs/1512.03385"
+  },
+  {
+    "id": "conch",
+    "name": "CONCH",
+    "organization": "Mass General / Harvard",
+    "architecture": "ViT-B/16 + GPT2",
+    "params": "200M+",
+    "pretrainingData": "1.17M image-caption pairs",
+    "publicationDate": "2024-03",
+    "paperUrl": "https://www.nature.com/articles/s41591-024-02856-4",
+    "codeUrl": "https://github.com/mahmoodlab/CONCH",
+    "weightsUrl": "https://huggingface.co/MahmoodLab/CONCH"
+  }
+]

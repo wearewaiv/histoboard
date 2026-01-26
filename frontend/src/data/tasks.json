@@ -1,0 +1,122 @@
+[
+  {
+    "id": "eva-bach",
+    "benchmarkId": "eva",
+    "name": "BACH Classification",
+    "organ": "breast",
+    "metric": "accuracy",
+    "category": "patch-level"
+  },
+  {
+    "id": "eva-crc",
+    "benchmarkId": "eva",
+    "name": "CRC-100K Classification",
+    "organ": "colon",
+    "metric": "accuracy",
+    "category": "patch-level"
+  },
+  {
+    "id": "eva-pcam",
+    "benchmarkId": "eva",
+    "name": "PCam Classification",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "patch-level"
+  },
+  {
+    "id": "eva-mhist",
+    "benchmarkId": "eva",
+    "name": "MHIST Classification",
+    "organ": "colon",
+    "metric": "auc",
+    "category": "patch-level"
+  },
+  {
+    "id": "eva-skin",
+    "benchmarkId": "eva",
+    "name": "Skin Cancer Classification",
+    "organ": "skin",
+    "metric": "accuracy",
+    "category": "patch-level"
+  },
+  {
+    "id": "hest-brca-subtyping",
+    "benchmarkId": "hest",
+    "name": "BRCA Subtyping",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "slide-level"
+  },
+  {
+    "id": "hest-nsclc",
+    "benchmarkId": "hest",
+    "name": "NSCLC Subtyping",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "slide-level"
+  },
+  {
+    "id": "hest-kidney-subtyping",
+    "benchmarkId": "hest",
+    "name": "Kidney Cancer Subtyping",
+    "organ": "kidney",
+    "metric": "auc",
+    "category": "slide-level"
+  },
+  {
+    "id": "hest-liver-hcc",
+    "benchmarkId": "hest",
+    "name": "Liver HCC Detection",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "slide-level"
+  },
+  {
+    "id": "hest-crc-msi",
+    "benchmarkId": "hest",
+    "name": "CRC MSI Prediction",
+    "organ": "colon",
+    "metric": "auc",
+    "category": "slide-level"
+  },
+  {
+    "id": "plism-brca",
+    "benchmarkId": "plism",
+    "name": "BRCA Patch Classification",
+    "organ": "breast",
+    "metric": "accuracy",
+    "category": "patch-level"
+  },
+  {
+    "id": "plism-colon",
+    "benchmarkId": "plism",
+    "name": "Colon Patch Classification",
+    "organ": "colon",
+    "metric": "accuracy",
+    "category": "patch-level"
+  },
+  {
+    "id": "pathbench-brca-survival",
+    "benchmarkId": "pathbench",
+    "name": "BRCA Survival Prediction",
+    "organ": "breast",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pathbench-lung-survival",
+    "benchmarkId": "pathbench",
+    "name": "Lung Cancer Survival",
+    "organ": "lung",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "tissuenet-cell-seg",
+    "benchmarkId": "stanford-tissue-net",
+    "name": "Cell Segmentation",
+    "organ": "multi-organ",
+    "metric": "dice",
+    "category": "segmentation"
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "eva",
+    "name": "EVA Benchmark",
+    "shortName": "EVA",
+    "category": "patch-level",
+    "url": "https://kaiko.ai/benchmarks/eva",
+    "organs": ["breast", "colon", "lung", "prostate", "skin"],
+    "taskCount": 12,
+    "description": "Comprehensive evaluation framework for pathology foundation models on patch-level classification tasks."
+  },
+  {
+    "id": "hest",
+    "name": "HEST Benchmark",
+    "shortName": "HEST",
+    "category": "slide-level",
+    "url": "https://github.com/mahmoodlab/HEST",
+    "organs": ["breast", "kidney", "liver", "lung", "colon", "brain"],
+    "taskCount": 25,
+    "description": "Histopathology embeddings and spatial transcriptomics benchmark for whole-slide image analysis."
+  },
+  {
+    "id": "plism",
+    "name": "PLISM Benchmark",
+    "shortName": "PLISM",
+    "category": "patch-level",
+    "url": "https://github.com/mahdihosseini/PLISM",
+    "organs": ["breast", "colon", "lung", "liver", "kidney"],
+    "taskCount": 15,
+    "description": "Pathology foundation model evaluation on linear probing tasks across multiple tissue types."
+  },
+  {
+    "id": "pathbench",
+    "name": "PathBench",
+    "shortName": "PathBench",
+    "category": "slide-level",
+    "url": "https://pathbench.ai",
+    "organs": ["breast", "lung", "colon", "ovary", "prostate"],
+    "taskCount": 18,
+    "description": "Benchmarking suite for pathology models on whole-slide image classification and survival prediction."
+  },
+  {
+    "id": "stanford-tissue-net",
+    "name": "Stanford TissueNet",
+    "shortName": "TissueNet",
+    "category": "segmentation",
+    "url": "https://tissuenet.research.stanford.edu",
+    "organs": ["multi-organ"],
+    "taskCount": 8,
+    "description": "Cell and tissue segmentation benchmark for pathology image analysis."
+  }
+]
