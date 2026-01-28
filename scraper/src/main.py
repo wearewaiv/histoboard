@@ -21,9 +21,6 @@ async def run_scrapers():
 
     scrapers = [
         EVAScraper(),
-        # Add more scrapers here as they're implemented
-        # HESTScraper(),
-        # PLISMScraper(),
     ]
 
     for scraper in scrapers:

@@ -3,50 +3,176 @@
     "id": "eva",
     "name": "EVA Benchmark",
     "shortName": "EVA",
-    "category": "patch-level",
+    "category": "pathology",
     "url": "https://kaiko.ai/benchmarks/eva",
-    "organs": ["breast", "colon", "lung", "prostate", "skin"],
-    "taskCount": 12,
-    "description": "Comprehensive evaluation framework for pathology foundation models on patch-level classification tasks."
-  },
-  {
-    "id": "hest",
-    "name": "HEST Benchmark",
-    "shortName": "HEST",
-    "category": "slide-level",
-    "url": "https://github.com/mahmoodlab/HEST",
-    "organs": ["breast", "kidney", "liver", "lung", "colon", "brain"],
-    "taskCount": 25,
-    "description": "Histopathology embeddings and spatial transcriptomics benchmark for whole-slide image analysis."
-  },
-  {
-    "id": "plism",
-    "name": "PLISM Benchmark",
-    "shortName": "PLISM",
-    "category": "patch-level",
-    "url": "https://github.com/mahdihosseini/PLISM",
-    "organs": ["breast", "colon", "lung", "liver", "kidney"],
-    "taskCount": 15,
-    "description": "Pathology foundation model evaluation on linear probing tasks across multiple tissue types."
+    "organs": [
+      "breast",
+      "colon",
+      "prostate",
+      "multi-organ"
+    ],
+    "taskCount": 13,
+    "description": "Comprehensive evaluation framework for pathology foundation models covering patch-level classification, slide-level analysis, and segmentation tasks."
   },
   {
     "id": "pathbench",
     "name": "PathBench",
     "shortName": "PathBench",
-    "category": "slide-level",
-    "url": "https://pathbench.ai",
-    "organs": ["breast", "lung", "colon", "ovary", "prostate"],
-    "taskCount": 18,
-    "description": "Benchmarking suite for pathology models on whole-slide image classification and survival prediction."
+    "category": "pathology",
+    "url": "https://github.com/birkhoffkiki/PathBench",
+    "organs": [
+      "breast",
+      "colorectal",
+      "gastric",
+      "liver",
+      "lung",
+      "bladder",
+      "brain",
+      "cervical",
+      "esophagus",
+      "prostate",
+      "soft-tissue",
+      "thyroid"
+    ],
+    "taskCount": 229,
+    "description": "Large-scale benchmark for pathology foundation models across 229 tasks including classification, OS prediction, DFS prediction, and DSS prediction."
   },
   {
-    "id": "stanford-tissue-net",
-    "name": "Stanford TissueNet",
-    "shortName": "TissueNet",
-    "category": "segmentation",
-    "url": "https://tissuenet.research.stanford.edu",
-    "organs": ["multi-organ"],
-    "taskCount": 8,
-    "description": "Cell and tissue segmentation benchmark for pathology image analysis."
+    "id": "stanford",
+    "name": "Stanford PathBench",
+    "shortName": "Stanford",
+    "category": "pathology",
+    "description": "Comprehensive benchmark evaluating 31 foundation models across 41 tasks from TCGA, CPTAC, and external datasets.",
+    "url": "https://pathbench.stanford.edu",
+    "paperUrl": "https://www.medrxiv.org/content/10.1101/2025.05.08.25327250v1",
+    "organs": [
+      "lung",
+      "brain",
+      "breast",
+      "prostate",
+      "kidney",
+      "colon",
+      "rectum",
+      "bladder",
+      "skin",
+      "gi"
+    ],
+    "taskCount": 41
+  },
+  {
+    "id": "hest",
+    "name": "HEST-Benchmark",
+    "shortName": "HEST",
+    "category": "spatial-transcriptomics",
+    "description": "Spatial transcriptomics benchmark evaluating gene expression prediction from H&E images across 9 cancer types.",
+    "url": "https://github.com/mahmoodlab/HEST",
+    "paperUrl": "https://www.nature.com/articles/s41592-024-02461-y",
+    "organs": [
+      "breast",
+      "prostate",
+      "pancreas",
+      "skin",
+      "colon",
+      "rectum",
+      "kidney",
+      "lung",
+      "lymph"
+    ],
+    "taskCount": 9
+  },
+  {
+    "id": "pathobench",
+    "name": "Patho-Bench",
+    "shortName": "Patho-Bench",
+    "category": "pathology",
+    "description": "Comprehensive benchmark from Mahmood Lab evaluating foundation models across molecular prediction, TME characterization, grading, survival, and treatment response tasks.",
+    "url": "https://github.com/mahmoodlab/Patho-Bench",
+    "paperUrl": "https://arxiv.org/abs/2601.05148",
+    "organs": [
+      "breast",
+      "kidney",
+      "colon",
+      "brain",
+      "head-neck",
+      "lung",
+      "pancreas",
+      "cervix",
+      "ovary"
+    ],
+    "taskCount": 45
+  },
+  {
+    "id": "sinai",
+    "name": "Sinai SSL Tile Benchmarks",
+    "shortName": "Sinai",
+    "category": "pathology",
+    "description": "Comprehensive benchmark from Mount Sinai evaluating pathology foundation models on cancer detection and biomarker prediction tasks across multiple organs and institutions.",
+    "url": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks",
+    "organs": [
+      "breast",
+      "bladder",
+      "colorectal",
+      "kidney",
+      "oral",
+      "prostate",
+      "thyroid",
+      "lung",
+      "skin"
+    ],
+    "taskCount": 22
+  },
+  {
+    "id": "stamp",
+    "name": "STAMP Benchmark",
+    "shortName": "STAMP",
+    "category": "pathology",
+    "description": "Nature Biomedical Engineering benchmark evaluating 15 foundation models as feature extractors for weakly supervised computational pathology across morphology, biomarker, and prognosis tasks.",
+    "url": "https://doi.org/10.5281/zenodo.15749283",
+    "paperUrl": "https://www.nature.com/articles/s41551-025-01516-3",
+    "organs": [
+      "lung",
+      "breast",
+      "colorectal",
+      "gastric"
+    ],
+    "taskCount": 31
+  },
+  {
+    "id": "thunder",
+    "name": "THUNDER Benchmark",
+    "shortName": "THUNDER",
+    "category": "pathology",
+    "description": "Comprehensive benchmark evaluating pathology foundation models across KNN classification, linear probing, few-shot learning, segmentation, calibration, and adversarial robustness tasks.",
+    "url": "https://github.com/MICS-Lab/thunder",
+    "organs": [
+      "multi-organ"
+    ],
+    "taskCount": 6
+  },
+  {
+    "id": "pathorob",
+    "name": "PathoROB",
+    "shortName": "PathoROB",
+    "category": "robustness",
+    "description": "Robustness benchmark evaluating pathology foundation models across domain shift scenarios including TCGA 2x2 splits, Camelyon, and Tolkach ESCA datasets.",
+    "url": "https://github.com/bifold-pathomics/PathoROB",
+    "organs": [
+      "multi-organ",
+      "breast",
+      "esophagus"
+    ],
+    "taskCount": 3
+  },
+  {
+    "id": "plism",
+    "name": "PLISM Benchmark",
+    "shortName": "PLISM",
+    "category": "robustness",
+    "description": "Robustness benchmark from Owkin evaluating embedding consistency across scanners and staining variations using cosine similarity and top-10 retrieval accuracy.",
+    "url": "https://github.com/owkin/plism-benchmark",
+    "organs": [
+      "multi-organ"
+    ],
+    "taskCount": 4
   }
 ]

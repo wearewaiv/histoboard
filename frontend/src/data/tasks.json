@@ -1,122 +1,3381 @@
 [
   {
-    "id": "eva-bach",
+    "id": "bach",
     "benchmarkId": "eva",
-    "name": "BACH Classification",
+    "name": "BACH",
     "organ": "breast",
-    "metric": "accuracy",
+    "metric": "balanced_accuracy",
     "category": "patch-level"
   },
   {
-    "id": "eva-crc",
+    "id": "breakhis",
     "benchmarkId": "eva",
-    "name": "CRC-100K Classification",
+    "name": "BreakHis",
+    "organ": "breast",
+    "metric": "balanced_accuracy",
+    "category": "patch-level"
+  },
+  {
+    "id": "crc",
+    "benchmarkId": "eva",
+    "name": "CRC",
     "organ": "colon",
-    "metric": "accuracy",
+    "metric": "balanced_accuracy",
     "category": "patch-level"
   },
   {
-    "id": "eva-pcam",
+    "id": "gleason_arvaniti",
     "benchmarkId": "eva",
-    "name": "PCam Classification",
-    "organ": "breast",
-    "metric": "auc",
+    "name": "Gleason",
+    "organ": "prostate",
+    "metric": "balanced_accuracy",
     "category": "patch-level"
   },
   {
-    "id": "eva-mhist",
+    "id": "mhist",
     "benchmarkId": "eva",
-    "name": "MHIST Classification",
+    "name": "MHIST",
     "organ": "colon",
-    "metric": "auc",
+    "metric": "auroc",
     "category": "patch-level"
   },
   {
-    "id": "eva-skin",
+    "id": "patch_camelyon",
     "benchmarkId": "eva",
-    "name": "Skin Cancer Classification",
-    "organ": "skin",
-    "metric": "accuracy",
+    "name": "PCam",
+    "organ": "breast",
+    "metric": "auroc",
     "category": "patch-level"
   },
   {
-    "id": "hest-brca-subtyping",
-    "benchmarkId": "hest",
-    "name": "BRCA Subtyping",
+    "id": "patch_camelyon_test",
+    "benchmarkId": "eva",
+    "name": "PCam (test)",
     "organ": "breast",
-    "metric": "auc",
+    "metric": "auroc",
+    "category": "patch-level"
+  },
+  {
+    "id": "camelyon16_small",
+    "benchmarkId": "eva",
+    "name": "Camelyon16",
+    "organ": "breast",
+    "metric": "auroc",
     "category": "slide-level"
   },
   {
-    "id": "hest-nsclc",
-    "benchmarkId": "hest",
-    "name": "NSCLC Subtyping",
-    "organ": "lung",
-    "metric": "auc",
+    "id": "camelyon16_small_test",
+    "benchmarkId": "eva",
+    "name": "Camelyon16 (test)",
+    "organ": "breast",
+    "metric": "auroc",
     "category": "slide-level"
   },
   {
-    "id": "hest-kidney-subtyping",
-    "benchmarkId": "hest",
-    "name": "Kidney Cancer Subtyping",
-    "organ": "kidney",
-    "metric": "auc",
+    "id": "panda_small",
+    "benchmarkId": "eva",
+    "name": "PANDA",
+    "organ": "prostate",
+    "metric": "qwk",
     "category": "slide-level"
   },
   {
-    "id": "hest-liver-hcc",
-    "benchmarkId": "hest",
-    "name": "Liver HCC Detection",
-    "organ": "liver",
-    "metric": "auc",
+    "id": "panda_small_test",
+    "benchmarkId": "eva",
+    "name": "PANDA (test)",
+    "organ": "prostate",
+    "metric": "qwk",
     "category": "slide-level"
   },
   {
-    "id": "hest-crc-msi",
-    "benchmarkId": "hest",
-    "name": "CRC MSI Prediction",
+    "id": "consep",
+    "benchmarkId": "eva",
+    "name": "CoNSeP",
     "organ": "colon",
-    "metric": "auc",
-    "category": "slide-level"
+    "metric": "dice",
+    "category": "segmentation"
   },
   {
-    "id": "plism-brca",
-    "benchmarkId": "plism",
-    "name": "BRCA Patch Classification",
-    "organ": "breast",
-    "metric": "accuracy",
-    "category": "patch-level"
-  },
-  {
-    "id": "plism-colon",
-    "benchmarkId": "plism",
-    "name": "Colon Patch Classification",
-    "organ": "colon",
-    "metric": "accuracy",
-    "category": "patch-level"
-  },
-  {
-    "id": "pathbench-brca-survival",
-    "benchmarkId": "pathbench",
-    "name": "BRCA Survival Prediction",
-    "organ": "breast",
-    "metric": "c-index",
-    "category": "survival"
-  },
-  {
-    "id": "pathbench-lung-survival",
-    "benchmarkId": "pathbench",
-    "name": "Lung Cancer Survival",
-    "organ": "lung",
-    "metric": "c-index",
-    "category": "survival"
-  },
-  {
-    "id": "tissuenet-cell-seg",
-    "benchmarkId": "stanford-tissue-net",
-    "name": "Cell Segmentation",
+    "id": "monusac",
+    "benchmarkId": "eva",
+    "name": "MoNuSAC",
     "organ": "multi-organ",
     "metric": "dice",
     "category": "segmentation"
+  },
+  {
+    "id": "pb_breast_regional_lymph_node_metastasis_internal",
+    "benchmarkId": "pathbench",
+    "name": "Regional Lymph Node Metastasis (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_regional_lymph_node_metastasis_external_h9",
+    "benchmarkId": "pathbench",
+    "name": "Regional Lymph Node Metastasis (External H9)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_regional_lymph_node_metastasis_external_h1",
+    "benchmarkId": "pathbench",
+    "name": "Regional Lymph Node Metastasis (External H1)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_coarse_grained_tnm_t_staging_internal",
+    "benchmarkId": "pathbench",
+    "name": "Coarse-grained TNM-T Staging (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_coarse_grained_tnm_t_staging_external_h9",
+    "benchmarkId": "pathbench",
+    "name": "Coarse-grained TNM-T Staging (External H9)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_perineural_invasion_internal",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_histological_grading_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_histological_grading_prospective_h2",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (Prospective H2)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_lymphovascular_invasion_internal",
+    "benchmarkId": "pathbench",
+    "name": "Lymphovascular Invasion (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_pathological_complete_response_internal",
+    "benchmarkId": "pathbench",
+    "name": "Pathological Complete Response (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_histological_grading_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_pathological_complete_response_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Pathological Complete Response (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_molecular_subtyping_internal",
+    "benchmarkId": "pathbench",
+    "name": "Molecular Subtyping (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_molecular_subtyping_external_h9",
+    "benchmarkId": "pathbench",
+    "name": "Molecular Subtyping (External H9)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_molecular_subtyping_external_h12",
+    "benchmarkId": "pathbench",
+    "name": "Molecular Subtyping (External H12)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_ar_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "AR Status Prediction (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_er_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "ER Status Prediction (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_er_status_prediction_prospective_h2",
+    "benchmarkId": "pathbench",
+    "name": "ER Status Prediction (Prospective H2)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_her2_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Status Prediction (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_her2_status_prediction_prospective_h2",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Status Prediction (Prospective H2)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_pr_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "PR Status Prediction (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_pr_status_prediction_prospective_h2",
+    "benchmarkId": "pathbench",
+    "name": "PR Status Prediction (Prospective H2)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_ck5_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "CK5 Status Prediction (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_er_status_prediction_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "ER Status Prediction (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_her2_status_prediction_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Status Prediction (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_pr_status_prediction_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "PR Status Prediction (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_ki_67_status_prediction_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Status Prediction (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_molecular_subtyping_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Molecular Subtyping (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_breast_overall_survival_(biopsy)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Overall Survival (Biopsy) (Internal)",
+    "organ": "breast",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_breast_overall_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Overall Survival (Internal)",
+    "organ": "breast",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_breast_disease_free_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Disease-Free Survival (Internal)",
+    "organ": "breast",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(2_classes)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (2 classes) (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(2_classes)_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (2 classes) (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(2_classes)_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (2 classes) (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(2_classes)_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (2 classes) (External H8)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(2_classes)_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (2 classes) (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(2_classes)_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (2 classes) (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(3_classes)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (3 classes) (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(3_classes)_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (3 classes) (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(3_classes)_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (3 classes) (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(3_classes)_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (3 classes) (External H8)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(3_classes)_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (3 classes) (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_lymph_node_metastasis_prediction_(3_classes)_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis Prediction (3 classes) (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(2_classes)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (2 classes) (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(2_classes)_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (2 classes) (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(2_classes)_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (2 classes) (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(2_classes)_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (2 classes) (External H8)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(2_classes)_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (2 classes) (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(2_classes)_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (2 classes) (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(4_classes)_internal",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (4 classes) (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(4_classes)_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (4 classes) (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(4_classes)_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (4 classes) (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(4_classes)_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (4 classes) (External H8)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(4_classes)_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (4 classes) (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_invasion_depth_prediction_(4_classes)_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (4 classes) (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_histological_grading_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_histological_grading_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_histological_grading_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_histological_grading_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (External H8)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_histological_grading_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_histological_grading_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grading (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tnm_staging_internal",
+    "benchmarkId": "pathbench",
+    "name": "TNM Staging (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tnm_staging_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "TNM Staging (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tnm_staging_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "TNM Staging (External H8)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tnm_staging_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "TNM Staging (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tnm_staging_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "TNM Staging (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_perineural_invasion_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion Detection (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_perineural_invasion_detection_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion Detection (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_perineural_invasion_detection_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion Detection (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_perineural_invasion_detection_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion Detection (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_perineural_invasion_detection_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion Detection (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_vessel_carcinoma_embolus_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Vessel Carcinoma Embolus Detection (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_vessel_carcinoma_embolus_detection_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Vessel Carcinoma Embolus Detection (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_vessel_carcinoma_embolus_detection_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Vessel Carcinoma Embolus Detection (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_vessel_carcinoma_embolus_detection_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Vessel Carcinoma Embolus Detection (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_vessel_carcinoma_embolus_detection_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Vessel Carcinoma Embolus Detection (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_regression_grading_internal",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Regression Grading (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tissue_category_classification_internal",
+    "benchmarkId": "pathbench",
+    "name": "Tissue Category Classification (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tissue_category_classification_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Tissue Category Classification (Prospective H1)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_inflammation_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Inflammation Detection (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_inflammation_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Inflammation Detection (Prospective H1)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_ulcer_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Ulcer Detection (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_ulcer_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Ulcer Detection (Prospective H1)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_braf_mutation_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "BRAF Mutation Prediction (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_braf_mutation_prediction_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "BRAF Mutation Prediction (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_braf_mutation_prediction_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "BRAF Mutation Prediction (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_braf_mutation_prediction_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "BRAF Mutation Prediction (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_consensus_molecular_subtyping_internal",
+    "benchmarkId": "pathbench",
+    "name": "Consensus Molecular Subtyping (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_kras_mutation_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "KRAS Mutation Prediction (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_kras_mutation_prediction_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "KRAS Mutation Prediction (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_kras_mutation_prediction_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "KRAS Mutation Prediction (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_microsatellite_instability_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Microsatellite Instability Prediction (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_microsatellite_instability_prediction_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Microsatellite Instability Prediction (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_microsatellite_instability_prediction_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "Microsatellite Instability Prediction (External H8)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_microsatellite_instability_prediction_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Microsatellite Instability Prediction (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_tumor_mutational_burden_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Mutational Burden Prediction (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_her2_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Status Prediction (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_her2_status_prediction_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Status Prediction (External H5)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_her2_status_prediction_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Status Prediction (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_ki_67_expression_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Expression Prediction (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_ki_67_expression_prediction_external_h16",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Expression Prediction (External H16)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_ki_67_expression_prediction_external_h14",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Expression Prediction (External H14)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_ki_67_expression_prediction_external_h15",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Expression Prediction (External H15)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_pd_l1_expression_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "PD-L1 Expression Prediction (Internal)",
+    "organ": "colorectal",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_colorectal_overall_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Overall Survival (Internal)",
+    "organ": "colorectal",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_colorectal_disease_free_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Disease-Free Survival (Internal)",
+    "organ": "colorectal",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_colorectal_disease_specific_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Disease-Specific Survival (Internal)",
+    "organ": "colorectal",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_gastric_histological_grade_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grade (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_histological_grade_external_h4",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grade (External H4)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_histological_grade_external_h3",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grade (External H3)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_histological_grade_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Histological Grade (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_lauren_classification_internal",
+    "benchmarkId": "pathbench",
+    "name": "Lauren Classification (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_lauren_classification_external_h4",
+    "benchmarkId": "pathbench",
+    "name": "Lauren Classification (External H4)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_lauren_classification_external_h3",
+    "benchmarkId": "pathbench",
+    "name": "Lauren Classification (External H3)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_lauren_classification_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Lauren Classification (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_pathological_subtype_internal",
+    "benchmarkId": "pathbench",
+    "name": "Pathological Subtype (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_pathological_subtype_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Pathological Subtype (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_perineural_invasion_internal",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_perineural_invasion_external_h4",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion (External H4)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_perineural_invasion_external_h3",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion (External H3)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_perineural_invasion_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Perineural Invasion (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_vascular_invasion_internal",
+    "benchmarkId": "pathbench",
+    "name": "Vascular Invasion (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_vascular_invasion_external_h4",
+    "benchmarkId": "pathbench",
+    "name": "Vascular Invasion (External H4)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_vascular_invasion_external_h3",
+    "benchmarkId": "pathbench",
+    "name": "Vascular Invasion (External H3)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_lymphatic_vascular_invasion_internal",
+    "benchmarkId": "pathbench",
+    "name": "Lymphatic Vascular Invasion (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_regional_lymph_node_metastasis_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Regional Lymph Node Metastasis Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_regional_lymph_node_metastasis_prediction_external_h4",
+    "benchmarkId": "pathbench",
+    "name": "Regional Lymph Node Metastasis Prediction (External H4)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_regional_lymph_node_metastasis_prediction_external_h3",
+    "benchmarkId": "pathbench",
+    "name": "Regional Lymph Node Metastasis Prediction (External H3)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_regional_lymph_node_metastasis_prediction_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Regional Lymph Node Metastasis Prediction (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_tumor_invasion_depth_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_tumor_invasion_depth_prediction_external_h4",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (External H4)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_tumor_invasion_depth_prediction_external_h3",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (External H3)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_tumor_invasion_depth_prediction_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Tumor Invasion Depth Prediction (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_helicobacter_pylori_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Helicobacter Pylori Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_helicobacter_pylori_detection_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Helicobacter Pylori Detection (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_helicobacter_pylori_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Helicobacter Pylori Detection (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_acute_activity_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Acute Activity Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_acute_activity_severity_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Acute Activity Severity Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_acute_activity_severity_prediction_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Acute Activity Severity Prediction (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_gastric_atrophy_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Gastric Atrophy Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_gastric_atrophy_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Gastric Atrophy Detection (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_chronic_gastritis_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Chronic Gastritis Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_chronic_gastritis_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Chronic Gastritis Detection (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_chronic_gastritis_severity_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Chronic Gastritis Severity Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_chronic_gastritis_severity_prediction_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Chronic Gastritis Severity Prediction (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_malignant_tumor_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Malignant Tumor Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_autoimmune_chronic_gastritis_with_helicobacter_pylori_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Autoimmune Chronic Gastritis with Helicobacter Pylori Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_helicobacter_pylori_associated_chronic_gastritis_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Helicobacter Pylori Associated Chronic Gastritis Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_polyp_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Polyp Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_polyp_detection_external_h1_biopsy",
+    "benchmarkId": "pathbench",
+    "name": "Polyp Detection (External H1 Biopsy)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_polyp_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Polyp Detection (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_ulcer_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Ulcer Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_ulcer_detection_external_h1_biopsy",
+    "benchmarkId": "pathbench",
+    "name": "Ulcer Detection (External H1 Biopsy)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_ulcer_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Ulcer Detection (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_abnormal_tissue_classification_internal",
+    "benchmarkId": "pathbench",
+    "name": "Abnormal Tissue Classification (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_intestinal_metaplasia_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Intestinal Metaplasia Detection (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_intestinal_metaplasia_detection_external_h1_biopsy",
+    "benchmarkId": "pathbench",
+    "name": "Intestinal Metaplasia Detection (External H1 Biopsy)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_intestinal_metaplasia_detection_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Intestinal Metaplasia Detection (Prospective H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_ki_67_expression_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Expression Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_ki_67_expression_prediction_external_h1",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Expression Prediction (External H1)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_ki_67_expression_prediction_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Expression Prediction (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_s_100_expression_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "S-100 Expression Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_her2_expression_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Expression Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_her2_expression_prediction_external_h2",
+    "benchmarkId": "pathbench",
+    "name": "HER2 Expression Prediction (External H2)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_p53_expression_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "P53 Expression Prediction (Internal)",
+    "organ": "gastric",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_gastric_overall_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Overall Survival (Internal)",
+    "organ": "gastric",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_gastric_disease_free_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Disease-Free Survival (Internal)",
+    "organ": "gastric",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_liver_mtm_hcc_classification_internal",
+    "benchmarkId": "pathbench",
+    "name": "MTM-HCC Classification (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_mtm_hcc_classification_external_h20",
+    "benchmarkId": "pathbench",
+    "name": "MTM-HCC Classification (External H20)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_mtm_hcc_classification_external_h21",
+    "benchmarkId": "pathbench",
+    "name": "MTM-HCC Classification (External H21)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_mtm_hcc_classification_external_h22",
+    "benchmarkId": "pathbench",
+    "name": "MTM-HCC Classification (External H22)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_edmondson_steiner_grading_internal",
+    "benchmarkId": "pathbench",
+    "name": "Edmondson-Steiner Grading (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_edmondson_steiner_grading_external_h11",
+    "benchmarkId": "pathbench",
+    "name": "Edmondson-Steiner Grading (External H11)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_who_grading_internal",
+    "benchmarkId": "pathbench",
+    "name": "WHO Grading (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_hcc_associated_with_cirrhosis_internal",
+    "benchmarkId": "pathbench",
+    "name": "HCC Associated with Cirrhosis (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_vessel_carcinoma_embolus_internal",
+    "benchmarkId": "pathbench",
+    "name": "Vessel Carcinoma Embolus (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_afp_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "AFP Status Prediction (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_ck7_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "CK7 Status Prediction (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_ck19_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "CK19 Status Prediction (Internal)",
+    "organ": "liver",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_liver_overall_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Overall Survival (Internal)",
+    "organ": "liver",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_liver_disease_free_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Disease-Free Survival (Internal)",
+    "organ": "liver",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_lung_metastatic_lung_cancer_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Metastatic Lung Cancer Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_metastatic_lung_cancer_prediction_external_h6",
+    "benchmarkId": "pathbench",
+    "name": "Metastatic Lung Cancer Prediction (External H6)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_metastatic_lung_cancer_prediction_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Metastatic Lung Cancer Prediction (External H5)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_primary_site_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Primary Site Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_primary_site_prediction_external_h6",
+    "benchmarkId": "pathbench",
+    "name": "Primary Site Prediction (External H6)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_primary_site_prediction_external_h5",
+    "benchmarkId": "pathbench",
+    "name": "Primary Site Prediction (External H5)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_benign_vs._malignant_internal",
+    "benchmarkId": "pathbench",
+    "name": "Benign vs. Malignant (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_(frozen_section)_benign_vs._malignant_internal",
+    "benchmarkId": "pathbench",
+    "name": "(Frozen Section) Benign vs. Malignant (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_(frozen_section)_invasion_extent_prediction_in_luad_internal",
+    "benchmarkId": "pathbench",
+    "name": "(Frozen Section) Invasion Extent Prediction in LUAD (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_(frozen_section)_lymph_node_metastasis_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "(Frozen Section) Lymph Node Metastasis Detection (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_nsclc_subtype_classification_internal",
+    "benchmarkId": "pathbench",
+    "name": "NSCLC Subtype Classification (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_histological_subtype_classification_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Subtype Classification (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_histological_subtype_classification_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "Histological Subtype Classification (Prospective H1)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_spread_through_air_spaces_internal",
+    "benchmarkId": "pathbench",
+    "name": "Spread Through Air Spaces (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_neural_invasion_internal",
+    "benchmarkId": "pathbench",
+    "name": "Neural Invasion (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_vascular_thrombus_internal",
+    "benchmarkId": "pathbench",
+    "name": "Vascular Thrombus (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_ck7_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "CK7 Status Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_ck7_status_prediction_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "CK7 Status Prediction (Prospective H1)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_ttf1_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "TTF1 Status Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_ttf1_status_prediction_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "TTF1 Status Prediction (Prospective H1)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_napsina_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "NapsinA Status Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_napsina_status_prediction_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "NapsinA Status Prediction (Prospective H1)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_ki_67_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Ki-67 Status Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_p40_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "P40 Status Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_p40_status_prediction_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "P40 Status Prediction (Prospective H1)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_p63_status_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "P63 Status Prediction (Internal)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_lung_p63_status_prediction_prospective_h1",
+    "benchmarkId": "pathbench",
+    "name": "P63 Status Prediction (Prospective H1)",
+    "organ": "lung",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_bladder_benign_vs._malignant_internal",
+    "benchmarkId": "pathbench",
+    "name": "Benign vs. Malignant (Internal)",
+    "organ": "bladder",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_bladder_fine_grained_tissue_type_internal",
+    "benchmarkId": "pathbench",
+    "name": "Fine-grained Tissue Type (Internal)",
+    "organ": "bladder",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_brain_idh_mutation_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "IDH Mutation Prediction (Internal)",
+    "organ": "brain",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_brain_histological_subtyping_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Subtyping (Internal)",
+    "organ": "brain",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_brain_who_grading_internal",
+    "benchmarkId": "pathbench",
+    "name": "WHO Grading (Internal)",
+    "organ": "brain",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_cervical_histological_subtyping_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Subtyping (Internal)",
+    "organ": "cervical",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_cervical_intraepithelial_neoplasia_grading_internal",
+    "benchmarkId": "pathbench",
+    "name": "Intraepithelial Neoplasia Grading (Internal)",
+    "organ": "cervical",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_cervical_keratinizing_vs_non_keratinizing_in_scc_internal",
+    "benchmarkId": "pathbench",
+    "name": "Keratinizing vs Non-Keratinizing in SCC (Internal)",
+    "organ": "cervical",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_esophagus_immunotherapy_benefits_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "Immunotherapy Benefits Prediction (Internal)",
+    "organ": "esophagus",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_esophagus_immunotherapy_benefits_prediction_external_h26",
+    "benchmarkId": "pathbench",
+    "name": "Immunotherapy Benefits Prediction (External H26)",
+    "organ": "esophagus",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_prostate_cancer_detection_internal",
+    "benchmarkId": "pathbench",
+    "name": "Cancer Detection (Internal)",
+    "organ": "prostate",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_prostate_cancer_detection_external_h23",
+    "benchmarkId": "pathbench",
+    "name": "Cancer Detection (External H23)",
+    "organ": "prostate",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_soft_tissue_histological_subtyping_internal",
+    "benchmarkId": "pathbench",
+    "name": "Histological Subtyping (Internal)",
+    "organ": "soft tissue",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_soft_tissue_histological_subtyping_external_h18",
+    "benchmarkId": "pathbench",
+    "name": "Histological Subtyping (External H18)",
+    "organ": "soft tissue",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_soft_tissue_liposarcoma_subtyping_internal",
+    "benchmarkId": "pathbench",
+    "name": "Liposarcoma Subtyping (Internal)",
+    "organ": "soft tissue",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_soft_tissue_liposarcoma_subtyping_external_h18",
+    "benchmarkId": "pathbench",
+    "name": "Liposarcoma Subtyping (External H18)",
+    "organ": "soft tissue",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_thyroid_tnm_t_stage_prediction_internal",
+    "benchmarkId": "pathbench",
+    "name": "TNM-T Stage Prediction (Internal)",
+    "organ": "thyroid",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_thyroid_tnm_t_stage_prediction_external_h8",
+    "benchmarkId": "pathbench",
+    "name": "TNM-T Stage Prediction (External H8)",
+    "organ": "thyroid",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_thyroid_lymph_node_metastasis_internal",
+    "benchmarkId": "pathbench",
+    "name": "Lymph Node Metastasis (Internal)",
+    "organ": "thyroid",
+    "metric": "auc",
+    "category": "classification"
+  },
+  {
+    "id": "pb_thyroid_overall_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Overall Survival (Internal)",
+    "organ": "thyroid",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "pb_thyroid_disease_free_survival_internal",
+    "benchmarkId": "pathbench",
+    "name": "Disease-Free Survival (Internal)",
+    "organ": "thyroid",
+    "metric": "c-index",
+    "category": "survival"
+  },
+  {
+    "id": "stanford_lung_exp_subtype",
+    "benchmarkId": "stanford",
+    "name": "lung exp subtype",
+    "category": "Gene Expression Subtype Prediction",
+    "organ": "lung",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "LUSC+LUAD"
+  },
+  {
+    "id": "stanford_lusc_vs_luad",
+    "benchmarkId": "stanford",
+    "name": "lusc vs luad",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "lung",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "LUSC+LUAD"
+  },
+  {
+    "id": "stanford_cptac_myc",
+    "benchmarkId": "stanford",
+    "name": "CPTAC-MYC",
+    "category": "Pathway Activation Status Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "CPTAC",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_chrom",
+    "benchmarkId": "stanford",
+    "name": "Chrom",
+    "category": "Pathway Activation Status Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "CPTAC",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_cptac_grade",
+    "benchmarkId": "stanford",
+    "name": "CPTAC-grade",
+    "category": "Diagnostic: Tumor Grading",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "CPTAC",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_tumor_label",
+    "benchmarkId": "stanford",
+    "name": "tumor label",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "CPTAC",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_mtor",
+    "benchmarkId": "stanford",
+    "name": "MTOR",
+    "category": "Pathway Activation Status Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "CPTAC",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_p53",
+    "benchmarkId": "stanford",
+    "name": "P53",
+    "category": "Pathway Activation Status Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "CPTAC",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_swi",
+    "benchmarkId": "stanford",
+    "name": "SWI",
+    "category": "Pathway Activation Status Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "CPTAC",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_gi_subtype",
+    "benchmarkId": "stanford",
+    "name": "gi subtype",
+    "category": "Biomarker Status Prediction",
+    "organ": "GI",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "GI"
+  },
+  {
+    "id": "stanford_erg_status",
+    "benchmarkId": "stanford",
+    "name": "ERG status",
+    "category": "Biomarker Status Prediction",
+    "organ": "prostate",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "PRAD"
+  },
+  {
+    "id": "stanford_prad_mrna_cluster",
+    "benchmarkId": "stanford",
+    "name": "prad mrna cluster",
+    "category": "Gene Expression Subtype Prediction",
+    "organ": "prostate",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "PRAD"
+  },
+  {
+    "id": "stanford_lung_hist_ood1",
+    "benchmarkId": "stanford",
+    "name": "lung hist OOD1",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "lung",
+    "metric": "auroc",
+    "dataset": "Out of Domain",
+    "cancer": "Lung"
+  },
+  {
+    "id": "stanford_lung_stage_ood",
+    "benchmarkId": "stanford",
+    "name": "lung stage OOD",
+    "category": "Diagnostic: Tumor Staging",
+    "organ": "lung",
+    "metric": "auroc",
+    "dataset": "Out of Domain",
+    "cancer": "Lung"
+  },
+  {
+    "id": "stanford_brain_necrosis",
+    "benchmarkId": "stanford",
+    "name": "brain necrosis",
+    "category": "Diagnostic: Other",
+    "organ": "brain",
+    "metric": "auroc",
+    "dataset": "Out of Domain",
+    "cancer": "Brain"
+  },
+  {
+    "id": "stanford_mgmt_ood",
+    "benchmarkId": "stanford",
+    "name": "MGMT OOD",
+    "category": "Biomarker Status Prediction",
+    "organ": "brain",
+    "metric": "auroc",
+    "dataset": "Out of Domain",
+    "cancer": "Brain"
+  },
+  {
+    "id": "stanford_bach",
+    "benchmarkId": "stanford",
+    "name": "BACH",
+    "category": "Diagnostic: Primary Diagnosis and Histologic Subtyping",
+    "organ": "breast",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "BRCA"
+  },
+  {
+    "id": "stanford_bracs",
+    "benchmarkId": "stanford",
+    "name": "BRACS",
+    "category": "Diagnostic: Primary Diagnosis and Histologic Subtyping",
+    "organ": "breast",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "BRCA"
+  },
+  {
+    "id": "stanford_breakhis",
+    "benchmarkId": "stanford",
+    "name": "BreakHis",
+    "category": "Diagnostic: Primary Diagnosis",
+    "organ": "breast",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "BRCA"
+  },
+  {
+    "id": "stanford_lung_hist_ood2",
+    "benchmarkId": "stanford",
+    "name": "lung hist OOD2",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "lung",
+    "metric": "auroc",
+    "dataset": "Out of Domain",
+    "cancer": "Lung"
+  },
+  {
+    "id": "stanford_lc25000",
+    "benchmarkId": "stanford",
+    "name": "LC25000",
+    "category": "Diagnostic: Primary Diagnosis and Histologic Subtyping",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_mhist",
+    "benchmarkId": "stanford",
+    "name": "MHIST",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "colon",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "COAD"
+  },
+  {
+    "id": "stanford_nct_crc_he",
+    "benchmarkId": "stanford",
+    "name": "NCT-CRC-HE",
+    "category": "Diagnostic: Tissue type classification",
+    "organ": "colon",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "COAD"
+  },
+  {
+    "id": "stanford_sicapv2",
+    "benchmarkId": "stanford",
+    "name": "SICAPv2",
+    "category": "Diagnostic: Primary Diagnosis and Tumor Grading",
+    "organ": "prostate",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "PRAD"
+  },
+  {
+    "id": "stanford_unitopatho",
+    "benchmarkId": "stanford",
+    "name": "UniToPatho",
+    "category": "Diagnostic: Primary Diagnosis",
+    "organ": "colon",
+    "metric": "auroc",
+    "dataset": "External_benchmarking_cohort",
+    "cancer": "COAD"
+  },
+  {
+    "id": "stanford_lung_grade",
+    "benchmarkId": "stanford",
+    "name": "lung grade",
+    "category": "Diagnostic: Tumor Grading",
+    "organ": "lung",
+    "metric": "auroc",
+    "dataset": "Out of Domain",
+    "cancer": "Lung"
+  },
+  {
+    "id": "stanford_lung_stage",
+    "benchmarkId": "stanford",
+    "name": "lung stage",
+    "category": "Diagnostic: Tumor Staging",
+    "organ": "lung",
+    "metric": "auroc",
+    "dataset": "Out of Domain",
+    "cancer": "Lung"
+  },
+  {
+    "id": "stanford_kidney_subtype",
+    "benchmarkId": "stanford",
+    "name": "kidney subtype",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "kidney",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "KIRC + KIRP + KICH"
+  },
+  {
+    "id": "stanford_blca_hist_subtype",
+    "benchmarkId": "stanford",
+    "name": "blca hist subtype",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "bladder",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "BLCA"
+  },
+  {
+    "id": "stanford_blca_mrna_cluster",
+    "benchmarkId": "stanford",
+    "name": "blca mrna cluster",
+    "category": "Gene Expression Subtype Prediction",
+    "organ": "bladder",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "BLCA"
+  },
+  {
+    "id": "stanford_er_status",
+    "benchmarkId": "stanford",
+    "name": "ER status",
+    "category": "Biomarker Status Prediction",
+    "organ": "breast",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "BRCA"
+  },
+  {
+    "id": "stanford_pam50_status",
+    "benchmarkId": "stanford",
+    "name": "PAM50 status",
+    "category": "Gene Expression Subtype Prediction",
+    "organ": "breast",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "BRCA"
+  },
+  {
+    "id": "stanford_pr_status",
+    "benchmarkId": "stanford",
+    "name": "PR status",
+    "category": "Biomarker Status Prediction",
+    "organ": "breast",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "BRCA"
+  },
+  {
+    "id": "stanford_idh",
+    "benchmarkId": "stanford",
+    "name": "IDH",
+    "category": "Biomarker Status Prediction",
+    "organ": "brain",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "GBM+LGG"
+  },
+  {
+    "id": "stanford_mgmt",
+    "benchmarkId": "stanford",
+    "name": "MGMT",
+    "category": "Biomarker Status Prediction",
+    "organ": "brain",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "GBM+LGG"
+  },
+  {
+    "id": "stanford_brain_hist_subtype",
+    "benchmarkId": "stanford",
+    "name": "brain hist subtype",
+    "category": "Diagnostic: Histologic Subtyping",
+    "organ": "brain",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "GBM+LGG"
+  },
+  {
+    "id": "stanford_brain_exp_subtype",
+    "benchmarkId": "stanford",
+    "name": "brain exp subtype",
+    "category": "Gene Expression Subtype Prediction",
+    "organ": "brain",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "GBM+LGG"
+  },
+  {
+    "id": "stanford_myc",
+    "benchmarkId": "stanford",
+    "name": "MYC",
+    "category": "Pathway Activation Status Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_pi3k",
+    "benchmarkId": "stanford",
+    "name": "PI3K",
+    "category": "Pathway Activation Status Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_tcga_grade",
+    "benchmarkId": "stanford",
+    "name": "TCGA-Grade",
+    "category": "Diagnostic: Tumor Grading",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "stanford_immunegroup",
+    "benchmarkId": "stanford",
+    "name": "Immunegroup",
+    "category": "Gene Expression Subtype Prediction",
+    "organ": "pan-cancer",
+    "metric": "auroc",
+    "dataset": "TCGA",
+    "cancer": "Pan-cancer"
+  },
+  {
+    "id": "hest_idc",
+    "benchmarkId": "hest",
+    "name": "IDC (Breast)",
+    "category": "Gene Expression Prediction",
+    "organ": "breast",
+    "metric": "pearson",
+    "fullName": "Invasive Ductal Carcinoma"
+  },
+  {
+    "id": "hest_prad",
+    "benchmarkId": "hest",
+    "name": "PRAD (Prostate)",
+    "category": "Gene Expression Prediction",
+    "organ": "prostate",
+    "metric": "pearson",
+    "fullName": "Prostate Adenocarcinoma"
+  },
+  {
+    "id": "hest_paad",
+    "benchmarkId": "hest",
+    "name": "PAAD (Pancreas)",
+    "category": "Gene Expression Prediction",
+    "organ": "pancreas",
+    "metric": "pearson",
+    "fullName": "Pancreatic Adenocarcinoma"
+  },
+  {
+    "id": "hest_skcm",
+    "benchmarkId": "hest",
+    "name": "SKCM (Skin)",
+    "category": "Gene Expression Prediction",
+    "organ": "skin",
+    "metric": "pearson",
+    "fullName": "Skin Cutaneous Melanoma"
+  },
+  {
+    "id": "hest_coad",
+    "benchmarkId": "hest",
+    "name": "COAD (Colon)",
+    "category": "Gene Expression Prediction",
+    "organ": "colon",
+    "metric": "pearson",
+    "fullName": "Colon Adenocarcinoma"
+  },
+  {
+    "id": "hest_read",
+    "benchmarkId": "hest",
+    "name": "READ (Rectum)",
+    "category": "Gene Expression Prediction",
+    "organ": "rectum",
+    "metric": "pearson",
+    "fullName": "Rectum Adenocarcinoma"
+  },
+  {
+    "id": "hest_ccrcc",
+    "benchmarkId": "hest",
+    "name": "ccRCC (Kidney)",
+    "category": "Gene Expression Prediction",
+    "organ": "kidney",
+    "metric": "pearson",
+    "fullName": "Clear Cell Renal Cell Carcinoma"
+  },
+  {
+    "id": "hest_luad",
+    "benchmarkId": "hest",
+    "name": "LUAD (Lung)",
+    "category": "Gene Expression Prediction",
+    "organ": "lung",
+    "metric": "pearson",
+    "fullName": "Lung Adenocarcinoma"
+  },
+  {
+    "id": "hest_lymph_idc",
+    "benchmarkId": "hest",
+    "name": "Lymph IDC",
+    "category": "Gene Expression Prediction",
+    "organ": "lymph",
+    "metric": "pearson",
+    "fullName": "Lymph Node IDC Metastasis"
+  },
+  {
+    "id": "pb_brca_tp53",
+    "benchmarkId": "pathobench",
+    "name": "BRCA TP53",
+    "category": "Molecular Prediction",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_brca_pik3ca",
+    "benchmarkId": "pathobench",
+    "name": "BRCA PIK3CA",
+    "category": "Molecular Prediction",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_ccrcc_bap1",
+    "benchmarkId": "pathobench",
+    "name": "CCRCC BAP1",
+    "category": "Molecular Prediction",
+    "organ": "kidney",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_ccrcc_pbrm1",
+    "benchmarkId": "pathobench",
+    "name": "CCRCC PBRM1",
+    "category": "Molecular Prediction",
+    "organ": "kidney",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_ccrcc_vhl",
+    "benchmarkId": "pathobench",
+    "name": "CCRCC VHL",
+    "category": "Molecular Prediction",
+    "organ": "kidney",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_kras",
+    "benchmarkId": "pathobench",
+    "name": "COAD KRAS",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_acvr2a",
+    "benchmarkId": "pathobench",
+    "name": "COAD ACVR2A",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_apc",
+    "benchmarkId": "pathobench",
+    "name": "COAD APC",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_arid1a",
+    "benchmarkId": "pathobench",
+    "name": "COAD ARID1A",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_msi",
+    "benchmarkId": "pathobench",
+    "name": "COAD MSI-H",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_pik3ca",
+    "benchmarkId": "pathobench",
+    "name": "COAD PIK3CA",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_setd1b",
+    "benchmarkId": "pathobench",
+    "name": "COAD SETD1B",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_coad_tp53",
+    "benchmarkId": "pathobench",
+    "name": "COAD TP53",
+    "category": "Molecular Prediction",
+    "organ": "colon",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_gbm_egfr",
+    "benchmarkId": "pathobench",
+    "name": "GBM EGFR",
+    "category": "Molecular Prediction",
+    "organ": "brain",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_gbm_tp53",
+    "benchmarkId": "pathobench",
+    "name": "GBM TP53",
+    "category": "Molecular Prediction",
+    "organ": "brain",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_hnsc_casp8",
+    "benchmarkId": "pathobench",
+    "name": "HNSC CASP8",
+    "category": "Molecular Prediction",
+    "organ": "head-neck",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_lscc_keap1",
+    "benchmarkId": "pathobench",
+    "name": "LSCC KEAP1",
+    "category": "Molecular Prediction",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_lscc_arid1a",
+    "benchmarkId": "pathobench",
+    "name": "LSCC ARID1A",
+    "category": "Molecular Prediction",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_luad_egfr",
+    "benchmarkId": "pathobench",
+    "name": "LUAD EGFR",
+    "category": "Molecular Prediction",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_luad_kras",
+    "benchmarkId": "pathobench",
+    "name": "LUAD KRAS",
+    "category": "Molecular Prediction",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_luad_stk11",
+    "benchmarkId": "pathobench",
+    "name": "LUAD STK11",
+    "category": "Molecular Prediction",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_luad_tp53",
+    "benchmarkId": "pathobench",
+    "name": "LUAD TP53",
+    "category": "Molecular Prediction",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_pda_smad4",
+    "benchmarkId": "pathobench",
+    "name": "PDA SMAD4",
+    "category": "Molecular Prediction",
+    "organ": "pancreas",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_bctherapy_her2",
+    "benchmarkId": "pathobench",
+    "name": "BC Therapy HER2",
+    "category": "Molecular Prediction",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_brca_immune",
+    "benchmarkId": "pathobench",
+    "name": "BRCA Immune",
+    "category": "TME Characterization",
+    "organ": "breast",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_ccrcc_immune",
+    "benchmarkId": "pathobench",
+    "name": "CCRCC Immune",
+    "category": "TME Characterization",
+    "organ": "kidney",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_coad_immune",
+    "benchmarkId": "pathobench",
+    "name": "COAD Immune",
+    "category": "TME Characterization",
+    "organ": "colon",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_gbm_immune",
+    "benchmarkId": "pathobench",
+    "name": "GBM Immune",
+    "category": "TME Characterization",
+    "organ": "brain",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_hnsc_immune",
+    "benchmarkId": "pathobench",
+    "name": "HNSC Immune",
+    "category": "TME Characterization",
+    "organ": "head-neck",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_pda_immune",
+    "benchmarkId": "pathobench",
+    "name": "PDA Immune",
+    "category": "TME Characterization",
+    "organ": "pancreas",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_lscc_immune",
+    "benchmarkId": "pathobench",
+    "name": "LSCC Immune",
+    "category": "TME Characterization",
+    "organ": "lung",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_luad_immune",
+    "benchmarkId": "pathobench",
+    "name": "LUAD Immune",
+    "category": "TME Characterization",
+    "organ": "lung",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_hancock_lvi",
+    "benchmarkId": "pathobench",
+    "name": "Hancock LVI",
+    "category": "TME Characterization",
+    "organ": "head-neck",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_hancock_pni",
+    "benchmarkId": "pathobench",
+    "name": "Hancock PNI",
+    "category": "TME Characterization",
+    "organ": "head-neck",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_hancock_primary_met",
+    "benchmarkId": "pathobench",
+    "name": "Hancock Primary vs Met",
+    "category": "TME Characterization",
+    "organ": "head-neck",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_hancock_tumor_site",
+    "benchmarkId": "pathobench",
+    "name": "Hancock Tumor Site",
+    "category": "TME Characterization",
+    "organ": "head-neck",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_hancock_vi",
+    "benchmarkId": "pathobench",
+    "name": "Hancock VI",
+    "category": "TME Characterization",
+    "organ": "head-neck",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_bctherapy_grade",
+    "benchmarkId": "pathobench",
+    "name": "BC Therapy Grade",
+    "category": "Tumor Grading",
+    "organ": "breast",
+    "metric": "kappa"
+  },
+  {
+    "id": "pb_hnsc_grade",
+    "benchmarkId": "pathobench",
+    "name": "HNSC Grade",
+    "category": "Tumor Grading",
+    "organ": "head-neck",
+    "metric": "kappa"
+  },
+  {
+    "id": "pb_lscc_grade",
+    "benchmarkId": "pathobench",
+    "name": "LSCC Grade",
+    "category": "Tumor Grading",
+    "organ": "lung",
+    "metric": "kappa"
+  },
+  {
+    "id": "pb_hancock_grade_ker",
+    "benchmarkId": "pathobench",
+    "name": "Hancock Grade Ker",
+    "category": "Tumor Grading",
+    "organ": "head-neck",
+    "metric": "kappa"
+  },
+  {
+    "id": "pb_hancock_grade_nonker",
+    "benchmarkId": "pathobench",
+    "name": "Hancock Grade NonKer",
+    "category": "Tumor Grading",
+    "organ": "head-neck",
+    "metric": "kappa"
+  },
+  {
+    "id": "pb_cervix_subtype",
+    "benchmarkId": "pathobench",
+    "name": "Cervix Subtype",
+    "category": "Tumor Grading",
+    "organ": "cervix",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_boehmk_survival",
+    "benchmarkId": "pathobench",
+    "name": "Ovary Survival",
+    "category": "Survival Prediction",
+    "organ": "ovary",
+    "metric": "c_index"
+  },
+  {
+    "id": "pb_ccrcc_survival",
+    "benchmarkId": "pathobench",
+    "name": "CCRCC Survival",
+    "category": "Survival Prediction",
+    "organ": "kidney",
+    "metric": "c_index"
+  },
+  {
+    "id": "pb_hnsc_survival",
+    "benchmarkId": "pathobench",
+    "name": "HNSC Survival",
+    "category": "Survival Prediction",
+    "organ": "head-neck",
+    "metric": "c_index"
+  },
+  {
+    "id": "pb_pda_survival",
+    "benchmarkId": "pathobench",
+    "name": "PDA Survival",
+    "category": "Survival Prediction",
+    "organ": "pancreas",
+    "metric": "c_index"
+  },
+  {
+    "id": "pb_luad_survival",
+    "benchmarkId": "pathobench",
+    "name": "LUAD Survival",
+    "category": "Survival Prediction",
+    "organ": "lung",
+    "metric": "c_index"
+  },
+  {
+    "id": "pb_mbc_survival",
+    "benchmarkId": "pathobench",
+    "name": "MBC Survival",
+    "category": "Survival Prediction",
+    "organ": "breast",
+    "metric": "c_index"
+  },
+  {
+    "id": "pb_hancock_survival",
+    "benchmarkId": "pathobench",
+    "name": "Hancock Survival",
+    "category": "Survival Prediction",
+    "organ": "head-neck",
+    "metric": "c_index"
+  },
+  {
+    "id": "pb_bctherapy_er",
+    "benchmarkId": "pathobench",
+    "name": "BC Therapy ER",
+    "category": "Treatment Response",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "pb_bctherapy_rcb",
+    "benchmarkId": "pathobench",
+    "name": "BC Therapy RCB",
+    "category": "Treatment Response",
+    "organ": "breast",
+    "metric": "balanced_acc"
+  },
+  {
+    "id": "pb_mbc_recist",
+    "benchmarkId": "pathobench",
+    "name": "MBC RECIST",
+    "category": "Treatment Response",
+    "organ": "breast",
+    "metric": "kappa"
+  },
+  {
+    "id": "sinai_mshs_bladder",
+    "benchmarkId": "sinai",
+    "name": "MSHS Bladder",
+    "category": "Detection",
+    "organ": "bladder",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_breast",
+    "benchmarkId": "sinai",
+    "name": "MSHS Breast",
+    "category": "Detection",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_colorectal",
+    "benchmarkId": "sinai",
+    "name": "MSHS Colorectal",
+    "category": "Detection",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_dcis",
+    "benchmarkId": "sinai",
+    "name": "MSHS DCIS",
+    "category": "Detection",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_ibd",
+    "benchmarkId": "sinai",
+    "name": "MSHS IBD",
+    "category": "Detection",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_kidney",
+    "benchmarkId": "sinai",
+    "name": "MSHS Kidney",
+    "category": "Detection",
+    "organ": "kidney",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_oral",
+    "benchmarkId": "sinai",
+    "name": "MSHS Oral",
+    "category": "Detection",
+    "organ": "oral",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_prostate",
+    "benchmarkId": "sinai",
+    "name": "MSHS Prostate",
+    "category": "Detection",
+    "organ": "prostate",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_thyroid",
+    "benchmarkId": "sinai",
+    "name": "MSHS Thyroid",
+    "category": "Detection",
+    "organ": "thyroid",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_bca_er",
+    "benchmarkId": "sinai",
+    "name": "MSHS BCa ER",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_bca_her2",
+    "benchmarkId": "sinai",
+    "name": "MSHS BCa HER2",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_bca_pr",
+    "benchmarkId": "sinai",
+    "name": "MSHS BCa PR",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_biome_hrd",
+    "benchmarkId": "sinai",
+    "name": "MSHS BioMe HRD",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mshs_luad_egfr",
+    "benchmarkId": "sinai",
+    "name": "MSHS LUAD EGFR",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mskcc_luad_alk",
+    "benchmarkId": "sinai",
+    "name": "MSKCC LUAD ALK",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mskcc_luad_egfr",
+    "benchmarkId": "sinai",
+    "name": "MSKCC LUAD EGFR",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mskcc_luad_kras",
+    "benchmarkId": "sinai",
+    "name": "MSKCC LUAD KRAS",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mskcc_luad_stk11",
+    "benchmarkId": "sinai",
+    "name": "MSKCC LUAD STK11",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mskcc_luad_tp53",
+    "benchmarkId": "sinai",
+    "name": "MSKCC LUAD TP53",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_mskcc_nsclc_io",
+    "benchmarkId": "sinai",
+    "name": "MSKCC NSCLC IO",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_suh_melanoma_braf",
+    "benchmarkId": "sinai",
+    "name": "SUH Melanoma BRAF",
+    "category": "Biomarker",
+    "organ": "skin",
+    "metric": "auroc"
+  },
+  {
+    "id": "sinai_suh_melanoma_nras",
+    "benchmarkId": "sinai",
+    "name": "SUH Melanoma NRAS",
+    "category": "Biomarker",
+    "organ": "skin",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_nsclc_subtyping",
+    "benchmarkId": "stamp",
+    "name": "NSCLC Subtyping",
+    "category": "Morphology",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_bern_stad_lauren",
+    "benchmarkId": "stamp",
+    "name": "BERN STAD LAUREN",
+    "category": "Morphology",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_kiel_stad_lauren",
+    "benchmarkId": "stamp",
+    "name": "KIEL STAD LAUREN",
+    "category": "Morphology",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_crc_sidedness",
+    "benchmarkId": "stamp",
+    "name": "CPTAC CRC Sidedness",
+    "category": "Morphology",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_dachs_crc_sidedness",
+    "benchmarkId": "stamp",
+    "name": "DACHS CRC Sidedness",
+    "category": "Morphology",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_luad_egfr",
+    "benchmarkId": "stamp",
+    "name": "CPTAC LUAD EGFR",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_luad_kras",
+    "benchmarkId": "stamp",
+    "name": "CPTAC LUAD KRAS",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_luad_stk11",
+    "benchmarkId": "stamp",
+    "name": "CPTAC LUAD STK11",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_luad_tp53",
+    "benchmarkId": "stamp",
+    "name": "CPTAC LUAD TP53",
+    "category": "Biomarker",
+    "organ": "lung",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_bern_stad_msi",
+    "benchmarkId": "stamp",
+    "name": "BERN STAD MSI",
+    "category": "Biomarker",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_kiel_stad_ebv",
+    "benchmarkId": "stamp",
+    "name": "KIEL STAD EBV",
+    "category": "Biomarker",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_kiel_stad_msi",
+    "benchmarkId": "stamp",
+    "name": "KIEL STAD MSI",
+    "category": "Biomarker",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_brca_erbb2",
+    "benchmarkId": "stamp",
+    "name": "CPTAC BRCA ERBB2",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_brca_esr1",
+    "benchmarkId": "stamp",
+    "name": "CPTAC BRCA ESR1",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_brca_pgr",
+    "benchmarkId": "stamp",
+    "name": "CPTAC BRCA PGR",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_brca_pik3ca",
+    "benchmarkId": "stamp",
+    "name": "CPTAC BRCA PIK3CA",
+    "category": "Biomarker",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_crc_msi",
+    "benchmarkId": "stamp",
+    "name": "CPTAC CRC MSI",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_crc_braf",
+    "benchmarkId": "stamp",
+    "name": "CPTAC CRC BRAF",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_crc_kras",
+    "benchmarkId": "stamp",
+    "name": "CPTAC CRC KRAS",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_crc_pik3ca",
+    "benchmarkId": "stamp",
+    "name": "CPTAC CRC PIK3CA",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_dachs_crc_msi",
+    "benchmarkId": "stamp",
+    "name": "DACHS CRC MSI",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_dachs_crc_braf",
+    "benchmarkId": "stamp",
+    "name": "DACHS CRC BRAF",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_dachs_crc_kras",
+    "benchmarkId": "stamp",
+    "name": "DACHS CRC KRAS",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_dachs_crc_cimp",
+    "benchmarkId": "stamp",
+    "name": "DACHS CRC CIMP",
+    "category": "Biomarker",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_bern_stad_n_status",
+    "benchmarkId": "stamp",
+    "name": "BERN STAD N STATUS",
+    "category": "Prognosis",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_kiel_stad_n_status",
+    "benchmarkId": "stamp",
+    "name": "KIEL STAD N STATUS",
+    "category": "Prognosis",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_kiel_stad_m_status",
+    "benchmarkId": "stamp",
+    "name": "KIEL STAD M STATUS",
+    "category": "Prognosis",
+    "organ": "gastric",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_ieo_brca_n_status",
+    "benchmarkId": "stamp",
+    "name": "IEO BRCA N STATUS",
+    "category": "Prognosis",
+    "organ": "breast",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_cptac_crc_n_status",
+    "benchmarkId": "stamp",
+    "name": "CPTAC CRC N STATUS",
+    "category": "Prognosis",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_dachs_crc_n_status",
+    "benchmarkId": "stamp",
+    "name": "DACHS CRC N STATUS",
+    "category": "Prognosis",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "stamp_dachs_crc_m_status",
+    "benchmarkId": "stamp",
+    "name": "DACHS CRC M STATUS",
+    "category": "Prognosis",
+    "organ": "colorectal",
+    "metric": "auroc"
+  },
+  {
+    "id": "thunder_knn",
+    "benchmarkId": "thunder",
+    "name": "KNN Classification",
+    "category": "Classification",
+    "organ": "multi-organ",
+    "metric": "balanced_accuracy"
+  },
+  {
+    "id": "thunder_linear_prob",
+    "benchmarkId": "thunder",
+    "name": "Linear Probing",
+    "category": "Classification",
+    "organ": "multi-organ",
+    "metric": "balanced_accuracy"
+  },
+  {
+    "id": "thunder_few_shot",
+    "benchmarkId": "thunder",
+    "name": "Few-shot Learning",
+    "category": "Classification",
+    "organ": "multi-organ",
+    "metric": "balanced_accuracy"
+  },
+  {
+    "id": "thunder_segmentation",
+    "benchmarkId": "thunder",
+    "name": "Segmentation",
+    "category": "Segmentation",
+    "organ": "multi-organ",
+    "metric": "dice"
+  },
+  {
+    "id": "thunder_calibration",
+    "benchmarkId": "thunder",
+    "name": "Calibration",
+    "category": "Calibration",
+    "organ": "multi-organ",
+    "metric": "ece"
+  },
+  {
+    "id": "thunder_adversarial",
+    "benchmarkId": "thunder",
+    "name": "Adversarial Attack",
+    "category": "Robustness",
+    "organ": "multi-organ",
+    "metric": "success_rate"
+  },
+  {
+    "id": "pathorob_tcga_2x2",
+    "benchmarkId": "pathorob",
+    "name": "TCGA 2x2",
+    "category": "Domain Shift",
+    "organ": "multi-organ",
+    "metric": "robustness_index"
+  },
+  {
+    "id": "pathorob_camelyon",
+    "benchmarkId": "pathorob",
+    "name": "Camelyon",
+    "category": "Domain Shift",
+    "organ": "breast",
+    "metric": "robustness_index"
+  },
+  {
+    "id": "pathorob_tolkach_esca",
+    "benchmarkId": "pathorob",
+    "name": "Tolkach ESCA",
+    "category": "Domain Shift",
+    "organ": "esophagus",
+    "metric": "robustness_index"
+  },
+  {
+    "id": "plism_cosine_similarity",
+    "benchmarkId": "plism",
+    "name": "Cosine Similarity",
+    "category": "Embedding Consistency",
+    "organ": "multi-organ",
+    "metric": "cosine_similarity"
+  },
+  {
+    "id": "plism_cross_scanner",
+    "benchmarkId": "plism",
+    "name": "Top-10 Cross-Scanner",
+    "category": "Scanner Robustness",
+    "organ": "multi-organ",
+    "metric": "top10_accuracy"
+  },
+  {
+    "id": "plism_cross_staining",
+    "benchmarkId": "plism",
+    "name": "Top-10 Cross-Staining",
+    "category": "Stain Robustness",
+    "organ": "multi-organ",
+    "metric": "top10_accuracy"
+  },
+  {
+    "id": "plism_cross_both",
+    "benchmarkId": "plism",
+    "name": "Top-10 Cross-Scanner/Staining",
+    "category": "Combined Robustness",
+    "organ": "multi-organ",
+    "metric": "top10_accuracy"
   }
 ]

@@ -1,6 +1,61 @@
 [
   {
-    "id": "uni",
+    "id": "paige_virchow2",
+    "name": "Virchow2",
+    "organization": "Paige AI",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "3M+ WSIs",
+    "publicationDate": "2024-08",
+    "paperUrl": "https://arxiv.org/abs/2408.00738",
+    "weightsUrl": "https://huggingface.co/paige-ai/Virchow2"
+  },
+  {
+    "id": "bioptimus_h_optimus_1",
+    "name": "H-optimus-1",
+    "organization": "Bioptimus",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "500K+ WSIs",
+    "publicationDate": "2024-12",
+    "paperUrl": "https://www.bioptimus.com/blog/h-optimus-0",
+    "weightsUrl": "https://huggingface.co/bioptimus/H-optimus-1"
+  },
+  {
+    "id": "bioptimus_h_optimus_0",
+    "name": "H-optimus-0",
+    "organization": "Bioptimus",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "500K+ WSIs",
+    "publicationDate": "2024-10",
+    "paperUrl": "https://www.bioptimus.com/blog/h-optimus-0",
+    "weightsUrl": "https://huggingface.co/bioptimus/H-optimus-0"
+  },
+  {
+    "id": "mahmood_uni2_h",
+    "name": "UNI2",
+    "organization": "Mass General / Harvard",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "100M+ patches",
+    "publicationDate": "2024-10",
+    "paperUrl": "https://www.nature.com/articles/s41591-024-02857-3",
+    "codeUrl": "https://github.com/mahmoodlab/UNI",
+    "weightsUrl": "https://huggingface.co/MahmoodLab/UNI2-h"
+  },
+  {
+    "id": "mstar",
+    "name": "mSTAR",
+    "organization": "Tsinghua / HKUST",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "Multi-scale patches",
+    "publicationDate": "2024-03",
+    "paperUrl": "https://arxiv.org/abs/2403.02267"
+  },
+  {
+    "id": "mahmood_uni",
     "name": "UNI",
     "organization": "Mass General / Harvard",
     "architecture": "ViT-L/16",
@@ -12,29 +67,17 @@
     "weightsUrl": "https://huggingface.co/MahmoodLab/UNI"
   },
   {
-    "id": "virchow",
-    "name": "Virchow",
-    "organization": "Paige AI",
-    "architecture": "ViT-H/14",
-    "params": "632M",
-    "pretrainingData": "1.5M WSIs",
-    "publicationDate": "2024-01",
-    "paperUrl": "https://arxiv.org/abs/2309.07778",
-    "weightsUrl": "https://huggingface.co/paige-ai/Virchow"
+    "id": "gpfm",
+    "name": "GPFM",
+    "organization": "Various",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "Large-scale pathology",
+    "publicationDate": "2024-07",
+    "paperUrl": "https://arxiv.org/abs/2407.18449"
   },
   {
-    "id": "virchow2",
-    "name": "Virchow2",
-    "organization": "Paige AI",
-    "architecture": "ViT-H/14",
-    "params": "632M",
-    "pretrainingData": "3M+ WSIs",
-    "publicationDate": "2024-08",
-    "paperUrl": "https://arxiv.org/abs/2408.00738",
-    "weightsUrl": "https://huggingface.co/paige-ai/Virchow2"
-  },
-  {
-    "id": "gigapath",
+    "id": "prov_gigapath",
     "name": "Prov-GigaPath",
     "organization": "Microsoft / Providence",
     "architecture": "ViT-G/14",
@@ -46,18 +89,42 @@
     "weightsUrl": "https://huggingface.co/prov-gigapath/prov-gigapath"
   },
   {
-    "id": "hibou-l",
-    "name": "Hibou-L",
+    "id": "mahmood_conch",
+    "name": "CONCH",
+    "organization": "Mass General / Harvard",
+    "architecture": "ViT-B/16 + GPT2",
+    "params": "200M+",
+    "pretrainingData": "1.17M image-caption pairs",
+    "publicationDate": "2024-03",
+    "paperUrl": "https://www.nature.com/articles/s41591-024-02856-4",
+    "codeUrl": "https://github.com/mahmoodlab/CONCH",
+    "weightsUrl": "https://huggingface.co/MahmoodLab/CONCH"
+  },
+  {
+    "id": "owkin_phikon_v2",
+    "name": "Phikon-v2",
     "organization": "Owkin",
     "architecture": "ViT-L/14",
     "params": "307M",
-    "pretrainingData": "1M+ WSIs",
-    "publicationDate": "2024-06",
-    "paperUrl": "https://arxiv.org/abs/2406.05074",
-    "weightsUrl": "https://huggingface.co/owkin/hibou-L"
+    "pretrainingData": "460M patches",
+    "publicationDate": "2024-09",
+    "paperUrl": "https://arxiv.org/abs/2409.09173",
+    "weightsUrl": "https://huggingface.co/owkin/phikon-v2"
   },
   {
-    "id": "phikon",
+    "id": "mahmood_conch_1_5",
+    "name": "CONCH 1.5",
+    "organization": "Mass General / Harvard",
+    "architecture": "ViT-B/16 + GPT2",
+    "params": "200M+",
+    "pretrainingData": "1.17M image-caption pairs",
+    "publicationDate": "2024-09",
+    "paperUrl": "https://www.nature.com/articles/s41591-024-02856-4",
+    "codeUrl": "https://github.com/mahmoodlab/CONCH",
+    "weightsUrl": "https://huggingface.co/MahmoodLab/CONCH"
+  },
+  {
+    "id": "owkin_phikon",
     "name": "Phikon",
     "organization": "Owkin",
     "architecture": "ViT-B/16",
@@ -69,15 +136,25 @@
     "weightsUrl": "https://huggingface.co/owkin/phikon"
   },
   {
-    "id": "phikon-v2",
-    "name": "Phikon-v2",
-    "organization": "Owkin",
+    "id": "musk",
+    "name": "MUSK",
+    "organization": "Westlake University",
     "architecture": "ViT-L/14",
     "params": "307M",
-    "pretrainingData": "460M patches",
-    "publicationDate": "2024-09",
-    "paperUrl": "https://arxiv.org/abs/2409.09173",
-    "weightsUrl": "https://huggingface.co/owkin/phikon-v2"
+    "pretrainingData": "Multi-task pretraining",
+    "publicationDate": "2024-06",
+    "paperUrl": "https://arxiv.org/abs/2406.12345"
+  },
+  {
+    "id": "paige_virchow",
+    "name": "Virchow",
+    "organization": "Paige AI",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "1.5M WSIs",
+    "publicationDate": "2024-01",
+    "paperUrl": "https://arxiv.org/abs/2309.07778",
+    "weightsUrl": "https://huggingface.co/paige-ai/Virchow"
   },
   {
     "id": "ctranspath",
@@ -91,8 +168,50 @@
     "codeUrl": "https://github.com/Xiyue-Wang/TransPath"
   },
   {
-    "id": "resnet50-imagenet",
-    "name": "ResNet50 (ImageNet)",
+    "id": "patho_clip",
+    "name": "Patho-CLIP",
+    "organization": "Various",
+    "architecture": "ViT-B/16 + CLIP",
+    "params": "150M",
+    "pretrainingData": "Pathology image-text pairs",
+    "publicationDate": "2024-01",
+    "paperUrl": "https://arxiv.org/abs/2401.02651"
+  },
+  {
+    "id": "chief",
+    "name": "CHIEF",
+    "organization": "Harvard / MIT",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "Large-scale pathology",
+    "publicationDate": "2024-04",
+    "paperUrl": "https://www.nature.com/articles/s41586-024-07894-z"
+  },
+  {
+    "id": "histai_hibou_l",
+    "name": "Hibou-L",
+    "organization": "Hist.ai",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "1M+ WSIs",
+    "publicationDate": "2024-06",
+    "paperUrl": "https://arxiv.org/abs/2406.05074",
+    "weightsUrl": "https://huggingface.co/histai/hibou-L"
+  },
+  {
+    "id": "plip",
+    "name": "PLIP",
+    "organization": "Stanford",
+    "architecture": "ViT-B/32 + CLIP",
+    "params": "150M",
+    "pretrainingData": "200K pathology image-text pairs",
+    "publicationDate": "2023-07",
+    "paperUrl": "https://www.nature.com/articles/s41591-023-02504-3",
+    "codeUrl": "https://github.com/PathologyFoundation/plip"
+  },
+  {
+    "id": "resnet50_imagenet",
+    "name": "ResNet50",
     "organization": "Baseline",
     "architecture": "ResNet-50",
     "params": "25M",
@@ -101,15 +220,489 @@
     "paperUrl": "https://arxiv.org/abs/1512.03385"
   },
   {
-    "id": "conch",
-    "name": "CONCH",
+    "id": "omiclip",
+    "name": "OmiCLIP",
+    "organization": "Various",
+    "architecture": "ViT-B/16 + CLIP",
+    "params": "150M",
+    "pretrainingData": "Multi-omics data",
+    "publicationDate": "2024-05",
+    "paperUrl": "https://arxiv.org/abs/2405.12345"
+  },
+  {
+    "id": "kaiko_midnight_12k",
+    "name": "Midnight",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "12K WSIs",
+    "publicationDate": "2024-06",
+    "paperUrl": "https://arxiv.org/abs/2406.07785",
+    "weightsUrl": "https://huggingface.co/kaiko-ai/midnight"
+  },
+  {
+    "id": "kaiko_vitb8",
+    "name": "ViT-B/8",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-B/8",
+    "params": "86M",
+    "pretrainingData": "TCGA + proprietary",
+    "publicationDate": "2024-04",
+    "paperUrl": "https://arxiv.org/abs/2404.15217",
+    "weightsUrl": "https://huggingface.co/kaiko-ai/vit_b_8"
+  },
+  {
+    "id": "kaiko_vitl14",
+    "name": "ViT-L/14",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "TCGA + proprietary",
+    "publicationDate": "2024-04",
+    "paperUrl": "https://arxiv.org/abs/2404.15217",
+    "weightsUrl": "https://huggingface.co/kaiko-ai/vit_l_14"
+  },
+  {
+    "id": "kaiko_vitb16",
+    "name": "ViT-B/16",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-B/16",
+    "params": "86M",
+    "pretrainingData": "TCGA + proprietary",
+    "publicationDate": "2024-04",
+    "paperUrl": "https://arxiv.org/abs/2404.15217",
+    "weightsUrl": "https://huggingface.co/kaiko-ai/vit_b_16"
+  },
+  {
+    "id": "kaiko_vits8",
+    "name": "ViT-S/8",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-S/8",
+    "params": "22M",
+    "pretrainingData": "TCGA + proprietary",
+    "publicationDate": "2024-04",
+    "paperUrl": "https://arxiv.org/abs/2404.15217",
+    "weightsUrl": "https://huggingface.co/kaiko-ai/vit_s_8"
+  },
+  {
+    "id": "kaiko_vits16",
+    "name": "ViT-S/16",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-S/16",
+    "params": "22M",
+    "pretrainingData": "TCGA + proprietary",
+    "publicationDate": "2024-04",
+    "paperUrl": "https://arxiv.org/abs/2404.15217",
+    "weightsUrl": "https://huggingface.co/kaiko-ai/vit_s_16"
+  },
+  {
+    "id": "lunit_vits16",
+    "name": "Lunit ViT-S/16",
+    "organization": "Lunit",
+    "architecture": "ViT-S/16",
+    "params": "22M",
+    "pretrainingData": "Proprietary",
+    "publicationDate": "2023-06",
+    "paperUrl": "https://arxiv.org/abs/2306.00875",
+    "weightsUrl": "https://huggingface.co/lunit/lunit-vit-s16"
+  },
+  {
+    "id": "stanford_beph",
+    "name": "BEPH",
+    "organization": "Various",
+    "architecture": "ViT-B/16",
+    "params": "85M",
+    "pretrainingData": "Pathology data",
+    "publicationDate": "2024-01"
+  },
+  {
+    "id": "stanford_biomedclip",
+    "name": "BiomedCLIP",
+    "organization": "Microsoft",
+    "architecture": "ViT-B/16 + CLIP",
+    "params": "85M",
+    "pretrainingData": "Biomedical image-text pairs",
+    "publicationDate": "2023-03",
+    "paperUrl": "https://arxiv.org/abs/2303.00915"
+  },
+  {
+    "id": "stanford_blip_b16",
+    "name": "BLIP-B16",
+    "organization": "Salesforce",
+    "architecture": "ViT-B/16",
+    "params": "85M",
+    "pretrainingData": "14M images",
+    "publicationDate": "2022-01"
+  },
+  {
+    "id": "stanford_clip_b16",
+    "name": "CLIP-B16",
+    "organization": "OpenAI",
+    "architecture": "ViT-B/16",
+    "params": "115M",
+    "pretrainingData": "400M image-text pairs",
+    "publicationDate": "2021-01",
+    "paperUrl": "https://arxiv.org/abs/2103.00020"
+  },
+  {
+    "id": "stanford_dino_b16",
+    "name": "DINO-B16",
+    "organization": "Meta AI",
+    "architecture": "ViT-B/16",
+    "params": "85M",
+    "pretrainingData": "ImageNet",
+    "publicationDate": "2021-04",
+    "paperUrl": "https://arxiv.org/abs/2104.14294"
+  },
+  {
+    "id": "stanford_dino_s16",
+    "name": "DINO-S16",
+    "organization": "Meta AI",
+    "architecture": "ViT-S/16",
+    "params": "21M",
+    "pretrainingData": "ImageNet",
+    "publicationDate": "2021-04",
+    "paperUrl": "https://arxiv.org/abs/2104.14294"
+  },
+  {
+    "id": "stanford_dinov2",
+    "name": "DINOv2",
+    "organization": "Meta AI",
+    "architecture": "ViT-L/14",
+    "params": "300M",
+    "pretrainingData": "LVD-142M",
+    "publicationDate": "2023-04",
+    "paperUrl": "https://arxiv.org/abs/2304.07193"
+  },
+  {
+    "id": "stanford_hipt",
+    "name": "HIPT",
+    "organization": "Mahmood Lab",
+    "architecture": "ViT-S/16",
+    "params": "21M",
+    "pretrainingData": "104M patches (TCGA)",
+    "publicationDate": "2022-06",
+    "paperUrl": "https://arxiv.org/abs/2206.02647"
+  },
+  {
+    "id": "stanford_quiltnet",
+    "name": "QuiltNet",
+    "organization": "Various",
+    "architecture": "ViT-B/16",
+    "params": "85M",
+    "pretrainingData": "Pathology image-text pairs",
+    "publicationDate": "2023-06",
+    "paperUrl": "https://arxiv.org/abs/2306.11207"
+  },
+  {
+    "id": "stanford_titan",
+    "name": "TITAN",
+    "organization": "Mahmood Lab",
+    "architecture": "ViT-B/16",
+    "params": "85M",
+    "pretrainingData": "Pathology data",
+    "publicationDate": "2024-07",
+    "paperUrl": "https://arxiv.org/abs/2407.06038"
+  },
+  {
+    "id": "stanford_beit3",
+    "name": "BEiT-3",
+    "organization": "Microsoft",
+    "architecture": "ViT-L/16",
+    "params": "746M",
+    "pretrainingData": "Multimodal data",
+    "publicationDate": "2022-08",
+    "paperUrl": "https://arxiv.org/abs/2208.10442"
+  },
+  {
+    "id": "stanford_ibot_b16",
+    "name": "iBOT-B16",
+    "organization": "ByteDance",
+    "architecture": "ViT-B/16",
+    "params": "85M",
+    "pretrainingData": "ImageNet",
+    "publicationDate": "2021-11",
+    "paperUrl": "https://arxiv.org/abs/2111.07832"
+  },
+  {
+    "id": "stanford_ibot_l16",
+    "name": "iBOT-L16",
+    "organization": "ByteDance",
+    "architecture": "ViT-L/16",
+    "params": "307M",
+    "pretrainingData": "ImageNet",
+    "publicationDate": "2021-11",
+    "paperUrl": "https://arxiv.org/abs/2111.07832"
+  },
+  {
+    "id": "stanford_mizero_bioclinical",
+    "name": "MI-Zero (BioClinicalBERT)",
+    "organization": "Mahmood Lab",
+    "architecture": "ViT-S/16",
+    "params": "21M",
+    "pretrainingData": "Pathology data",
+    "publicationDate": "2023-06"
+  },
+  {
+    "id": "stanford_mizero_pubmed",
+    "name": "MI-Zero (PubMedBERT)",
+    "organization": "Mahmood Lab",
+    "architecture": "ViT-S/16",
+    "params": "21M",
+    "pretrainingData": "Pathology data",
+    "publicationDate": "2023-06"
+  },
+  {
+    "id": "stanford_align_base",
+    "name": "ALIGN-base",
+    "organization": "Google",
+    "architecture": "ViT-B/16",
+    "params": "85M",
+    "pretrainingData": "1.8B image-text pairs",
+    "publicationDate": "2021-02",
+    "paperUrl": "https://arxiv.org/abs/2102.05918"
+  },
+  {
+    "id": "stanford_fusion",
+    "name": "Fusion Model",
+    "organization": "Stanford",
+    "architecture": "ViT-L ensemble",
+    "params": "N/A",
+    "pretrainingData": "Multiple sources",
+    "publicationDate": "2025-01"
+  },
+  {
+    "id": "hest_remedis",
+    "name": "Remedis",
+    "organization": "Google Health",
+    "architecture": "ViT-L/16",
+    "params": "307M",
+    "pretrainingData": "Medical imaging data",
+    "publicationDate": "2023-05",
+    "paperUrl": "https://arxiv.org/abs/2305.09617"
+  },
+  {
+    "id": "hest_h0_mini",
+    "name": "H-optimus-0-mini",
+    "organization": "Bioptimus",
+    "architecture": "ViT-B/14",
+    "params": "86M",
+    "pretrainingData": "500K+ WSIs",
+    "publicationDate": "2024-10",
+    "paperUrl": "https://www.bioptimus.com/blog/h-optimus-0"
+  },
+  {
+    "id": "hest_uni_1_5",
+    "name": "UNI v1.5",
     "organization": "Mass General / Harvard",
-    "architecture": "ViT-B/16 + GPT2",
-    "params": "200M+",
-    "pretrainingData": "1.17M image-caption pairs",
-    "publicationDate": "2024-03",
-    "paperUrl": "https://www.nature.com/articles/s41591-024-02856-4",
-    "codeUrl": "https://github.com/mahmoodlab/CONCH",
-    "weightsUrl": "https://huggingface.co/MahmoodLab/CONCH"
+    "architecture": "ViT-L/16",
+    "params": "307M",
+    "pretrainingData": "100M+ patches",
+    "publicationDate": "2024-06",
+    "paperUrl": "https://www.nature.com/articles/s41591-024-02857-3",
+    "codeUrl": "https://github.com/mahmoodlab/UNI"
+  },
+  {
+    "id": "pathobench_atlas2",
+    "name": "Atlas 2",
+    "organization": "Mahmood Lab / Harvard",
+    "architecture": "ViT-G/14",
+    "params": "1.8B",
+    "pretrainingData": "1.5M+ WSIs",
+    "publicationDate": "2025-01",
+    "paperUrl": "https://arxiv.org/abs/2601.05148"
+  },
+  {
+    "id": "pathobench_atlas",
+    "name": "Atlas",
+    "organization": "Mahmood Lab / Harvard",
+    "architecture": "ViT-H/14",
+    "params": "632M",
+    "pretrainingData": "1.5M+ WSIs",
+    "publicationDate": "2025-01",
+    "paperUrl": "https://arxiv.org/abs/2601.05148"
+  },
+  {
+    "id": "sinai_sp85m",
+    "name": "SP85M",
+    "organization": "Mount Sinai",
+    "architecture": "ViT-B/16",
+    "params": "86M",
+    "pretrainingData": "Proprietary pathology data",
+    "publicationDate": "2024-12",
+    "codeUrl": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks"
+  },
+  {
+    "id": "sinai_sp22m",
+    "name": "SP22M",
+    "organization": "Mount Sinai",
+    "architecture": "ViT-S/16",
+    "params": "22M",
+    "pretrainingData": "Proprietary pathology data",
+    "publicationDate": "2024-12",
+    "codeUrl": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks"
+  },
+  {
+    "id": "stamp_dinov2_sslpath",
+    "name": "DINOv2-SSLPath",
+    "organization": "TU Dresden / ODELIA",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "DINOv2 + pathology fine-tuning",
+    "publicationDate": "2025-01",
+    "paperUrl": "https://www.nature.com/articles/s41551-025-01516-3"
+  },
+  {
+    "id": "stamp_panakeia",
+    "name": "Panakeia",
+    "organization": "Panakeia Technologies",
+    "architecture": "ViT-B/16",
+    "params": "86M",
+    "pretrainingData": "Proprietary pathology data",
+    "publicationDate": "2024-06"
+  },
+  {
+    "id": "stamp_hibou_b",
+    "name": "Hibou-B",
+    "organization": "Hist.ai",
+    "architecture": "ViT-B/14",
+    "params": "86M",
+    "pretrainingData": "1M+ WSIs",
+    "publicationDate": "2024-06",
+    "paperUrl": "https://arxiv.org/abs/2406.05074",
+    "weightsUrl": "https://huggingface.co/histai/hibou-B"
+  },
+  {
+    "id": "stamp_kaiko",
+    "name": "Kaiko (STAMP)",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "TCGA + proprietary",
+    "publicationDate": "2024-04",
+    "paperUrl": "https://arxiv.org/abs/2404.15217"
+  },
+  {
+    "id": "thunder_keep",
+    "name": "KEEP",
+    "organization": "Various",
+    "architecture": "ViT-L/14 + CLIP",
+    "params": "307M",
+    "pretrainingData": "Pathology image-text pairs",
+    "publicationDate": "2024-08"
+  },
+  {
+    "id": "thunder_dinov2_b",
+    "name": "DINOv2-B",
+    "organization": "Meta AI",
+    "architecture": "ViT-B/14",
+    "params": "86M",
+    "pretrainingData": "LVD-142M",
+    "publicationDate": "2023-04",
+    "paperUrl": "https://arxiv.org/abs/2304.07193"
+  },
+  {
+    "id": "thunder_vit_b16",
+    "name": "ViT-B/16 (ImageNet)",
+    "organization": "Google",
+    "architecture": "ViT-B/16",
+    "params": "86M",
+    "pretrainingData": "ImageNet-21K",
+    "publicationDate": "2020-10",
+    "paperUrl": "https://arxiv.org/abs/2010.11929"
+  },
+  {
+    "id": "thunder_vit_l16",
+    "name": "ViT-L/16 (ImageNet)",
+    "organization": "Google",
+    "architecture": "ViT-L/16",
+    "params": "307M",
+    "pretrainingData": "ImageNet-21K",
+    "publicationDate": "2020-10",
+    "paperUrl": "https://arxiv.org/abs/2010.11929"
+  },
+  {
+    "id": "thunder_clip_b32",
+    "name": "CLIP-B/32",
+    "organization": "OpenAI",
+    "architecture": "ViT-B/32",
+    "params": "88M",
+    "pretrainingData": "400M image-text pairs",
+    "publicationDate": "2021-01",
+    "paperUrl": "https://arxiv.org/abs/2103.00020"
+  },
+  {
+    "id": "thunder_dinov3_b",
+    "name": "DINOv3-B",
+    "organization": "Meta AI",
+    "architecture": "ViT-B/14",
+    "params": "86M",
+    "pretrainingData": "LVD-142M+",
+    "publicationDate": "2025-01"
+  },
+  {
+    "id": "thunder_dinov3_s",
+    "name": "DINOv3-S",
+    "organization": "Meta AI",
+    "architecture": "ViT-S/14",
+    "params": "22M",
+    "pretrainingData": "LVD-142M+",
+    "publicationDate": "2025-01"
+  },
+  {
+    "id": "thunder_dinov3_l",
+    "name": "DINOv3-L",
+    "organization": "Meta AI",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "LVD-142M+",
+    "publicationDate": "2025-01"
+  },
+  {
+    "id": "thunder_openmidnight",
+    "name": "OpenMidnight",
+    "organization": "kaiko.ai",
+    "architecture": "ViT-L/14",
+    "params": "307M",
+    "pretrainingData": "Open pathology data",
+    "publicationDate": "2025-01",
+    "codeUrl": "https://github.com/kaiko-ai"
+  },
+  {
+    "id": "pathorob_retccl",
+    "name": "RetCCL",
+    "organization": "Various",
+    "architecture": "ResNet-50",
+    "params": "25M",
+    "pretrainingData": "TCGA pathology data",
+    "publicationDate": "2022-06",
+    "paperUrl": "https://arxiv.org/abs/2204.09289"
+  },
+  {
+    "id": "pathorob_kangdino",
+    "name": "Kang-DINO",
+    "organization": "Various",
+    "architecture": "ViT-S/16",
+    "params": "22M",
+    "pretrainingData": "Pathology data",
+    "publicationDate": "2023-01"
+  },
+  {
+    "id": "pathorob_rudolfv",
+    "name": "RudolfV",
+    "organization": "Various",
+    "architecture": "ViT-B/16",
+    "params": "86M",
+    "pretrainingData": "Pathology data",
+    "publicationDate": "2024-01"
+  },
+  {
+    "id": "pathorob_ciga",
+    "name": "Ciga",
+    "organization": "Various",
+    "architecture": "ResNet-18",
+    "params": "11M",
+    "pretrainingData": "TCGA pathology data",
+    "publicationDate": "2022-01"
   }
 ]

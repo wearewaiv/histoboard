@@ -15,6 +15,8 @@ const benchmarks = benchmarksData as Benchmark[];
 const tasks = tasksData as Task[];
 
 const categoryColors: Record<string, string> = {
+  "pathology": "bg-blue-100 text-blue-800",
+  "spatial-transcriptomics": "bg-purple-100 text-purple-800",
   "patch-level": "bg-blue-100 text-blue-800",
   "slide-level": "bg-purple-100 text-purple-800",
   survival: "bg-red-100 text-red-800",
