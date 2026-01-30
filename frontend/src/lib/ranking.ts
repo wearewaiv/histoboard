@@ -111,7 +111,7 @@ export function filterResults(
 
     if (
       filters.categories.length > 0 &&
-      !filters.categories.includes(task.category)
+      !filters.categories.includes(task.category as BenchmarkCategory)
     ) {
       return false;
     }
