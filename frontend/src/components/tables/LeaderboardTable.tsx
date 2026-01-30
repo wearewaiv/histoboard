@@ -36,6 +36,7 @@ export function LeaderboardTable({
   benchmarks,
 }: LeaderboardTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
+  const [sortByBenchmarkCount, setSortByBenchmarkCount] = useState<"asc" | "desc" | null>(null);
   const modelMap = new Map(models.map((m) => [m.id, m]));
 
   // Compute integer ranks per benchmark (1, 2, 3, ...) based on avgRank
@@ -64,8 +65,25 @@ export function LeaderboardTable({
     return ranks;
   }, [modelRankings, benchmarks]);
 
+  // Count models per benchmark for column headers
+  const benchmarkModelCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const benchmark of benchmarks) {
+      counts[benchmark.id] = benchmarkIntegerRanks[benchmark.id]?.size || 0;
+    }
+    return counts;
+  }, [benchmarks, benchmarkIntegerRanks]);
+
   // Sort models based on current sort config
   const sortedRankings = useMemo(() => {
+    if (sortByBenchmarkCount) {
+      return [...modelRankings].sort((a, b) => {
+        const countA = (a.benchmarkCount as number) || 0;
+        const countB = (b.benchmarkCount as number) || 0;
+        return sortByBenchmarkCount === "asc" ? countA - countB : countB - countA;
+      });
+    }
+
     if (!sortConfig) {
       return modelRankings;
     }
@@ -81,9 +99,10 @@ export function LeaderboardTable({
 
       return sortConfig.direction === "asc" ? rankA - rankB : rankB - rankA;
     });
-  }, [modelRankings, sortConfig, benchmarkIntegerRanks]);
+  }, [modelRankings, sortConfig, sortByBenchmarkCount, benchmarkIntegerRanks]);
 
   const handleSort = (benchmarkId: string) => {
+    setSortByBenchmarkCount(null); // Clear benchmark count sort
     setSortConfig((prev) => {
       if (prev?.benchmarkId === benchmarkId) {
         // Toggle direction or clear
@@ -96,14 +115,50 @@ export function LeaderboardTable({
     });
   };
 
+  const handleBenchmarkCountSort = () => {
+    setSortConfig(null); // Clear benchmark sort
+    setSortByBenchmarkCount((prev) => {
+      if (prev === null) return "desc"; // Default to descending (most benchmarks first)
+      if (prev === "desc") return "asc";
+      return null;
+    });
+  };
+
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto max-h-[70vh]">
       <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b bg-muted/50">
+        <thead className="sticky top-0 z-10">
+          <tr className="border-b bg-muted">
             <th className="px-4 py-3 text-left text-sm font-semibold">Model</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">
               Organization
+            </th>
+            <th className="px-4 py-3 text-center text-sm font-semibold">
+              <button
+                onClick={handleBenchmarkCountSort}
+                className="inline-flex items-center gap-1 hover:text-primary transition-colors"
+                title="Sort by number of benchmarks"
+              >
+                # Benchmarks
+                <span className="flex flex-col">
+                  <ChevronUp
+                    className={cn(
+                      "h-3 w-3 -mb-1",
+                      sortByBenchmarkCount === "asc"
+                        ? "text-primary"
+                        : "text-muted-foreground/50"
+                    )}
+                  />
+                  <ChevronDown
+                    className={cn(
+                      "h-3 w-3",
+                      sortByBenchmarkCount === "desc"
+                        ? "text-primary"
+                        : "text-muted-foreground/50"
+                    )}
+                  />
+                </span>
+              </button>
             </th>
             {benchmarks.map((benchmark) => (
               <th
@@ -173,25 +228,30 @@ export function LeaderboardTable({
                 <td className="px-4 py-3 text-sm text-muted-foreground">
                   {model.organization}
                 </td>
+                <td className="px-4 py-3 text-center">
+                  <Badge variant="outline" className="font-medium">
+                    {ranking.benchmarkCount || 0}
+                  </Badge>
+                </td>
                 {benchmarks.map((benchmark) => {
                   const integerRank = benchmarkIntegerRanks[benchmark.id]?.get(ranking.modelId as string);
-                  const avgRank = ranking[benchmark.id];
+                  const total = benchmarkModelCounts[benchmark.id];
                   const medal = integerRank ? getMedal(integerRank) : null;
 
                   return (
                     <td key={benchmark.id} className="px-4 py-3 text-center">
-                      {avgRank !== undefined && typeof avgRank === "number" ? (
+                      {integerRank !== undefined ? (
                         <div className="flex items-center justify-center gap-1">
                           {medal && <span className="text-lg">{medal}</span>}
                           <Badge
-                            variant={integerRank && integerRank <= 3 ? "default" : "secondary"}
+                            variant={integerRank <= 3 ? "default" : "secondary"}
                             className={cn(
                               integerRank === 1 && "bg-yellow-500 hover:bg-yellow-600",
                               integerRank === 2 && "bg-gray-400 hover:bg-gray-500",
                               integerRank === 3 && "bg-amber-600 hover:bg-amber-700"
                             )}
                           >
-                            {avgRank.toFixed(2)}
+                            {integerRank}<span className="text-[0.7em] opacity-70">/{total}</span>
                           </Badge>
                         </div>
                       ) : (
