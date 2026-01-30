@@ -15,6 +15,7 @@ export interface Model {
   license?: LicenseType;
   publicationType?: PublicationType;
   modelType?: ModelType;
+  trainingMethod?: string;
   paperUrl?: string;
   blogUrl?: string;
   codeUrl?: string;
@@ -26,20 +27,26 @@ export interface Benchmark {
   id: string;
   name: string;
   shortName: string;
-  category: BenchmarkCategory;
+  category: BenchmarkCategory | BenchmarkCategory[];
   url: string;
   organs: string[];
   taskCount: number;
   description: string;
+  paperUrl?: string;
+  datasetUrl?: string;
 }
 
 export type BenchmarkCategory =
+  | "pathology"
+  | "radiology"
+  | "spatial-transcriptomics"
   | "patch-level"
   | "slide-level"
   | "survival"
   | "segmentation"
   | "retrieval"
-  | "robustness";
+  | "robustness"
+  | "H&E";
 
 export interface Task {
   id: string;
@@ -47,7 +54,8 @@ export interface Task {
   name: string;
   organ: string;
   metric: MetricType;
-  category: BenchmarkCategory;
+  category: BenchmarkCategory | string;
+  dataset?: string;
 }
 
 export type MetricType = "accuracy" | "auc" | "f1" | "c-index" | "dice" | "map";

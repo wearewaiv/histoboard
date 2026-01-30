@@ -257,6 +257,12 @@ export default function ModelsPage() {
                     <dt className="text-muted-foreground">Parameters</dt>
                     <dd className="font-medium">{model.params}</dd>
                   </div>
+                  {model.trainingMethod && (
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Training Method</dt>
+                      <dd className="font-medium">{model.trainingMethod}</dd>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <dt className="text-muted-foreground">Training Data</dt>
                     <dd className="font-medium text-right max-w-[60%] truncate">

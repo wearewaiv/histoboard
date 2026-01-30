@@ -12,6 +12,16 @@ interface DetailedResultsTableProps {
   modelRankings: { modelId: string; overallRank: number }[];
 }
 
+// Get metric display for EVA tasks
+// All EVA metrics are balanced accuracy except Dice for segmentation tasks (CoNSeP, MoNuSAC)
+function getEvaMetricDisplay(taskName: string): string {
+  const name = taskName.toLowerCase();
+  if (name.includes("consep") || name.includes("monusac")) {
+    return "Dice";
+  }
+  return "Bal. Acc";
+}
+
 export function DetailedResultsTable({
   models,
   tasks,
@@ -96,6 +106,28 @@ export function DetailedResultsTable({
     return avgRanks;
   }, [models, filteredTasks, results]);
 
+  // Compute average metric value per model (across filtered tasks, excluding BACH)
+  const modelAvgValues = useMemo(() => {
+    const avgValues = new Map<string, number>();
+
+    for (const model of models) {
+      const values: number[] = [];
+      for (const task of filteredTasks) {
+        // Exclude BACH task from average calculation
+        if (task.name.toLowerCase().includes("bach")) continue;
+        const value = resultsMap.get(model.id)?.get(task.id);
+        if (value !== undefined) {
+          values.push(value);
+        }
+      }
+      if (values.length > 0) {
+        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
+      }
+    }
+
+    return avgValues;
+  }, [models, filteredTasks, resultsMap]);
+
   // Sort models by average rank
   const sortedModels = useMemo(() => {
     return [...models].sort((a, b) => {
@@ -154,16 +186,19 @@ export function DetailedResultsTable({
                 <th
                   key={task.id}
                   className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[100px]"
-                  title={`${task.name} (${task.metric})`}
+                  title={`${task.name} (${getEvaMetricDisplay(task.name)})`}
                 >
                   <div className="text-xs truncate max-w-[120px]" title={task.name}>
                     {task.name}
                   </div>
                   <div className="text-[10px] text-muted-foreground font-normal">
-                    {task.metric}
+                    {getEvaMetricDisplay(task.name)}
                   </div>
                 </th>
               ))}
+              <th className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[80px] bg-muted/80">
+                <div className="text-xs">Average</div>
+              </th>
               <th className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[80px] bg-muted/80">
                 <div className="text-xs">Avg Rank</div>
               </th>
@@ -212,6 +247,9 @@ export function DetailedResultsTable({
                       </td>
                     );
                   })}
+                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
+                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                  </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
                     {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
                   </td>
