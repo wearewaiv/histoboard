@@ -1,5 +1,9 @@
 // Core TypeScript types for Histoboard
 
+export type LicenseType = "open-source" | "non-commercial" | "closed-source";
+export type PublicationType = "peer-reviewed" | "preprint" | "blog";
+export type ModelType = "vision" | "vision-language";
+
 export interface Model {
   id: string;
   name: string;
@@ -8,9 +12,14 @@ export interface Model {
   params: string;
   pretrainingData: string;
   publicationDate: string;
+  license?: LicenseType;
+  publicationType?: PublicationType;
+  modelType?: ModelType;
   paperUrl?: string;
+  blogUrl?: string;
   codeUrl?: string;
   weightsUrl?: string;
+  datasetUrl?: string;
 }
 
 export interface Benchmark {

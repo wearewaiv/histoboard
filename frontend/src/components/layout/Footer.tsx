@@ -9,7 +9,7 @@ export function Footer() {
           Data is collected from public benchmarks and papers.
         </p>
         <p className="text-sm text-muted-foreground">
-          Last updated: December 2024
+          Last updated: January 2025
         </p>
       </div>
     </footer>

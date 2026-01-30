@@ -4,7 +4,7 @@
     "name": "EVA Benchmark",
     "shortName": "EVA",
     "category": "pathology",
-    "url": "https://kaiko.ai/benchmarks/eva",
+    "url": "https://kaiko-ai.github.io/eva/main/",
     "organs": [
       "breast",
       "colon",
@@ -127,7 +127,7 @@
     "shortName": "STAMP",
     "category": "pathology",
     "description": "Nature Biomedical Engineering benchmark evaluating 15 foundation models as feature extractors for weakly supervised computational pathology across morphology, biomarker, and prognosis tasks.",
-    "url": "https://doi.org/10.5281/zenodo.15749283",
+    "url": "https://github.com/KatherLab/STAMP-Benchmark",
     "paperUrl": "https://www.nature.com/articles/s41551-025-01516-3",
     "organs": [
       "lung",
@@ -143,7 +143,7 @@
     "shortName": "THUNDER",
     "category": "pathology",
     "description": "Comprehensive benchmark evaluating pathology foundation models across KNN classification, linear probing, few-shot learning, segmentation, calibration, and adversarial robustness tasks.",
-    "url": "https://github.com/MICS-Lab/thunder",
+    "url": "https://mics-lab.github.io/thunder/",
     "organs": [
       "multi-organ"
     ],
