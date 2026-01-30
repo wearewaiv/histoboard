@@ -10,6 +10,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2408.00738",
     "weightsUrl": "https://huggingface.co/paige-ai/Virchow2"
   },
@@ -24,6 +25,7 @@
     "license": "non-commercial",
     "publicationType": "blog",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "blogUrl": "https://www.bioptimus.com/h-optimus-1",
     "weightsUrl": "https://huggingface.co/bioptimus/H-optimus-1"
   },
@@ -38,6 +40,7 @@
     "license": "open-source",
     "publicationType": "blog",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "blogUrl": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-0-the-worlds-largest-open-source-ai-foundation-model-for-pathology",
     "weightsUrl": "https://huggingface.co/bioptimus/H-optimus-0"
   },
@@ -52,6 +55,7 @@
     "license": "non-commercial",
     "publicationType": "blog",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "blogUrl": "https://www.linkedin.com/pulse/announcing-uni-2-tong-ding-mfk9e/",
     "codeUrl": "https://github.com/mahmoodlab/UNI",
     "weightsUrl": "https://huggingface.co/MahmoodLab/UNI2-h"
@@ -67,6 +71,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "Contrastive (custom)",
     "paperUrl": "https://www.nature.com/articles/s41467-025-66220-x",
     "codeUrl": "https://github.com/Innse/mSTAR",
     "weightsUrl": "https://huggingface.co/Wangyh/mSTAR"
@@ -82,6 +87,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://www.nature.com/articles/s41591-024-02857-3",
     "codeUrl": "https://github.com/mahmoodlab/UNI",
     "weightsUrl": "https://huggingface.co/MahmoodLab/UNI"
@@ -97,6 +103,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINOv2 (distillation)",
     "paperUrl": "https://www.nature.com/articles/s41551-025-01488-4",
     "codeUrl": "https://github.com/birkhoffkiki/GPFM/",
     "weightsUrl": "https://huggingface.co/majiabo/GPFM"
@@ -112,6 +119,7 @@
     "license": "open-source",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://www.nature.com/articles/s41586-024-07441-w",
     "codeUrl": "https://github.com/prov-gigapath/prov-gigapath",
     "weightsUrl": "https://huggingface.co/prov-gigapath/prov-gigapath"
@@ -127,6 +135,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision-language",
+    "trainingMethod": "CoCa, iBOT",
     "paperUrl": "https://www.nature.com/articles/s41591-024-02856-4",
     "codeUrl": "https://github.com/mahmoodlab/CONCH",
     "weightsUrl": "https://huggingface.co/MahmoodLab/CONCH"
@@ -142,6 +151,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2409.09173",
     "weightsUrl": "https://huggingface.co/owkin/phikon-v2"
   },
@@ -149,13 +159,14 @@
     "id": "mahmood_conch_1_5",
     "name": "CONCH 1.5",
     "organization": "Mahmood Lab",
-    "architecture": "ViT-B/16",
-    "params": "86M",
+    "architecture": "ViT-L/16",
+    "params": "307M",
     "pretrainingData": "335K+ WSIs",
     "publicationDate": "2024-09",
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision-language",
+    "trainingMethod": "CoCa, iBOT",
     "paperUrl": "https://www.nature.com/articles/s41591-025-03982-3",
     "codeUrl": "https://github.com/mahmoodlab/TITAN",
     "weightsUrl": "https://huggingface.co/MahmoodLab/TITAN"
@@ -171,6 +182,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "iBOT",
     "paperUrl": "https://www.medrxiv.org/content/10.1101/2023.07.21.23292757v2",
     "codeUrl": "https://github.com/owkin/HistoSSLscaling",
     "weightsUrl": "https://huggingface.co/owkin/phikon"
@@ -186,6 +198,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision-language",
+    "trainingMethod": "CoCa, BEiT-3",
     "paperUrl": "https://www.nature.com/articles/s41586-024-08378-w",
     "codeUrl": "https://github.com/lilab-stanford/MUSK",
     "weightsUrl": "https://huggingface.co/xiangjx/musk"
@@ -201,6 +214,7 @@
     "license": "open-source",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://www.nature.com/articles/s41591-024-03141-0",
     "weightsUrl": "https://huggingface.co/paige-ai/Virchow"
   },
@@ -215,6 +229,7 @@
     "license": "open-source",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "SRCL",
     "paperUrl": "https://www.sciencedirect.com/science/article/pii/S1361841522002043",
     "codeUrl": "https://github.com/Xiyue-Wang/TransPath"
   },
@@ -229,6 +244,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "CLIP",
     "paperUrl": "https://arxiv.org/abs/2505.11404",
     "codeUrl": "https://github.com/Wenchuan-Zhang/Patho-R1",
     "weightsUrl": "https://huggingface.co/WenchuanZhang/Patho-CLIP-L"
@@ -244,6 +260,7 @@
     "license": "open-source",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2406.05074",
     "weightsUrl": "https://huggingface.co/histai/hibou-L"
   },
@@ -258,6 +275,7 @@
     "license": "open-source",
     "publicationType": "peer-reviewed",
     "modelType": "vision-language",
+    "trainingMethod": "CLIP",
     "paperUrl": "https://www.nature.com/articles/s41591-023-02504-3",
     "codeUrl": "https://github.com/PathologyFoundation/plip",
     "weightsUrl": "https://huggingface.co/vinid/plip"
@@ -273,6 +291,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision-language",
+    "trainingMethod": "CLIP",
     "paperUrl": "https://www.nature.com/articles/s41592-025-02707-1",
     "codeUrl": "https://github.com/GuangyuWangLab2021/Loki",
     "weightsUrl": "https://github.com/GuangyuWangLab2021/Loki"
@@ -288,6 +307,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://papers.miccai.org/miccai-2025/0947-Paper4651.html",
     "weightsUrl": "https://huggingface.co/kaiko-ai/midnight"
   },
@@ -302,6 +322,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINO",
     "paperUrl": "https://arxiv.org/abs/2404.15217",
     "codeUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms",
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
@@ -317,6 +338,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2404.15217",
     "codeUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms",
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
@@ -332,6 +354,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINO",
     "paperUrl": "https://arxiv.org/abs/2404.15217",
     "codeUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms",
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
@@ -347,6 +370,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINO",
     "paperUrl": "https://arxiv.org/abs/2404.15217",
     "codeUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms",
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
@@ -362,6 +386,7 @@
     "license": "non-commercial",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINO",
     "paperUrl": "https://arxiv.org/abs/2404.15217",
     "codeUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms",
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
@@ -377,6 +402,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINO",
     "paperUrl": "https://openaccess.thecvf.com/content/CVPR2023/papers/Kang_Benchmarking_Self-Supervised_Learning_on_Diverse_Pathology_Datasets_CVPR_2023_paper.pdf",
     "codeUrl": "https://github.com/lunit-io/benchmark-ssl-pathology",
     "weightsUrl": "https://github.com/lunit-io/benchmark-ssl-pathology#pre-trained-weights"
@@ -392,6 +418,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINO",
     "paperUrl": "https://openaccess.thecvf.com/content/CVPR2022/papers/Chen_Scaling_Vision_Transformers_to_Gigapixel_Images_via_Hierarchical_Self-Supervised_Learning_CVPR_2022_paper.pdf",
     "codeUrl": "https://github.com/mahmoodlab/HIPT"
   },
@@ -406,6 +433,7 @@
     "license": "open-source",
     "publicationType": "peer-reviewed",
     "modelType": "vision-language",
+    "trainingMethod": "CLIP",
     "paperUrl": "https://proceedings.neurips.cc/paper_files/paper/2023/file/775ec578876fa6812c062644964b9870-Paper-Datasets_and_Benchmarks.pdf",
     "codeUrl": "https://github.com/wisdomikezogwo/quilt1m?tab=readme-ov-file",
     "weightsUrl": "https://github.com/wisdomikezogwo/quilt1m?tab=readme-ov-file",
@@ -422,6 +450,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "iBOT, CoCa",
     "paperUrl": "https://www.nature.com/articles/s41591-025-03982-3",
     "codeUrl": "https://github.com/mahmoodlab/TITAN?tab=readme-ov-file",
     "weightsUrl": "https://huggingface.co/MahmoodLab/TITAN"
@@ -437,6 +466,7 @@
     "license": "non-commercial",
     "publicationType": "peer-reviewed",
     "modelType": "vision",
+    "trainingMethod": "DINOv2 (distillation)",
     "paperUrl": "https://papers.miccai.org/miccai-2025/paper/4289_paper.pdf",
     "weightsUrl": "https://huggingface.co/bioptimus/H0-mini"
   },
@@ -451,6 +481,7 @@
     "license": "closed-source",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2601.05148"
   },
   {
@@ -464,6 +495,7 @@
     "license": "closed-source",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2501.05409"
   },
   {
@@ -477,6 +509,7 @@
     "license": "open-source",
     "publicationType": "preprint",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2406.05074",
     "weightsUrl": "https://huggingface.co/histai/hibou-B"
   },
@@ -491,6 +524,7 @@
     "license": "open-source",
     "publicationType": "preprint",
     "modelType": "vision-language",
+    "trainingMethod": "CLIP",
     "paperUrl": "https://arxiv.org/abs/2412.13126",
     "codeUrl": "https://github.com/MAGIC-AI4Med/KEEP",
     "weightsUrl": "https://huggingface.co/Astaxanthin/KEEP",
@@ -507,6 +541,7 @@
     "license": "open-source",
     "publicationType": "blog",
     "modelType": "vision",
+    "trainingMethod": "DINOv2",
     "blogUrl": "https://sophontai.com/blog/openmidnight",
     "weightsUrl": "https://huggingface.co/SophontAI/OpenMidnight"
   }

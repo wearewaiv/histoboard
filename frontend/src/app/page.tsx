@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Trophy, Database, BarChart3, ArrowRight, Award } from "lucide-react";
+import { Trophy, Database, BarChart3, Award } from "lucide-react";
 
 import modelsData from "@/data/models.json";
 import tasksData from "@/data/tasks.json";
@@ -79,7 +79,7 @@ export default function HomePage() {
   };
 
   // Top 5 List Component
-  const TopModelsList = ({ benchmarkId, benchmarkName }: { benchmarkId: string; benchmarkName: string }) => {
+  const TopModelsList = ({ benchmarkId }: { benchmarkId: string }) => {
     const items = getTopModels(benchmarkId, 5);
 
     return (
@@ -123,7 +123,7 @@ export default function HomePage() {
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
           A centralized dashboard aggregating benchmark results to compare
-          pathology foundation models using rank-based comparisons.
+          pathology foundation models.
         </p>
         <div className="flex items-center justify-center gap-4">
           <Link href="/leaderboard">
@@ -254,41 +254,12 @@ export default function HomePage() {
                           </Button>
                         </Link>
                       </div>
-                      <TopModelsList benchmarkId={benchmark.id} benchmarkName={benchmark.name} />
+                      <TopModelsList benchmarkId={benchmark.id} />
                     </div>
                   </TabsContent>
                 ))}
               </>
             </Tabs>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Methodology */}
-      <section>
-        <Card>
-          <CardHeader>
-            <CardTitle>Ranking Methodology</CardTitle>
-          </CardHeader>
-          <CardContent className="prose prose-sm max-w-none text-muted-foreground">
-            <p>
-              Models are ranked using a <strong>mean rank aggregation</strong>{" "}
-              approach:
-            </p>
-            <ol className="mt-2 list-decimal space-y-1 pl-4">
-              <li>
-                For each task, models are ranked by performance (1 = best)
-              </li>
-              <li>Ties are handled using average rank assignment</li>
-              <li>The mean rank across all tasks determines the ranking within each benchmark</li>
-            </ol>
-            <p className="mt-4">
-              Visit the{" "}
-              <Link href="/leaderboard" className="text-primary hover:underline">
-                leaderboard page
-              </Link>{" "}
-              to see detailed results and compare models across benchmarks.
-            </p>
           </CardContent>
         </Card>
       </section>

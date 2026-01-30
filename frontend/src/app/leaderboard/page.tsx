@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Search } from "lucide-react";
 import { LeaderboardTable } from "@/components/tables/LeaderboardTable";
 import { DetailedResultsTable } from "@/components/tables/DetailedResultsTable";
 import { PathBenchDetailedTable } from "@/components/tables/PathBenchDetailedTable";
@@ -30,6 +32,11 @@ const benchmarks = benchmarksData as Benchmark[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
 
 export default function LeaderboardPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Create a map for quick model lookup
+  const modelMap = useMemo(() => new Map(models.map((m) => [m.id, m])), []);
+
   // Collect per-benchmark average ranks for each model
   const modelRankings = useMemo(() => {
     const rankingsList: { modelId: string; eva?: number; pathbench?: number; stanford?: number; hest?: number; pathobench?: number; sinai?: number; stamp?: number; thunder?: number; pathorob?: number; plism?: number; benchmarkCount: number }[] = [];
@@ -78,6 +85,24 @@ export default function LeaderboardPage() {
 
     return rankingsList;
   }, []);
+
+  // Filter rankings based on search query
+  const filteredModelRankings = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return modelRankings;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return modelRankings.filter((ranking) => {
+      const model = modelMap.get(ranking.modelId);
+      if (!model) return false;
+      return (
+        model.name.toLowerCase().includes(query) ||
+        model.organization.toLowerCase().includes(query) ||
+        model.architecture.toLowerCase().includes(query)
+      );
+    });
+  }, [modelRankings, searchQuery, modelMap]);
 
   // Compute integer ranks per benchmark for detail tables
   const evaModelRankings = useMemo(() => {
@@ -181,10 +206,19 @@ export default function LeaderboardPage() {
 
             <TabsContent value="rankings">
               <p className="mb-4 text-sm text-muted-foreground">
-                Click column headers to sort. Lower rank is better. &quot;-&quot; indicates the model was not evaluated on that benchmark.
+                Click column headers to sort. Rankings are taken directly from the official benchmarks and serve as the reference. For each benchmark and model, we also provide the average ranking across the corresponding tasks. &quot;-&quot; indicates the model was not evaluated on that benchmark.
               </p>
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search models by name, organization, or architecture..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
               <LeaderboardTable
-                modelRankings={modelRankings}
+                modelRankings={filteredModelRankings}
                 models={models}
                 benchmarks={benchmarks}
               />
@@ -192,8 +226,11 @@ export default function LeaderboardPage() {
 
             <TabsContent value="eva-details">
               <p className="mb-4 text-sm text-muted-foreground">
-                Full EVA benchmark results showing metric values for each task.
+                EVA evaluates FMs on a variety of WSI classification &amp; segmentation tasks.
+                It reports Balanced Accuracy for binary &amp; multiclass tasks and Dice Score (without background) for segmentation tasks.
+                Scores show the average performance over 5 runs for patch-level classification &amp; segmentation tasks, and 20 runs for slide-level (due to higher standard deviation among runs).
                 Colors indicate relative performance (green = best, red = worst).
+                Note: There are discrepancies between the average values computed here and those reported by EVA (e.g., they report 0.798 for Virchow2 but the correct average without BACH is 0.815).
               </p>
               <DetailedResultsTable
                 models={models.filter(m => rankings.eva?.[m.id])}
