@@ -196,7 +196,7 @@ export function computeModelRankings(
         }
       }
 
-      ranksByCategory[category] =
+      ranksByCategory[category as BenchmarkCategory] =
         categoryRanks.length > 0
           ? categoryRanks.reduce((a, b) => a + b, 0) / categoryRanks.length
           : null;
