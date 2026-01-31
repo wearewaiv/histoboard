@@ -30,6 +30,19 @@ function getMedal(rank: number): string | null {
   return null;
 }
 
+function getLicenseBadge(license: string): { label: string; className: string } {
+  switch (license) {
+    case "open-source":
+      return { label: "Open", className: "bg-green-100 text-green-700 border-green-200" };
+    case "non-commercial":
+      return { label: "NC", className: "bg-amber-100 text-amber-700 border-amber-200" };
+    case "closed-source":
+      return { label: "Closed", className: "bg-gray-100 text-gray-600 border-gray-200" };
+    default:
+      return { label: license, className: "bg-gray-100 text-gray-600 border-gray-200" };
+  }
+}
+
 export function LeaderboardTable({
   modelRankings,
   models,
@@ -215,12 +228,25 @@ export function LeaderboardTable({
                 className="border-b transition-colors hover:bg-muted/50"
               >
                 <td className="sticky left-0 z-10 bg-background px-4 py-3 border-r">
-                  <Link
-                    href={`/models/${ranking.modelId}`}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {model.name}
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/models/${ranking.modelId}`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {model.name}
+                    </Link>
+                    {model.license && (
+                      <span
+                        className={cn(
+                          "inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border",
+                          getLicenseBadge(model.license).className
+                        )}
+                        title={model.license === "non-commercial" ? "Non-commercial license" : model.license === "open-source" ? "Open source" : "Closed source"}
+                      >
+                        {getLicenseBadge(model.license).label}
+                      </span>
+                    )}
+                  </div>
                   <div className="text-xs text-muted-foreground">
                     {model.architecture} ({model.params})
                   </div>

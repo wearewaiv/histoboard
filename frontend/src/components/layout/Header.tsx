@@ -44,7 +44,7 @@ export function Header() {
         </nav>
         <div className="ml-auto flex items-center space-x-4">
           <a
-            href="https://github.com/your-repo/histoboard"
+            href="https://github.com/afiliot/histoboard"
             target="_blank"
             rel="noopener noreferrer"
             className="text-muted-foreground hover:text-primary"

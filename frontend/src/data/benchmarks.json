@@ -3,9 +3,14 @@
     "id": "eva",
     "name": "EVA Benchmark",
     "shortName": "EVA",
-    "category": ["pathology", "H&E", "radiology"],
+    "category": [
+      "pathology",
+      "H&E",
+      "radiology"
+    ],
     "url": "https://kaiko-ai.github.io/eva/main/",
-    "organs": [
+    "githubUrl": "https://github.com/kaiko-ai/eva",
+        "organs": [
       "breast",
       "colon",
       "prostate",
@@ -19,9 +24,13 @@
     "id": "pathbench",
     "name": "PathBench",
     "shortName": "PathBench",
-    "category": ["pathology", "H&E"],
+    "category": [
+      "pathology",
+      "H&E"
+    ],
     "url": "https://github.com/birkhoffkiki/PathBench",
-    "organs": [
+    "githubUrl": "https://github.com/birkhoffkiki/PathBench",
+        "organs": [
       "breast",
       "colorectal",
       "gastric",
@@ -43,7 +52,10 @@
     "id": "stanford",
     "name": "Stanford PathBench",
     "shortName": "Stanford",
-    "category": ["pathology", "H&E"],
+    "category": [
+      "pathology",
+      "H&E"
+    ],
     "description": "Comprehensive benchmark evaluating 31 foundation models across 41 tasks from TCGA, CPTAC, and external datasets.",
     "url": "https://pathbench.stanford.edu",
     "paperUrl": "https://www.medrxiv.org/content/10.1101/2025.05.08.25327250v1",
@@ -69,7 +81,8 @@
     "category": "spatial-transcriptomics",
     "description": "HEST-Benchmark is a spatial transcriptomics benchmark from the Mahmood Lab evaluating foundation models on gene expression prediction from H&E images. The benchmark assesses how well models can predict spatially-resolved gene expression patterns directly from histology across 9 cancer types using Pearson correlation as the primary metric. Results are sourced from the official HEST GitHub README.",
     "url": "https://github.com/mahmoodlab/HEST",
-    "paperUrl": "https://www.nature.com/articles/s41592-024-02461-y",
+    "githubUrl": "https://github.com/mahmoodlab/HEST",
+        "paperUrl": "https://www.nature.com/articles/s41592-024-02461-y",
     "datasetUrl": "https://huggingface.co/datasets/MahmoodLab/hest",
     "resultsUrl": "https://github.com/mahmoodlab/HEST/blob/main/README.md#hest-benchmark-results-011426",
     "organs": [
@@ -89,9 +102,13 @@
     "id": "pathobench",
     "name": "Patho-Bench",
     "shortName": "Patho-Bench",
-    "category": ["pathology", "H&E"],
+    "category": [
+      "pathology",
+      "H&E"
+    ],
     "description": "Comprehensive benchmark from Mahmood Lab with 95 tasks across 33 datasets covering mutation prediction, TME characterization, survival, grading, and treatment response. Note: Latest results sourced from the Atlas 2 preprint, not the official benchmark release.",
     "url": "https://github.com/mahmoodlab/Patho-Bench",
+    "githubUrl": "https://github.com/mahmoodlab/Patho-Bench",
     "paperUrl": "https://arxiv.org/abs/2502.06750",
     "datasetUrl": "https://huggingface.co/datasets/MahmoodLab/Patho-Bench",
     "organs": [
@@ -111,9 +128,13 @@
     "id": "sinai",
     "name": "Sinai SSL Tile Benchmarks",
     "shortName": "Sinai",
-    "category": ["pathology", "H&E"],
+    "category": [
+      "pathology",
+      "H&E"
+    ],
     "description": "Comprehensive benchmark from Mount Sinai evaluating pathology foundation models on cancer detection and biomarker prediction tasks across multiple organs and institutions.",
     "url": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks",
+    "githubUrl": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks",
     "paperUrl": "https://www.nature.com/articles/s41467-025-58796-1",
     "organs": [
       "breast",
@@ -132,9 +153,13 @@
     "id": "stamp",
     "name": "STAMP Benchmark",
     "shortName": "STAMP",
-    "category": ["pathology", "H&E"],
+    "category": [
+      "pathology",
+      "H&E"
+    ],
     "description": "Nature Biomedical Engineering benchmark evaluating 15 foundation models as feature extractors for weakly supervised computational pathology across morphology, biomarker, and prognosis tasks.",
     "url": "https://github.com/KatherLab/STAMP-Benchmark",
+    "githubUrl": "https://github.com/KatherLab/STAMP-Benchmark",
     "paperUrl": "https://www.nature.com/articles/s41551-025-01516-3",
     "organs": [
       "lung",
@@ -148,9 +173,13 @@
     "id": "thunder",
     "name": "THUNDER Benchmark",
     "shortName": "THUNDER",
-    "category": ["pathology", "H&E"],
+    "category": [
+      "pathology",
+      "H&E"
+    ],
     "description": "Comprehensive benchmark evaluating pathology foundation models across KNN classification, linear probing, few-shot learning, segmentation, calibration, and adversarial robustness tasks.",
     "url": "https://mics-lab.github.io/thunder/",
+    "githubUrl": "https://github.com/MICS-Lab/thunder",
     "paperUrl": "https://arxiv.org/abs/2507.07860",
     "organs": [
       "multi-organ"
@@ -161,9 +190,13 @@
     "id": "pathorob",
     "name": "PathoROB",
     "shortName": "PathoROB",
-    "category": ["robustness", "H&E"],
+    "category": [
+      "robustness",
+      "H&E"
+    ],
     "description": "Robustness benchmark evaluating pathology foundation models across domain shift scenarios including TCGA 2x2 splits, Camelyon, and Tolkach ESCA datasets.",
     "url": "https://github.com/bifold-pathomics/PathoROB",
+    "githubUrl": "https://github.com/bifold-pathomics/PathoROB",
     "paperUrl": "https://arxiv.org/abs/2507.17845",
     "datasetUrl": "https://huggingface.co/collections/bifold-pathomics/pathorob",
     "organs": [
@@ -175,11 +208,15 @@
   },
   {
     "id": "plism",
-    "name": "PLISM Benchmark",
-    "shortName": "PLISM",
-    "category": ["robustness", "H&E"],
+    "name": "Plismbench",
+    "shortName": "Plismbench",
+    "category": [
+      "robustness",
+      "H&E"
+    ],
     "description": "Robustness benchmark from Owkin evaluating embedding consistency across scanners and staining variations using cosine similarity and top-10 retrieval accuracy.",
     "url": "https://github.com/owkin/plism-benchmark",
+    "githubUrl": "https://github.com/owkin/plism-benchmark",
     "paperUrl": "https://papers.miccai.org/miccai-2025/paper/4289_paper.pdf",
     "datasetUrl": "https://huggingface.co/datasets/owkin/plism-dataset-tiles",
     "organs": [

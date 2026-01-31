@@ -24,6 +24,18 @@ function getEvaMetricDisplay(taskName: string): string {
   return "Balanced Accuracy";
 }
 
+// Get user-friendly label for task type/category
+function getTaskTypeLabel(category: string): string {
+  const labels: Record<string, string> = {
+    "patch-level": "Patch-level classification",
+    "slide-level": "Slide-level classification",
+    "segmentation": "Segmentation",
+    "classification": "Classification",
+    "survival": "Survival",
+  };
+  return labels[category] || category;
+}
+
 export function DetailedResultsTable({
   models,
   tasks,
@@ -35,6 +47,11 @@ export function DetailedResultsTable({
     return [...new Set(tasks.map((t) => t.organ))].sort();
   }, [tasks]);
 
+  // Get unique categories for filtering (Task Type)
+  const categories = useMemo(() => {
+    return [...new Set(tasks.map((t) => t.category as string))].sort();
+  }, [tasks]);
+
   // Get unique task names for filtering
   const taskNames = useMemo(() => {
     return [...new Set(tasks.map((t) => t.name))].sort();
@@ -44,6 +61,9 @@ export function DetailedResultsTable({
   const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
     new Set<string>()
   );
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
+    new Set<string>()
+  );
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
     new Set<string>()
   );
@@ -51,12 +71,13 @@ export function DetailedResultsTable({
 
   // Initialize selected values when options become available (only once)
   useEffect(() => {
-    if (!initializedRef.current && organs.length > 0 && taskNames.length > 0) {
+    if (!initializedRef.current && organs.length > 0 && categories.length > 0 && taskNames.length > 0) {
       setSelectedOrgans(new Set(organs));
+      setSelectedCategories(new Set(categories));
       setSelectedTasks(new Set(taskNames));
       initializedRef.current = true;
     }
-  }, [organs, taskNames]);
+  }, [organs, categories, taskNames]);
 
   // Toggle helpers
   const toggleOrgan = (organ: string) => {
@@ -66,6 +87,18 @@ export function DetailedResultsTable({
         next.delete(organ);
       } else {
         next.add(organ);
+      }
+      return next;
+    });
+  };
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(category)) {
+        next.delete(category);
+      } else {
+        next.add(category);
       }
       return next;
     });
@@ -83,12 +116,15 @@ export function DetailedResultsTable({
     });
   };
 
-  // Filter tasks by selected organs AND selected task names
+  // Filter tasks by selected organs, categories, AND selected task names
   const filteredTasks = useMemo(() => {
     return tasks.filter(
-      (t) => selectedOrgans.has(t.organ) && selectedTasks.has(t.name)
+      (t) =>
+        selectedOrgans.has(t.organ) &&
+        selectedCategories.has(t.category as string) &&
+        selectedTasks.has(t.name)
     );
-  }, [tasks, selectedOrgans, selectedTasks]);
+  }, [tasks, selectedOrgans, selectedCategories, selectedTasks]);
 
   // Create a lookup map for results: modelId -> taskId -> value
   const resultsMap = useMemo(() => {
@@ -204,7 +240,7 @@ export function DetailedResultsTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>EVA Benchmark</strong> evaluates pathology foundation models on WSI classification and segmentation tasks.
+          <strong>EVA Benchmark</strong> (NeurIPS, 2024) evaluates pathology foundation models on WSI classification and segmentation tasks.
           It reports Balanced Accuracy for binary and multiclass tasks, and Dice Score (without background) for segmentation.
           Scores show average performance over 5 runs for patch-level classification and segmentation, and 20 runs for slide-level
           tasks (due to higher variance). Colors indicate relative performance (green = best, red = worst).
@@ -236,7 +272,20 @@ export function DetailedResultsTable({
           onClearAll={() => setSelectedOrgans(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="Task Type"
+          options={categories
+            .map((category) => ({
+              id: category,
+              label: getTaskTypeLabel(category),
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={selectedCategories}
+          onToggle={toggleCategory}
+          onSelectAll={() => setSelectedCategories(new Set(categories))}
+          onClearAll={() => setSelectedCategories(new Set())}
+        />
+        <MultiSelectDropdown
+          label="All Tasks"
           options={taskNames
             .map((taskName) => ({
               id: taskName,

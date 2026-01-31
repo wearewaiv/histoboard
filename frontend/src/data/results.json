@@ -70805,5 +70805,222 @@
     "taskId": "plism_cross_both",
     "value": 0.008,
     "source": "plism"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "thunder_ranksum",
+    "value": 18,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "thunder_ranksum",
+    "value": 27,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "hest_h0_mini",
+    "taskId": "thunder_ranksum",
+    "value": 38,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "thunder_ranksum",
+    "value": 40,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "thunder_ranksum",
+    "value": 41,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "thunder_ranksum",
+    "value": 47,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_keep",
+    "taskId": "thunder_ranksum",
+    "value": 48,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "thunder_ranksum",
+    "value": 52,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "thunder_ranksum",
+    "value": 56,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "stamp_hibou_b",
+    "taskId": "thunder_ranksum",
+    "value": 61,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "thunder_ranksum",
+    "value": 61,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "thunder_ranksum",
+    "value": 64,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "thunder_ranksum",
+    "value": 67,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_openmidnight",
+    "taskId": "thunder_ranksum",
+    "value": 70,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "thunder_ranksum",
+    "value": 73,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "thunder_ranksum",
+    "value": 74,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "thunder_ranksum",
+    "value": 76,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "thunder_ranksum",
+    "value": 78,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "thunder_ranksum",
+    "value": 84,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "thunder_ranksum",
+    "value": 98,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_dinov3_s",
+    "taskId": "thunder_ranksum",
+    "value": 103,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_dinov3_l",
+    "taskId": "thunder_ranksum",
+    "value": 108,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_dinov3_b",
+    "taskId": "thunder_ranksum",
+    "value": 111,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_vit_l16",
+    "taskId": "thunder_ranksum",
+    "value": 118,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_vit_b16",
+    "taskId": "thunder_ranksum",
+    "value": 123,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "stanford_dinov2",
+    "taskId": "thunder_ranksum",
+    "value": 129,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "plip",
+    "taskId": "thunder_ranksum",
+    "value": 129,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "stanford_quiltnet",
+    "taskId": "thunder_ranksum",
+    "value": 129,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_dinov2_b",
+    "taskId": "thunder_ranksum",
+    "value": 134,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "stanford_clip_b16",
+    "taskId": "thunder_ranksum",
+    "value": 137,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "thunder_clip_b32",
+    "taskId": "thunder_ranksum",
+    "value": 149,
+    "source": "thunder",
+    "retrievedAt": "2025-01-31"
   }
 ]

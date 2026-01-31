@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ExternalLink, FileText, Database, Search } from "lucide-react";
+import { ExternalLink, FileText, Database, Search, Star } from "lucide-react";
 
 import benchmarksData from "@/data/benchmarks.json";
 import tasksData from "@/data/tasks.json";
@@ -28,14 +28,102 @@ const categoryColors: Record<string, string> = {
   "H&E": "bg-pink-100 text-pink-800",
 };
 
-// Extract base task name (before parentheses) for PathBench grouping
-function getBaseTaskName(name: string): string {
-  const match = name.match(/^(.+?)\s*\(/);
-  return match ? match[1].trim() : name;
+// Parse GitHub URL to get owner/repo
+function parseGitHubUrl(url: string): { owner: string; repo: string } | null {
+  const match = url.match(/github\.com\/([^/]+)\/([^/]+)/);
+  if (match) {
+    return { owner: match[1], repo: match[2] };
+  }
+  return null;
 }
+
+// Format star count (e.g., 1234 -> "1.2k")
+function formatStars(count: number): string {
+  if (count >= 1000) {
+    return (count / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+  }
+  return count.toString();
+}
+
+// Get PathBench task type (Classification, OS, DFS, DSS)
+function getPathBenchTaskType(task: Task): string {
+  if (task.category === "Classification" || task.category === "classification") {
+    return "Classification";
+  }
+  const name = task.name.toLowerCase();
+  if (name.includes("overall survival")) return "OS";
+  if (name.includes("disease-free survival")) return "DFS";
+  if (name.includes("disease-specific survival")) return "DSS";
+  return "Classification";
+}
+
+const PATHBENCH_TYPE_LABELS: Record<string, string> = {
+  "Classification": "Classification",
+  "OS": "OS (Overall Survival)",
+  "DFS": "DFS (Disease-free Survival)",
+  "DSS": "DSS (Disease-specific Survival)",
+};
 
 export default function BenchmarksPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [starCounts, setStarCounts] = useState<Record<string, number>>({});
+  const [starsLoading, setStarsLoading] = useState(true);
+
+  // Fetch GitHub stars for all benchmarks
+  useEffect(() => {
+    const fetchAllStars = async () => {
+      const stars: Record<string, number> = {};
+      const cacheExpiry = 1000 * 60 * 60; // 1 hour cache
+
+      await Promise.all(
+        benchmarks.map(async (benchmark) => {
+          if (!benchmark.githubUrl) return;
+
+          const parsed = parseGitHubUrl(benchmark.githubUrl);
+          if (!parsed) return;
+
+          const { owner, repo } = parsed;
+          const cacheKey = `github-stars-${owner}-${repo}`;
+
+          // Check localStorage cache first
+          const cached = localStorage.getItem(cacheKey);
+          if (cached) {
+            try {
+              const { stars: cachedStars, timestamp } = JSON.parse(cached);
+              if (Date.now() - timestamp < cacheExpiry) {
+                stars[benchmark.id] = cachedStars;
+                return;
+              }
+            } catch {
+              // Invalid cache, continue to fetch
+            }
+          }
+
+          // Fetch from GitHub API
+          try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+            if (res.ok) {
+              const data = await res.json();
+              const starCount = data.stargazers_count;
+              stars[benchmark.id] = starCount;
+              // Cache the result
+              localStorage.setItem(
+                cacheKey,
+                JSON.stringify({ stars: starCount, timestamp: Date.now() })
+              );
+            }
+          } catch {
+            // Silently fail for individual repos
+          }
+        })
+      );
+
+      setStarCounts(stars);
+      setStarsLoading(false);
+    };
+
+    fetchAllStars();
+  }, []);
 
   const tasksByBenchmark = tasks.reduce((acc, task) => {
     if (!acc[task.benchmarkId]) {
@@ -45,35 +133,45 @@ export default function BenchmarksPage() {
     return acc;
   }, {} as Record<string, Task[]>);
 
-  // Filter benchmarks based on search query
+  // Filter and sort benchmarks (by star count descending, then by name)
   const filteredBenchmarks = useMemo(() => {
-    if (!searchQuery.trim()) return benchmarks;
+    let filtered = benchmarks;
 
-    const query = searchQuery.toLowerCase().trim();
-    const queryWords = query.split(/\s+/);
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      const queryWords = query.split(/\s+/);
 
-    return benchmarks.filter((benchmark) => {
-      const benchmarkTasks = tasksByBenchmark[benchmark.id] || [];
+      filtered = benchmarks.filter((benchmark) => {
+        const benchmarkTasks = tasksByBenchmark[benchmark.id] || [];
 
-      // Searchable fields
-      const searchableText = [
-        benchmark.name,
-        benchmark.shortName,
-        benchmark.description,
-        ...(Array.isArray(benchmark.category) ? benchmark.category : [benchmark.category]),
-        ...benchmark.organs,
-        ...benchmarkTasks.map((t) => t.name),
-        ...benchmarkTasks.map((t) => t.category as string),
-        ...benchmarkTasks.map((t) => t.organ),
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+        // Searchable fields
+        const searchableText = [
+          benchmark.name,
+          benchmark.shortName,
+          benchmark.description,
+          ...(Array.isArray(benchmark.category) ? benchmark.category : [benchmark.category]),
+          ...benchmark.organs,
+          ...benchmarkTasks.map((t) => t.name),
+          ...benchmarkTasks.map((t) => t.category as string),
+          ...benchmarkTasks.map((t) => t.organ),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
 
-      // Match if all query words are found in searchable text
-      return queryWords.every((word) => searchableText.includes(word));
+        // Match if all query words are found in searchable text
+        return queryWords.every((word) => searchableText.includes(word));
+      });
+    }
+
+    // Sort by star count (descending), benchmarks without stars go last
+    return [...filtered].sort((a, b) => {
+      const starsA = starCounts[a.id] ?? -1;
+      const starsB = starCounts[b.id] ?? -1;
+      if (starsA !== starsB) return starsB - starsA;
+      return a.name.localeCompare(b.name);
     });
-  }, [searchQuery, tasksByBenchmark]);
+  }, [searchQuery, tasksByBenchmark, starCounts]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -108,10 +206,28 @@ export default function BenchmarksPage() {
         {filteredBenchmarks.map((benchmark) => {
           const benchmarkTasks = tasksByBenchmark[benchmark.id] || [];
           return (
-            <Card key={benchmark.id}>
+            <Card key={benchmark.id} className="relative">
+              {benchmark.githubUrl && starCounts[benchmark.id] !== undefined && (
+                <a
+                  href={benchmark.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute right-4 top-4 inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                  title={`${starCounts[benchmark.id]} GitHub stars`}
+                >
+                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  <span className="text-sm font-medium">{formatStars(starCounts[benchmark.id])}</span>
+                </a>
+              )}
+              {benchmark.githubUrl && starCounts[benchmark.id] === undefined && starsLoading && (
+                <div className="absolute right-4 top-4 inline-flex items-center gap-1 text-muted-foreground">
+                  <Star className="h-4 w-4" />
+                  <span className="text-xs">...</span>
+                </div>
+              )}
               <CardHeader>
                 <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
+                  <div className="pr-16">
                     <CardTitle className="flex items-center gap-2">
                       {benchmark.name}
                       {Array.isArray(benchmark.category) ? (
@@ -184,134 +300,53 @@ export default function BenchmarksPage() {
                     <h4 className="mb-2 text-sm font-medium">
                       Tasks ({benchmark.taskCount})
                     </h4>
-                    {benchmark.id === "stanford" ? (
-                      // Group Stanford tasks by TaskCategory
+                    {benchmark.id === "pathbench" ? (
+                      // PathBench: show 4 task types (Classification, OS, DFS, DSS)
                       <div className="flex flex-wrap gap-2">
                         {Object.entries(
                           benchmarkTasks.reduce((acc, task) => {
-                            const cat = task.category as string;
-                            if (!acc[cat]) acc[cat] = 0;
-                            acc[cat]++;
+                            const type = getPathBenchTaskType(task);
+                            if (!acc[type]) acc[type] = 0;
+                            acc[type]++;
                             return acc;
                           }, {} as Record<string, number>)
                         )
                           .sort((a, b) => b[1] - a[1])
-                          .map(([category, count]) => (
-                            <Badge
-                              key={category}
-                              variant="secondary"
-                            >
-                              {category} ({count})
+                          .map(([type, count]) => (
+                            <Badge key={type} variant="secondary">
+                              {PATHBENCH_TYPE_LABELS[type] || type} ({count})
                             </Badge>
                           ))}
                       </div>
-                    ) : benchmark.id === "hest" ? (
-                      // HEST has 1 task type across 9 datasets
+                    ) : benchmarkTasks.length < 10 ? (
+                      // Show all tasks individually if less than 10
                       <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">
-                          Gene expression prediction (9)
-                        </Badge>
-                      </div>
-                    ) : benchmark.id === "pathobench" ? (
-                      // Patho-Bench task categories from HuggingFace
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">Mutation Prediction (34)</Badge>
-                        <Badge variant="secondary">TME Characterization (16)</Badge>
-                        <Badge variant="secondary">Survival Prediction (12)</Badge>
-                        <Badge variant="secondary">Morphological Subtyping (11)</Badge>
-                        <Badge variant="secondary">Tumor Grading (9)</Badge>
-                        <Badge variant="secondary">Treatment Response (7)</Badge>
-                        <Badge variant="secondary">Molecular Subtyping (6)</Badge>
-                      </div>
-                    ) : benchmark.id === "sinai" ? (
-                      // Sinai SSL Tile Benchmarks categories with detailed biomarker breakdown
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">Cancer Detection (9)</Badge>
-                        <Badge variant="secondary">ER status (1)</Badge>
-                        <Badge variant="secondary">PR status (1)</Badge>
-                        <Badge variant="secondary">HER2 status (1)</Badge>
-                        <Badge variant="secondary">HRD (1)</Badge>
-                        <Badge variant="secondary">EGFR (1)</Badge>
-                        <Badge variant="secondary">ALK (1)</Badge>
-                        <Badge variant="secondary">STK11 (1)</Badge>
-                        <Badge variant="secondary">KRAS (1)</Badge>
-                        <Badge variant="secondary">TP53 (1)</Badge>
-                        <Badge variant="secondary">BRAF (1)</Badge>
-                        <Badge variant="secondary">NRAS (1)</Badge>
-                        <Badge variant="secondary">ICI response (1)</Badge>
-                      </div>
-                    ) : benchmark.id === "stamp" ? (
-                      // Group STAMP tasks by category (Morphology, Biomarker, Prognosis)
-                      <div className="flex flex-wrap gap-2">
-                        {Object.entries(
-                          benchmarkTasks.reduce((acc, task) => {
-                            const cat = task.category as string;
-                            if (!acc[cat]) acc[cat] = 0;
-                            acc[cat]++;
-                            return acc;
-                          }, {} as Record<string, number>)
-                        )
-                          .sort((a, b) => b[1] - a[1])
-                          .map(([category, count]) => (
-                            <Badge
-                              key={category}
-                              variant="secondary"
-                            >
-                              {category} ({count})
-                            </Badge>
-                          ))}
-                      </div>
-                    ) : benchmark.id === "pathbench" ? (
-                      // Group PathBench tasks by base name (ignoring dataset variations)
-                      <div className="flex flex-wrap gap-2">
-                        {Object.entries(
-                          benchmarkTasks.reduce((acc, task) => {
-                            const baseName = getBaseTaskName(task.name);
-                            if (!acc[baseName]) acc[baseName] = 0;
-                            acc[baseName]++;
-                            return acc;
-                          }, {} as Record<string, number>)
-                        )
-                          .sort((a, b) => b[1] - a[1])
-                          .slice(0, 10)
-                          .map(([baseName, count]) => (
-                            <Badge
-                              key={baseName}
-                              variant="secondary"
-                            >
-                              {baseName} ({count})
-                            </Badge>
-                          ))}
-                        {Object.keys(
-                          benchmarkTasks.reduce((acc, task) => {
-                            const baseName = getBaseTaskName(task.name);
-                            acc[baseName] = true;
-                            return acc;
-                          }, {} as Record<string, boolean>)
-                        ).length > 10 && (
-                          <Badge variant="secondary">
-                            +{Object.keys(
-                              benchmarkTasks.reduce((acc, task) => {
-                                const baseName = getBaseTaskName(task.name);
-                                acc[baseName] = true;
-                                return acc;
-                              }, {} as Record<string, boolean>)
-                            ).length - 10} more task types
-                          </Badge>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="flex flex-wrap gap-2">
-                        {benchmarkTasks.slice(0, 5).map((task) => (
+                        {benchmarkTasks.map((task) => (
                           <Badge key={task.id} variant="secondary">
                             {task.name}
                           </Badge>
                         ))}
-                        {benchmarkTasks.length > 5 && (
-                          <Badge variant="secondary">
-                            +{benchmarkTasks.length - 5} more
-                          </Badge>
-                        )}
+                      </div>
+                    ) : (
+                      // Show task categories if 10 or more tasks
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(
+                          benchmarkTasks.reduce((acc, task) => {
+                            const cat = task.category as string;
+                            if (!acc[cat]) acc[cat] = 0;
+                            acc[cat]++;
+                            return acc;
+                          }, {} as Record<string, number>)
+                        )
+                          .sort((a, b) => b[1] - a[1])
+                          .map(([category, count]) => (
+                            <Badge
+                              key={category}
+                              variant="secondary"
+                            >
+                              {category} ({count})
+                            </Badge>
+                          ))}
                       </div>
                     )}
                   </div>

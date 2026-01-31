@@ -4,20 +4,22 @@ import React from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Trophy, Database, BarChart3, Award } from "lucide-react";
+import { Trophy, Database, BarChart3, Award, TrendingUp } from "lucide-react";
+import { ScalingLawsChart } from "@/components/charts/ScalingLawsChart";
 
 import modelsData from "@/data/models.json";
 import tasksData from "@/data/tasks.json";
 import benchmarksData from "@/data/benchmarks.json";
 import rankingsData from "@/data/rankings.json";
+import resultsData from "@/data/results.json";
 
-import type { Model, Task, Benchmark } from "@/types";
+import type { Model, Task, Benchmark, Result } from "@/types";
 
 const models = modelsData as Model[];
 const tasks = tasksData as Task[];
 const benchmarks = benchmarksData as Benchmark[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
+const results = resultsData as Result[];
 
 export default function HomePage() {
   const stats = {
@@ -27,9 +29,13 @@ export default function HomePage() {
     organs: [...new Set(tasks.map((t) => t.organ))].length,
   };
 
+  // Models to exclude from rankings (e.g., benchmark-specific baselines)
+  const EXCLUDED_MODEL_IDS = new Set(["hest_uni_1_5"]);
+
   // Get top 5 models for each benchmark
   const getTopModels = (benchmarkId: string, limit: number = 5) => {
     return Object.entries(rankings[benchmarkId] || {})
+      .filter(([modelId]) => !EXCLUDED_MODEL_IDS.has(modelId))
       .sort((a, b) => a[1].avgRank - b[1].avgRank)
       .slice(0, limit)
       .map(([modelId, data], index) => ({
@@ -40,77 +46,42 @@ export default function HomePage() {
       }));
   };
 
-  // Get champion (top 1) for each benchmark
-  const champions = benchmarks.map(benchmark => ({
+  // Get top 3 for each benchmark
+  const podiums = benchmarks.map(benchmark => ({
     benchmark,
-    topModel: getTopModels(benchmark.id, 1)[0],
+    topModels: getTopModels(benchmark.id, 3),
   }));
 
-  // Champion Card Component
-  const ChampionCard = ({ benchmark, topModel }: { benchmark: Benchmark; topModel: ReturnType<typeof getTopModels>[0] }) => {
-    if (!topModel) return null;
+  const MEDALS = ["🥇", "🥈", "🥉"];
+
+  // Podium Card Component (shows top 3 with medals)
+  const PodiumCard = ({ benchmark, topModels }: { benchmark: Benchmark; topModels: ReturnType<typeof getTopModels> }) => {
+    if (topModels.length === 0) return null;
 
     return (
-      <Card className="relative overflow-hidden">
-        <div className="absolute right-2 top-2">
-          <Award className="h-5 w-5 text-yellow-500" />
-        </div>
-        <CardHeader className="pb-3">
+      <Card>
+        <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             {benchmark.shortName}
+            {(benchmark.id === "pathorob" || benchmark.id === "plism") && (
+              <span className="ml-1 text-[10px]">(robustness)</span>
+            )}
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <Link
-            href={`/models/${topModel.modelId}`}
-            className="text-base font-semibold text-primary hover:underline"
-          >
-            {topModel.model?.name || topModel.modelId}
-          </Link>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {topModel.model?.organization}
-          </p>
-          <p className="mt-2 text-xs font-medium text-muted-foreground">
-            Avg Rank: {topModel.avgRank.toFixed(2)}
-          </p>
+        <CardContent className="space-y-1.5">
+          {topModels.map((entry, idx) => (
+            <div key={entry.modelId} className="flex items-center gap-2">
+              <span className="text-base">{MEDALS[idx]}</span>
+              <Link
+                href={`/models/${entry.modelId}`}
+                className="text-sm font-medium text-primary hover:underline truncate"
+              >
+                {entry.model?.name || entry.modelId}
+              </Link>
+            </div>
+          ))}
         </CardContent>
       </Card>
-    );
-  };
-
-  // Top 5 List Component
-  const TopModelsList = ({ benchmarkId }: { benchmarkId: string }) => {
-    const items = getTopModels(benchmarkId, 5);
-
-    return (
-      <div className="space-y-3">
-        {items.map((item) => (
-          <div
-            key={item.modelId}
-            className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
-          >
-            <div className="flex items-center gap-3">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                {item.rank}
-              </span>
-              <div>
-                <Link
-                  href={`/models/${item.modelId}`}
-                  className="text-sm font-medium text-primary hover:underline"
-                >
-                  {item.model?.name || item.modelId}
-                </Link>
-                <p className="text-xs text-muted-foreground">
-                  {item.model?.organization}
-                </p>
-              </div>
-            </div>
-            <span className="text-sm font-medium text-muted-foreground">
-              {item.avgRank.toFixed(2)}
-            </span>
-          </div>
-        ))}
-      </div>
     );
   };
 
@@ -212,54 +183,32 @@ export default function HomePage() {
             Champion Board
           </h3>
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {champions.map(({ benchmark, topModel }) => (
-              <ChampionCard key={benchmark.id} benchmark={benchmark} topModel={topModel} />
+            {podiums.map(({ benchmark, topModels }) => (
+              <PodiumCard key={benchmark.id} benchmark={benchmark} topModels={topModels} />
             ))}
           </div>
         </div>
 
-        {/* Tabbed Interface */}
+      </section>
+
+      {/* Scaling Laws */}
+      <section className="mb-12">
+        <h2 className="mb-2 flex items-center gap-2 text-2xl font-bold">
+          <TrendingUp className="h-6 w-6" />
+          Scaling Laws
+        </h2>
+        <p className="mb-6 text-muted-foreground">
+          Relationship between robustness and performance.
+          Per-benchmark average metrics were normalized within [0, 1]. Point size represents model parameters.
+          Only models evaluated on the selected benchmarks are shown.
+        </p>
         <Card>
-          <CardHeader>
-            <CardTitle>Detailed Rankings</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Explore top 5 models for each benchmark
-            </p>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue={benchmarks[0].id}>
-              <>
-                <TabsList className="grid w-full grid-cols-5 lg:grid-cols-10">
-                  <>
-                    {benchmarks.map((benchmark) => (
-                      <TabsTrigger key={benchmark.id} value={benchmark.id}>
-                        {benchmark.shortName}
-                      </TabsTrigger>
-                    ))}
-                  </>
-                </TabsList>
-                {benchmarks.map((benchmark) => (
-                  <TabsContent key={benchmark.id} value={benchmark.id}>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-semibold">{benchmark.name}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            {benchmark.description}
-                          </p>
-                        </div>
-                        <Link href="/leaderboard">
-                          <Button variant="outline" size="sm">
-                            View Full Leaderboard
-                          </Button>
-                        </Link>
-                      </div>
-                      <TopModelsList benchmarkId={benchmark.id} />
-                    </div>
-                  </TabsContent>
-                ))}
-              </>
-            </Tabs>
+          <CardContent className="pt-6">
+            <ScalingLawsChart
+              models={models}
+              tasks={tasks}
+              results={results}
+            />
           </CardContent>
         </Card>
       </section>

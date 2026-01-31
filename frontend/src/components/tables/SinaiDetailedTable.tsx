@@ -2,8 +2,10 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { Search, X } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 
 interface SinaiResult extends Result {
@@ -23,6 +25,11 @@ export function SinaiDetailedTable({
   results,
   modelRankings,
 }: SinaiDetailedTableProps) {
+  // Get unique organs for filtering (Indications)
+  const organs = useMemo(() => {
+    return [...new Set(tasks.map((t) => t.organ))].sort();
+  }, [tasks]);
+
   // Get unique categories for filtering
   const categories = useMemo(() => {
     return [...new Set(tasks.map((t) => t.category as string))].sort();
@@ -34,14 +41,30 @@ export function SinaiDetailedTable({
   }, [tasks]);
 
   // Filter states
+  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
+    () => new Set(organs)
+  );
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     () => new Set(categories)
   );
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
     () => new Set(taskNames)
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Toggle helpers
+  const toggleOrgan = (organ: string) => {
+    setSelectedOrgans((prev) => {
+      const next = new Set(prev);
+      if (next.has(organ)) {
+        next.delete(organ);
+      } else {
+        next.add(organ);
+      }
+      return next;
+    });
+  };
+
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) => {
       const next = new Set(prev);
@@ -66,12 +89,37 @@ export function SinaiDetailedTable({
     });
   };
 
-  // Filter tasks by selected categories AND selected task names
+  // Filter tasks by selected organs, categories, task names, and search query
+  // When there's a search query, it searches across ALL tasks (ignoring filters)
   const filteredTasks = useMemo(() => {
-    return tasks.filter(
-      (t) => selectedCategories.has(t.category as string) && selectedTasks.has(t.name)
-    );
-  }, [tasks, selectedCategories, selectedTasks]);
+    const query = searchQuery.toLowerCase().trim();
+
+    let filtered: Task[];
+    // If there's a search query, search across all tasks
+    // All query words must be present in the searchable text
+    if (query) {
+      const queryWords = query.split(/\s+/);
+      filtered = tasks.filter((t) => {
+        const searchableText = [
+          t.name,
+          t.category as string,
+          t.organ,
+        ].join(" ").toLowerCase();
+        return queryWords.every((word) => searchableText.includes(word));
+      });
+    } else {
+      // Otherwise, apply all filters
+      filtered = tasks.filter(
+        (t) =>
+          selectedOrgans.has(t.organ) &&
+          selectedCategories.has(t.category as string) &&
+          selectedTasks.has(t.name)
+      );
+    }
+
+    // Sort alphabetically by task name
+    return filtered.sort((a, b) => a.name.localeCompare(b.name));
+  }, [tasks, selectedOrgans, selectedCategories, selectedTasks, searchQuery]);
 
   // Create a lookup map for results: modelId -> taskId -> {value, std}
   const resultsMap = useMemo(() => {
@@ -188,7 +236,7 @@ export function SinaiDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>Sinai SSL Tile Benchmarks</strong> is a comprehensive benchmark from Mount Sinai evaluating pathology
+          <strong>Sinai SSL Tile Benchmarks</strong> (Nature Communications, 2025) is a comprehensive benchmark from Mount Sinai evaluating pathology
           foundation models on cancer detection and biomarker prediction tasks across multiple organs and institutions.
           Data sourced from the{" "}
           <a
@@ -200,12 +248,28 @@ export function SinaiDetailedTable({
             official Sinai GitHub
           </a>.
         </p>
+        <p className="text-sm text-muted-foreground mt-2">
+          <strong>Institution abbreviations:</strong> MSHS = Mount Sinai Health System, SUH = Sahlgrenska University Hospital, MSKCC = Memorial Sloan Kettering Cancer Center.
+        </p>
       </div>
 
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
           label="Indications"
+          options={organs
+            .map((organ) => ({
+              id: organ,
+              label: organ.charAt(0).toUpperCase() + organ.slice(1),
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={selectedOrgans}
+          onToggle={toggleOrgan}
+          onSelectAll={() => setSelectedOrgans(new Set(organs))}
+          onClearAll={() => setSelectedOrgans(new Set())}
+        />
+        <MultiSelectDropdown
+          label="Task Category"
           options={categories
             .map((category) => ({
               id: category,
@@ -218,7 +282,7 @@ export function SinaiDetailedTable({
           onClearAll={() => setSelectedCategories(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskNames
             .map((taskName) => ({
               id: taskName,
@@ -230,6 +294,24 @@ export function SinaiDetailedTable({
           onSelectAll={() => setSelectedTasks(new Set(taskNames))}
           onClearAll={() => setSelectedTasks(new Set())}
         />
+        <div className="relative flex-1 min-w-[200px] max-w-[300px]">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8 pr-8 h-9"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       <p className="mb-3 text-sm text-muted-foreground">

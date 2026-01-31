@@ -2,12 +2,19 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Search, X } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Format cryptic task names to be more readable
 function formatTaskName(name: string): string {
@@ -198,13 +205,14 @@ export function StanfordDetailedTable({
     });
   };
 
-  const toggleLevel = (level: ClassificationLevel) => {
+  const toggleLevel = (level: string) => {
+    const typedLevel = level as ClassificationLevel;
     setSelectedLevels((prev) => {
       const next = new Set(prev);
-      if (next.has(level)) {
-        next.delete(level);
+      if (next.has(typedLevel)) {
+        next.delete(typedLevel);
       } else {
-        next.add(level);
+        next.add(typedLevel);
       }
       return next;
     });
@@ -218,13 +226,18 @@ export function StanfordDetailedTable({
 
     let filtered: Task[];
     // If there's a search query, search across all tasks
+    // All query words must be present in the searchable text
     if (query) {
-      filtered = tasks.filter((t) =>
-        t.name.toLowerCase().includes(query) ||
-        formatTaskName(t.name).toLowerCase().includes(query) ||
-        (t.category as string).toLowerCase().includes(query) ||
-        t.organ.toLowerCase().includes(query)
-      );
+      const queryWords = query.split(/\s+/);
+      filtered = tasks.filter((t) => {
+        const searchableText = [
+          t.name,
+          formatTaskName(t.name),
+          t.category as string,
+          t.organ,
+        ].join(" ").toLowerCase();
+        return queryWords.every((word) => searchableText.includes(word));
+      });
     } else {
       // Otherwise, apply all filters
       filtered = tasks.filter(
@@ -414,7 +427,7 @@ export function StanfordDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>Stanford PathBench</strong> is a comprehensive benchmark evaluating 31 foundation models across
+          <strong>Stanford PathBench</strong> (medRxiv, 2025) is a comprehensive benchmark evaluating 31 foundation models across
           41 tasks from TCGA, CPTAC, and external datasets. Data sourced from the{" "}
           <a
             href="https://pathbench.stanford.edu"
@@ -429,17 +442,25 @@ export function StanfordDetailedTable({
 
       {/* Metric dropdown and Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <select
-          value={selectedMetric}
-          onChange={(e) => setSelectedMetric(e.target.value as MetricType)}
-          className="h-9 px-3 py-1.5 text-sm rounded-md border border-border bg-background hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          {METRIC_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="justify-between min-w-[140px]">
+              <span className="truncate">
+                {METRIC_OPTIONS.find(m => m.value === selectedMetric)?.label || selectedMetric}
+              </span>
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuRadioGroup value={selectedMetric} onValueChange={(value) => setSelectedMetric(value as MetricType)}>
+              {METRIC_OPTIONS.map((option) => (
+                <DropdownMenuRadioItem key={option.value} value={option.value}>
+                  {option.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <MultiSelectDropdown
           label="Indications"
           options={organs
@@ -452,6 +473,19 @@ export function StanfordDetailedTable({
           onToggle={toggleOrgan}
           onSelectAll={() => setSelectedOrgans(new Set(organs))}
           onClearAll={() => setSelectedOrgans(new Set())}
+        />
+        <MultiSelectDropdown
+          label="Task Type"
+          options={classificationLevels
+            .map((level) => ({
+              id: level,
+              label: level === "Slide" ? "Slide-level classification" : "Patch-level classification",
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={selectedLevels}
+          onToggle={toggleLevel}
+          onSelectAll={() => setSelectedLevels(new Set(classificationLevels))}
+          onClearAll={() => setSelectedLevels(new Set())}
         />
         <MultiSelectDropdown
           label="Task Categories"
@@ -467,7 +501,7 @@ export function StanfordDetailedTable({
           onClearAll={() => setSelectedCategories(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskNames
             .map((taskName) => ({
               id: taskName,
@@ -478,19 +512,6 @@ export function StanfordDetailedTable({
           onToggle={toggleTask}
           onSelectAll={() => setSelectedTasks(new Set(taskNames))}
           onClearAll={() => setSelectedTasks(new Set())}
-        />
-        <MultiSelectDropdown
-          label="Level"
-          options={classificationLevels
-            .map((level) => ({
-              id: level,
-              label: level === "Slide" ? "Slide-level" : "Patch-level",
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedLevels}
-          onToggle={toggleLevel}
-          onSelectAll={() => setSelectedLevels(new Set(classificationLevels))}
-          onClearAll={() => setSelectedLevels(new Set())}
         />
         <div className="relative flex-1 min-w-[200px] max-w-[300px]">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

@@ -2,8 +2,10 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { Search, X } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 
 interface STAMPDetailedTableProps {
@@ -19,7 +21,12 @@ export function STAMPDetailedTable({
   results,
   modelRankings,
 }: STAMPDetailedTableProps) {
-  // Get unique categories for filtering
+  // Get unique organs for filtering (Indications)
+  const organs = useMemo(() => {
+    return [...new Set(tasks.map((t) => t.organ))].sort();
+  }, [tasks]);
+
+  // Get unique categories for filtering (Task Type)
   const categories = useMemo(() => {
     return [...new Set(tasks.map((t) => t.category as string))].sort();
   }, [tasks]);
@@ -30,14 +37,30 @@ export function STAMPDetailedTable({
   }, [tasks]);
 
   // Filter states - all selected by default
+  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
+    () => new Set(organs)
+  );
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     () => new Set(categories)
   );
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
     () => new Set(taskNames)
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Toggle helpers
+  const toggleOrgan = (organ: string) => {
+    setSelectedOrgans((prev) => {
+      const next = new Set(prev);
+      if (next.has(organ)) {
+        next.delete(organ);
+      } else {
+        next.add(organ);
+      }
+      return next;
+    });
+  };
+
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) => {
       const next = new Set(prev);
@@ -62,12 +85,37 @@ export function STAMPDetailedTable({
     });
   };
 
-  // Filter tasks by selected categories AND selected task names
+  // Filter tasks by selected organs, categories, task names, and search query
+  // When there's a search query, it searches across ALL tasks (ignoring filters)
   const filteredTasks = useMemo(() => {
-    return tasks.filter(
-      (t) => selectedCategories.has(t.category as string) && selectedTasks.has(t.name)
-    );
-  }, [tasks, selectedCategories, selectedTasks]);
+    const query = searchQuery.toLowerCase().trim();
+
+    let filtered: Task[];
+    // If there's a search query, search across all tasks
+    // All query words must be present in the searchable text
+    if (query) {
+      const queryWords = query.split(/\s+/);
+      filtered = tasks.filter((t) => {
+        const searchableText = [
+          t.name,
+          t.category as string,
+          t.organ,
+        ].join(" ").toLowerCase();
+        return queryWords.every((word) => searchableText.includes(word));
+      });
+    } else {
+      // Otherwise, apply all filters
+      filtered = tasks.filter(
+        (t) =>
+          selectedOrgans.has(t.organ) &&
+          selectedCategories.has(t.category as string) &&
+          selectedTasks.has(t.name)
+      );
+    }
+
+    // Sort alphabetically by task name
+    return filtered.sort((a, b) => a.name.localeCompare(b.name));
+  }, [tasks, selectedOrgans, selectedCategories, selectedTasks, searchQuery]);
 
   // Create a lookup map for results: modelId -> taskId -> value
   const resultsMap = useMemo(() => {
@@ -177,6 +225,10 @@ export function STAMPDetailedTable({
   }
 
   // Build options for dropdowns
+  const organOptions = organs.map((organ) => ({
+    id: organ,
+    label: organ.charAt(0).toUpperCase() + organ.slice(1),
+  })).sort((a, b) => a.label.localeCompare(b.label));
   const categoryOptions = categories.map((cat) => ({ id: cat, label: cat }));
   const taskOptions = taskNames.map((name) => ({ id: name, label: name }));
 
@@ -185,17 +237,17 @@ export function STAMPDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>STAMP Benchmark</strong> (Nature Biomedical Engineering) evaluates 15 foundation models as feature
+          <strong>STAMP Benchmark</strong> (Nature Biomedical Engineering, 2025) evaluates 15 foundation models as feature
           extractors for weakly supervised computational pathology across morphology, biomarker, and prognosis tasks.
-          Data sourced from the{" "}
+          Data sourced from the original publication (
           <a
-            href="https://github.com/KatherLab/STAMP-Benchmark"
+            href="https://static-content.springer.com/esm/art%3A10.1038%2Fs41551-025-01516-3/MediaObjects/41551_2025_1516_MOESM5_ESM.xlsx"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official STAMP GitHub
-          </a>.
+            Figure 2 Source Data
+          </a>).
         </p>
       </div>
 
@@ -203,6 +255,14 @@ export function STAMPDetailedTable({
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
           label="Indications"
+          options={organOptions}
+          selectedIds={selectedOrgans}
+          onToggle={toggleOrgan}
+          onSelectAll={() => setSelectedOrgans(new Set(organs))}
+          onClearAll={() => setSelectedOrgans(new Set())}
+        />
+        <MultiSelectDropdown
+          label="Task Category"
           options={categoryOptions}
           selectedIds={selectedCategories}
           onToggle={toggleCategory}
@@ -210,13 +270,31 @@ export function STAMPDetailedTable({
           onClearAll={() => setSelectedCategories(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskOptions}
           selectedIds={selectedTasks}
           onToggle={toggleTask}
           onSelectAll={() => setSelectedTasks(new Set(taskNames))}
           onClearAll={() => setSelectedTasks(new Set())}
         />
+        <div className="relative flex-1 min-w-[200px] max-w-[300px]">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8 pr-8 h-9"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       <p className="mb-3 text-sm text-muted-foreground">
@@ -246,7 +324,7 @@ export function STAMPDetailedTable({
                     {task.name}
                   </div>
                   <div className="text-[10px] text-muted-foreground font-normal whitespace-nowrap mt-0.5">
-                    {task.organ}
+                    AUROC
                   </div>
                 </th>
               ))}

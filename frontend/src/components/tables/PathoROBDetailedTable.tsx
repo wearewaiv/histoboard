@@ -178,7 +178,10 @@ export function PathoROBDetailedTable({
   }
 
   // Build options for dropdowns
-  const organOptions = organs.map((organ) => ({ id: organ, label: organ }));
+  const organOptions = organs.map((organ) => ({
+    id: organ,
+    label: organ.charAt(0).toUpperCase() + organ.slice(1)
+  }));
   const taskOptions = taskNames.map((name) => ({ id: name, label: name }));
 
   return (
@@ -186,7 +189,7 @@ export function PathoROBDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>PathoROB</strong> is a robustness benchmark evaluating pathology foundation models across domain shift
+          <strong>PathoROB</strong> (arXiv, 2025) is a robustness benchmark evaluating pathology foundation models across domain shift
           scenarios including TCGA 2x2 splits, Camelyon, and Tolkach ESCA datasets. Data sourced from the{" "}
           <a
             href="https://github.com/bifold-pathomics/PathoROB"
@@ -210,7 +213,7 @@ export function PathoROBDetailedTable({
           onClearAll={() => setSelectedOrgans(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskOptions}
           selectedIds={selectedTasks}
           onToggle={toggleTask}
@@ -246,7 +249,7 @@ export function PathoROBDetailedTable({
                     {task.name}
                   </div>
                   <div className="text-[10px] text-muted-foreground font-normal whitespace-nowrap mt-0.5">
-                    {task.organ}
+                    Rob. Index
                   </div>
                 </th>
               ))}

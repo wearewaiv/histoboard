@@ -21,6 +21,7 @@ interface MultiSelectDropdownProps {
   onSelectAll: () => void
   onClearAll: () => void
   className?: string
+  size?: "default" | "sm"
 }
 
 export function MultiSelectDropdown({
@@ -31,6 +32,7 @@ export function MultiSelectDropdown({
   onSelectAll,
   onClearAll,
   className,
+  size = "default",
 }: MultiSelectDropdownProps) {
   const selectedCount = selectedIds.size
   const totalCount = options.length
@@ -40,12 +42,17 @@ export function MultiSelectDropdown({
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className={cn("justify-between min-w-[140px]", className)}
+          size={size === "sm" ? "sm" : "default"}
+          className={cn(
+            "justify-between",
+            size === "sm" ? "min-w-[100px] text-xs h-8 px-2" : "min-w-[140px]",
+            className
+          )}
         >
           <span className="truncate">
             {label} ({selectedCount}/{totalCount})
           </span>
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className={cn("shrink-0 opacity-50", size === "sm" ? "ml-1 h-3 w-3" : "ml-2 h-4 w-4")} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72 max-h-[300px] overflow-y-auto" align="start">

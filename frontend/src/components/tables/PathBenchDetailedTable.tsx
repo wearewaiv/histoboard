@@ -106,6 +106,20 @@ export function PathBenchDetailedTable({
     return [...new Set(tasks.map((t) => getTaskCategory(t.name)))].sort();
   }, [tasks]);
 
+  // Get all task IDs for filtering (all 229 individual tasks)
+  const allTaskIds = useMemo(() => {
+    return tasks.map((t) => t.id).sort();
+  }, [tasks]);
+
+  // Create a map of task ID to task name for display
+  const taskIdToName = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const task of tasks) {
+      map.set(task.id, task.name);
+    }
+    return map;
+  }, [tasks]);
+
   // Filter states
   const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
     new Set<string>()
@@ -116,18 +130,22 @@ export function PathBenchDetailedTable({
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     new Set<string>()
   );
+  const [selectedTaskIds, setSelectedTaskIds] = useState<Set<string>>(
+    new Set<string>()
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const initializedRef = useRef(false);
 
   // Initialize selected values when options become available (only once)
   useEffect(() => {
-    if (!initializedRef.current && organs.length > 0 && taskTypes.length > 0 && taskCategories.length > 0) {
+    if (!initializedRef.current && organs.length > 0 && taskTypes.length > 0 && taskCategories.length > 0 && allTaskIds.length > 0) {
       setSelectedOrgans(new Set(organs));
       setSelectedTypes(new Set(taskTypes));
       setSelectedCategories(new Set(taskCategories));
+      setSelectedTaskIds(new Set(allTaskIds));
       initializedRef.current = true;
     }
-  }, [organs, taskTypes, taskCategories]);
+  }, [organs, taskTypes, taskCategories, allTaskIds]);
 
   // Toggle helpers
   const toggleOrgan = (organ: string) => {
@@ -166,7 +184,19 @@ export function PathBenchDetailedTable({
     });
   };
 
-  // Filter tasks by selected organs, task types, task categories, and search query
+  const toggleTaskId = (taskId: string) => {
+    setSelectedTaskIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(taskId)) {
+        next.delete(taskId);
+      } else {
+        next.add(taskId);
+      }
+      return next;
+    });
+  };
+
+  // Filter tasks by selected organs, task types, task categories, tasks, and search query
   // When there's a search query, it searches across ALL tasks (ignoring filters)
   // Sort alphabetically by task name
   const filteredTasks = useMemo(() => {
@@ -174,25 +204,31 @@ export function PathBenchDetailedTable({
 
     let filtered: Task[];
     // If there's a search query, search across all tasks
+    // All query words must be present in the searchable text
     if (query) {
-      filtered = tasks.filter((t) =>
-        t.name.toLowerCase().includes(query) ||
-        t.organ.toLowerCase().includes(query) ||
-        getDetailedTaskType(t).toLowerCase().includes(query) ||
-        getTaskCategory(t.name).toLowerCase().includes(query)
-      );
+      const queryWords = query.split(/\s+/);
+      filtered = tasks.filter((t) => {
+        const searchableText = [
+          t.name,
+          t.organ,
+          getDetailedTaskType(t),
+          getTaskCategory(t.name),
+        ].join(" ").toLowerCase();
+        return queryWords.every((word) => searchableText.includes(word));
+      });
     } else {
       // Otherwise, apply all filters
       filtered = tasks.filter((t) =>
         selectedOrgans.has(t.organ) &&
         selectedTypes.has(getDetailedTaskType(t)) &&
-        selectedCategories.has(getTaskCategory(t.name))
+        selectedCategories.has(getTaskCategory(t.name)) &&
+        selectedTaskIds.has(t.id)
       );
     }
 
     // Sort alphabetically by task name
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }, [tasks, selectedOrgans, selectedTypes, selectedCategories, searchQuery]);
+  }, [tasks, selectedOrgans, selectedTypes, selectedCategories, selectedTaskIds, searchQuery]);
 
   // Create a lookup map for results: modelId -> taskId -> { value, std }
   const resultsMap = useMemo(() => {
@@ -309,7 +345,7 @@ export function PathBenchDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>PathBench</strong> is a large-scale benchmark for pathology foundation models across 229 tasks
+          <strong>PathBench</strong> (arXiv, 2025) is a large-scale benchmark for pathology foundation models across 229 tasks
           including classification, overall survival (OS), disease-free survival (DFS), and disease-specific survival (DSS)
           prediction. Data sourced from the{" "}
           <a
@@ -339,7 +375,7 @@ export function PathBenchDetailedTable({
           onClearAll={() => setSelectedOrgans(new Set())}
         />
         <MultiSelectDropdown
-          label="Task Type"
+          label="Task Categories"
           options={taskTypes
             .map((type) => ({
               id: type,
@@ -352,7 +388,7 @@ export function PathBenchDetailedTable({
           onClearAll={() => setSelectedTypes(new Set())}
         />
         <MultiSelectDropdown
-          label="Task Categories"
+          label="Task Subcategories"
           options={taskCategories
             .map((category) => ({
               id: category,
@@ -363,6 +399,19 @@ export function PathBenchDetailedTable({
           onToggle={toggleCategory}
           onSelectAll={() => setSelectedCategories(new Set(taskCategories))}
           onClearAll={() => setSelectedCategories(new Set())}
+        />
+        <MultiSelectDropdown
+          label="All Tasks"
+          options={allTaskIds
+            .map((id) => ({
+              id: id,
+              label: taskIdToName.get(id) || id,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={selectedTaskIds}
+          onToggle={toggleTaskId}
+          onSelectAll={() => setSelectedTaskIds(new Set(allTaskIds))}
+          onClearAll={() => setSelectedTaskIds(new Set())}
         />
         <div className="relative flex-1 min-w-[200px] max-w-[300px]">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

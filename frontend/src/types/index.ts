@@ -29,6 +29,7 @@ export interface Benchmark {
   shortName: string;
   category: BenchmarkCategory | BenchmarkCategory[];
   url: string;
+  githubUrl?: string;
   organs: string[];
   taskCount: number;
   description: string;

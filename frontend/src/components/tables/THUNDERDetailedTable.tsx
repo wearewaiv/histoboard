@@ -16,15 +16,35 @@ interface THUNDERDetailedTableProps {
 // Define which metrics are lower-is-better
 const LOWER_IS_BETTER_TASKS = ["thunder_calibration", "thunder_adversarial"];
 
+// Task type categories for THUNDER benchmark
+const TASK_TYPES = [
+  "Patch-level classification",
+  "Calibration",
+  "Robustness",
+  "Segmentation",
+] as const;
+
+type TaskType = typeof TASK_TYPES[number];
+
+// Get task type based on task ID
+function getTaskType(taskId: string): TaskType {
+  if (taskId === "thunder_calibration") return "Calibration";
+  if (taskId === "thunder_adversarial") return "Robustness";
+  if (taskId === "thunder_segmentation") return "Segmentation";
+  return "Patch-level classification";
+}
+
 export function THUNDERDetailedTable({
   models,
   tasks,
   results,
   modelRankings,
 }: THUNDERDetailedTableProps) {
-  // Get unique categories for filtering
-  const categories = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.category as string))].sort();
+  // Get unique task types present in the data
+  const taskTypes = useMemo(() => {
+    const types = new Set(tasks.map((t) => getTaskType(t.id)));
+    // Return in the order defined in TASK_TYPES
+    return TASK_TYPES.filter((type) => types.has(type));
   }, [tasks]);
 
   // Get unique task names for filtering
@@ -33,21 +53,21 @@ export function THUNDERDetailedTable({
   }, [tasks]);
 
   // Filter states - all selected by default
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    () => new Set(categories)
+  const [selectedTaskTypes, setSelectedTaskTypes] = useState<Set<string>>(
+    () => new Set(taskTypes)
   );
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
     () => new Set(taskNames)
   );
 
   // Toggle helpers
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
+  const toggleTaskType = (taskType: string) => {
+    setSelectedTaskTypes((prev) => {
       const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
+      if (next.has(taskType)) {
+        next.delete(taskType);
       } else {
-        next.add(category);
+        next.add(taskType);
       }
       return next;
     });
@@ -65,12 +85,14 @@ export function THUNDERDetailedTable({
     });
   };
 
-  // Filter tasks by selected categories AND selected task names
+  // Filter tasks by selected task types AND selected task names
   const filteredTasks = useMemo(() => {
     return tasks.filter(
-      (t) => selectedCategories.has(t.category as string) && selectedTasks.has(t.name)
+      (t) =>
+        selectedTaskTypes.has(getTaskType(t.id)) &&
+        selectedTasks.has(t.name)
     );
-  }, [tasks, selectedCategories, selectedTasks]);
+  }, [tasks, selectedTaskTypes, selectedTasks]);
 
   // Create a lookup map for results: modelId -> taskId -> value
   const resultsMap = useMemo(() => {
@@ -101,76 +123,27 @@ export function THUNDERDetailedTable({
     return stats;
   }, [filteredTasks, results]);
 
-  // Compute average rank per model (across filtered tasks)
-  const modelAvgRanks = useMemo(() => {
-    const avgRanks = new Map<string, number>();
+  // Get official rank sums from results data (thunder_ranksum task)
+  const modelRankSums = useMemo(() => {
+    const rankSums = new Map<string, number>();
 
-    // For each task, compute ranks
-    const taskRanks = new Map<string, Map<string, number>>();
-    for (const task of filteredTasks) {
-      const taskResults = results
-        .filter(r => r.taskId === task.id)
-        .sort((a, b) => {
-          // For lower-is-better metrics, sort ascending
-          if (LOWER_IS_BETTER_TASKS.includes(task.id)) {
-            return a.value - b.value;
-          }
-          // For higher-is-better metrics, sort descending
-          return b.value - a.value;
-        });
-
-      const ranks = new Map<string, number>();
-      taskResults.forEach((r, idx) => {
-        ranks.set(r.modelId, idx + 1);
-      });
-      taskRanks.set(task.id, ranks);
-    }
-
-    // Compute average rank per model
-    for (const model of models) {
-      const ranks: number[] = [];
-      for (const task of filteredTasks) {
-        const rank = taskRanks.get(task.id)?.get(model.id);
-        if (rank !== undefined) {
-          ranks.push(rank);
-        }
-      }
-      if (ranks.length > 0) {
-        avgRanks.set(model.id, ranks.reduce((a, b) => a + b, 0) / ranks.length);
+    for (const result of results) {
+      if (result.taskId === "thunder_ranksum") {
+        rankSums.set(result.modelId, result.value);
       }
     }
 
-    return avgRanks;
-  }, [models, filteredTasks, results]);
+    return rankSums;
+  }, [results]);
 
-  // Compute average metric value per model (across filtered tasks)
-  const modelAvgValues = useMemo(() => {
-    const avgValues = new Map<string, number>();
-
-    for (const model of models) {
-      const values: number[] = [];
-      for (const task of filteredTasks) {
-        const value = resultsMap.get(model.id)?.get(task.id);
-        if (value !== undefined) {
-          values.push(value);
-        }
-      }
-      if (values.length > 0) {
-        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
-      }
-    }
-
-    return avgValues;
-  }, [models, filteredTasks, resultsMap]);
-
-  // Sort models by average rank
+  // Sort models by rank sum (lower is better)
   const sortedModels = useMemo(() => {
     return [...models].sort((a, b) => {
-      const rankA = modelAvgRanks.get(a.id) ?? 999;
-      const rankB = modelAvgRanks.get(b.id) ?? 999;
+      const rankA = modelRankSums.get(a.id) ?? 9999;
+      const rankB = modelRankSums.get(b.id) ?? 9999;
       return rankA - rankB;
     });
-  }, [models, modelAvgRanks]);
+  }, [models, modelRankSums]);
 
   // Get value color based on relative performance
   function getValueColor(value: number, taskId: string): string {
@@ -207,11 +180,11 @@ export function THUNDERDetailedTable({
     if (taskId === "thunder_calibration") return "ECE (%)";
     if (taskId === "thunder_adversarial") return "ASR (%)";
     if (taskId === "thunder_segmentation") return "Dice";
-    return "Bal. Acc.";
+    return "Balanced accuracy";
   }
 
   // Build options for dropdowns
-  const categoryOptions = categories.map((cat) => ({ id: cat, label: cat }));
+  const taskTypeOptions = taskTypes.map((type) => ({ id: type, label: type }));
   const taskOptions = taskNames.map((name) => ({ id: name, label: name }));
 
   return (
@@ -219,7 +192,7 @@ export function THUNDERDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>THUNDER Benchmark</strong> comprehensively evaluates pathology foundation models across KNN classification,
+          <strong>THUNDER Benchmark</strong> (arXiv, 2025) comprehensively evaluates pathology foundation models across KNN classification,
           linear probing, few-shot learning, segmentation, calibration, and adversarial robustness tasks.
           Data sourced from the{" "}
           <a
@@ -236,15 +209,15 @@ export function THUNDERDetailedTable({
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
-          label="Indications"
-          options={categoryOptions}
-          selectedIds={selectedCategories}
-          onToggle={toggleCategory}
-          onSelectAll={() => setSelectedCategories(new Set(categories))}
-          onClearAll={() => setSelectedCategories(new Set())}
+          label="Task Type"
+          options={taskTypeOptions}
+          selectedIds={selectedTaskTypes}
+          onToggle={toggleTaskType}
+          onSelectAll={() => setSelectedTaskTypes(new Set(taskTypes))}
+          onClearAll={() => setSelectedTaskTypes(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskOptions}
           selectedIds={selectedTasks}
           onToggle={toggleTask}
@@ -266,10 +239,7 @@ export function THUNDERDetailedTable({
                 Model
               </th>
               <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
-                <div className="text-xs leading-tight">Average<br />rank</div>
-              </th>
-              <th className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[100px] bg-muted/80">
-                <div className="text-xs">Average metric</div>
+                <div className="text-xs leading-tight">Rank<br />sum</div>
               </th>
               {filteredTasks.map((task) => (
                 <th
@@ -289,7 +259,7 @@ export function THUNDERDetailedTable({
           <tbody>
             {sortedModels.map((model, sortIdx) => {
               const modelResults = resultsMap.get(model.id);
-              const avgRank = modelAvgRanks.get(model.id);
+              const rankSum = modelRankSums.get(model.id);
 
               // Check if model has any results for filtered tasks
               const hasResults = filteredTasks.some(
@@ -316,10 +286,7 @@ export function THUNDERDetailedTable({
                     </div>
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
-                  </td>
-                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                    {rankSum !== undefined ? rankSum : "-"}
                   </td>
                   {filteredTasks.map((task) => {
                     const value = modelResults?.get(task.id);

@@ -181,7 +181,7 @@ export function HESTDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>HEST-Benchmark</strong> is a spatial transcriptomics benchmark from the Mahmood Lab that evaluates
+          <strong>HEST-Benchmark</strong> (Nature Methods, 2024) is a spatial transcriptomics benchmark from the Mahmood Lab that evaluates
           foundation models on gene expression prediction from H&E images. The benchmark assesses how well models
           can predict spatially-resolved gene expression patterns directly from histology across 9 cancer types,
           using Pearson correlation as the primary metric. Data sourced from the{" "}
@@ -212,7 +212,7 @@ export function HESTDetailedTable({
           onClearAll={() => setSelectedOrgans(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskNames
             .map((taskName) => ({
               id: taskName,

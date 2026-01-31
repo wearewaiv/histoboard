@@ -4,9 +4,7 @@ import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ChevronDown, ChevronUp, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 import { LeaderboardTable } from "@/components/tables/LeaderboardTable";
@@ -175,8 +173,6 @@ function getTrainingMethodCategory(model: Model): string {
 }
 
 export default function LeaderboardPage() {
-  const [filterExpanded, setFilterExpanded] = useState(true);
-
   // Get all models that have rankings
   const rankedModels = useMemo(() => {
     return models.filter((m) => benchmarks.some((b) => rankings[b.id]?.[m.id]));
@@ -192,6 +188,10 @@ export default function LeaderboardPage() {
     const imageCaptionCategories = new Set<string>();
     const hasHistologyPatches = { value: false };
     const methodCategories = new Set<string>();
+    const licenseCategories = new Set<string>();
+    const publicationYears = new Set<string>();
+    const publicationTypes = new Set<string>();
+    const modelTypes = new Set<string>();
 
     rankedModels.forEach((m) => {
       if (m.params) sizeCategories.add(getSizeCategory(m.params));
@@ -209,6 +209,13 @@ export default function LeaderboardPage() {
         }
       }
       methodCategories.add(getTrainingMethodCategory(m));
+      if (m.license) licenseCategories.add(m.license);
+      if (m.publicationDate) {
+        const year = m.publicationDate.split("-")[0];
+        publicationYears.add(year);
+      }
+      if (m.publicationType) publicationTypes.add(m.publicationType);
+      modelTypes.add(isVLMModel(m) ? "VLM" : "VM");
     });
 
     // Return size categories in order, only those that have models
@@ -233,12 +240,38 @@ export default function LeaderboardPage() {
       return a.localeCompare(b);
     });
 
+    // Sort years descending (most recent first)
+    const sortedYears = [...publicationYears].sort((a, b) => b.localeCompare(a));
+
+    // Sort licenses in a logical order
+    const licenseOrder = ["open-source", "non-commercial", "closed-source"];
+    const sortedLicenses = [...licenseCategories].sort(
+      (a, b) => licenseOrder.indexOf(a) - licenseOrder.indexOf(b)
+    );
+
+    // Sort model types (VM first, then VLM)
+    const sortedModelTypes = [...modelTypes].sort((a, b) => {
+      if (a === "VM") return -1;
+      if (b === "VM") return 1;
+      return 0;
+    });
+
+    // Sort publication types in logical order
+    const pubTypeOrder = ["peer-reviewed", "preprint", "blog"];
+    const sortedPubTypes = [...publicationTypes].sort(
+      (a, b) => pubTypeOrder.indexOf(a) - pubTypeOrder.indexOf(b)
+    );
+
     return {
       sizeCategories: orderedSizeCategories,
       wsiDataSizeCategories: orderedWsiDataSizeCategories,
       imageCaptionCategories: orderedImageCaptionCategories,
       hasHistologyPatches: hasHistologyPatches.value,
       methodCategories: sortedMethodCategories,
+      licenseCategories: sortedLicenses,
+      publicationYears: sortedYears,
+      publicationTypes: sortedPubTypes,
+      modelTypes: sortedModelTypes,
     };
   }, [rankedModels]);
 
@@ -257,6 +290,18 @@ export default function LeaderboardPage() {
   );
   const [selectedMethodCategories, setSelectedMethodCategories] = useState<Set<string>>(
     () => new Set(filterOptions.methodCategories)
+  );
+  const [selectedLicenses, setSelectedLicenses] = useState<Set<string>>(
+    () => new Set(filterOptions.licenseCategories)
+  );
+  const [selectedYears, setSelectedYears] = useState<Set<string>>(
+    () => new Set(filterOptions.publicationYears)
+  );
+  const [selectedModelTypes, setSelectedModelTypes] = useState<Set<string>>(
+    () => new Set(filterOptions.modelTypes)
+  );
+  const [selectedPublicationTypes, setSelectedPublicationTypes] = useState<Set<string>>(
+    () => new Set(filterOptions.publicationTypes)
   );
 
   // Selected models based on attribute filters
@@ -283,9 +328,14 @@ export default function LeaderboardPage() {
       }
 
       const methodMatch = selectedMethodCategories.has(getTrainingMethodCategory(m));
-      return sizeMatch && dataMatch && methodMatch;
+      const licenseMatch = !m.license || selectedLicenses.has(m.license);
+      const yearMatch = !m.publicationDate || selectedYears.has(m.publicationDate.split("-")[0]);
+      const typeMatch = selectedModelTypes.has(isVLMModel(m) ? "VLM" : "VM");
+      const pubTypeMatch = !m.publicationType || selectedPublicationTypes.has(m.publicationType);
+
+      return sizeMatch && dataMatch && methodMatch && licenseMatch && yearMatch && typeMatch && pubTypeMatch;
     });
-  }, [rankedModels, selectedSizeCategories, selectedWsiDataSizeCategories, selectedImageCaptionCategories, selectedHistologyPatches, selectedMethodCategories]);
+  }, [rankedModels, selectedSizeCategories, selectedWsiDataSizeCategories, selectedImageCaptionCategories, selectedHistologyPatches, selectedMethodCategories, selectedLicenses, selectedYears, selectedModelTypes, selectedPublicationTypes]);
 
   // Model IDs after attribute filtering
   const filteredModelIds = useMemo(
@@ -395,6 +445,10 @@ export default function LeaderboardPage() {
     setSelectedImageCaptionCategories(new Set(filterOptions.imageCaptionCategories));
     setSelectedHistologyPatches(filterOptions.hasHistologyPatches);
     setSelectedMethodCategories(new Set(filterOptions.methodCategories));
+    setSelectedLicenses(new Set(filterOptions.licenseCategories));
+    setSelectedYears(new Set(filterOptions.publicationYears));
+    setSelectedPublicationTypes(new Set(filterOptions.publicationTypes));
+    setSelectedModelTypes(new Set(filterOptions.modelTypes));
     setSelectedModelIds(new Set(allModelIds));
   };
 
@@ -426,6 +480,30 @@ export default function LeaderboardPage() {
     setSelectedMethodCategories(new Set());
   };
 
+  // Select/clear all for license categories
+  const selectAllLicenses = () => {
+    setSelectedLicenses(new Set(filterOptions.licenseCategories));
+  };
+  const clearAllLicenses = () => {
+    setSelectedLicenses(new Set());
+  };
+
+  // Select/clear all for publication years
+  const selectAllYears = () => {
+    setSelectedYears(new Set(filterOptions.publicationYears));
+  };
+  const clearAllYears = () => {
+    setSelectedYears(new Set());
+  };
+
+  // Select/clear all for model types
+  const selectAllModelTypes = () => {
+    setSelectedModelTypes(new Set(filterOptions.modelTypes));
+  };
+  const clearAllModelTypes = () => {
+    setSelectedModelTypes(new Set());
+  };
+
   // Helper to get category labels
   const getSizeCategoryLabel = (catId: string) => {
     return SIZE_CATEGORIES.find((c) => c.id === catId)?.label || catId;
@@ -437,6 +515,43 @@ export default function LeaderboardPage() {
 
   const getImageCaptionCategoryLabel = (catId: string) => {
     return IMAGE_CAPTION_CATEGORIES.find((c) => c.id === catId)?.label || catId;
+  };
+
+  // License label helper
+  const getLicenseLabel = (license: string) => {
+    const labels: Record<string, string> = {
+      "open-source": "Open Source",
+      "non-commercial": "Non-Commercial",
+      "closed-source": "Closed Source",
+    };
+    return labels[license] || license;
+  };
+
+  // Model type label helper
+  const getModelTypeLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      "VM": "Vision Model",
+      "VLM": "Vision-Language Model",
+    };
+    return labels[type] || type;
+  };
+
+  // Publication type label helper
+  const getPublicationTypeLabel = (pubType: string) => {
+    const labels: Record<string, string> = {
+      "peer-reviewed": "Peer-reviewed",
+      "preprint": "Preprint",
+      "blog": "Blog",
+    };
+    return labels[pubType] || pubType;
+  };
+
+  // Select/clear all for publication types
+  const selectAllPublicationTypes = () => {
+    setSelectedPublicationTypes(new Set(filterOptions.publicationTypes));
+  };
+  const clearAllPublicationTypes = () => {
+    setSelectedPublicationTypes(new Set());
   };
 
   // Count total data categories for display
@@ -557,8 +672,8 @@ export default function LeaderboardPage() {
               <TabsTrigger value="sinai-details">Sinai</TabsTrigger>
               <TabsTrigger value="stamp-details">STAMP</TabsTrigger>
               <TabsTrigger value="thunder-details">THUNDER</TabsTrigger>
-              <TabsTrigger value="pathorob-details">PathoROB</TabsTrigger>
-              <TabsTrigger value="plism-details">PLISM</TabsTrigger>
+              <TabsTrigger value="pathorob-details">PathoROB <span className="ml-1 text-[10px] text-muted-foreground">(robustness)</span></TabsTrigger>
+              <TabsTrigger value="plism-details">Plismbench <span className="ml-1 text-[10px] text-muted-foreground">(robustness)</span></TabsTrigger>
             </TabsList>
 
             <TabsContent value="rankings">
@@ -567,74 +682,145 @@ export default function LeaderboardPage() {
               </p>
 
               {/* Filters */}
-              <div className="mb-4 border rounded-lg">
-                <button
-                  onClick={() => setFilterExpanded(!filterExpanded)}
-                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Filter className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">Filters</span>
-                    <span className="text-sm text-muted-foreground">
-                      ({effectiveSelectedIds.size}/{allModelIds.length} models shown)
-                    </span>
-                  </div>
-                  {filterExpanded ? (
-                    <ChevronUp className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                  )}
-                </button>
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                {/* Model Size Dropdown */}
+                <MultiSelectDropdown
+                  label="Model Size"
+                  size="sm"
+                  options={filterOptions.sizeCategories.map((catId) => ({
+                    id: catId,
+                    label: getSizeCategoryLabel(catId),
+                  }))}
+                  selectedIds={selectedSizeCategories}
+                  onToggle={(catId) => toggleFilter(catId, setSelectedSizeCategories)}
+                  onSelectAll={selectAllSizeCategories}
+                  onClearAll={clearAllSizeCategories}
+                />
 
-                {filterExpanded && (
-                  <div className="px-4 pb-4 border-t">
-                    {/* Reset button and dropdown filters */}
-                    <div className="flex flex-wrap items-center gap-3 pt-3">
-                      {/* Model Size Dropdown */}
-                      <MultiSelectDropdown
-                        label="Model Size"
-                        options={filterOptions.sizeCategories.map((catId) => ({
-                          id: catId,
-                          label: getSizeCategoryLabel(catId),
-                        }))}
-                        selectedIds={selectedSizeCategories}
-                        onToggle={(catId) => toggleFilter(catId, setSelectedSizeCategories)}
-                        onSelectAll={selectAllSizeCategories}
-                        onClearAll={clearAllSizeCategories}
-                      />
+                {/* Pretraining Data Dropdown */}
+                <MultiSelectDropdown
+                  label="Data"
+                  size="sm"
+                  options={[
+                    ...filterOptions.wsiDataSizeCategories.map((catId) => ({
+                      id: catId,
+                      label: getWsiDataSizeCategoryLabel(catId),
+                    })),
+                    ...filterOptions.imageCaptionCategories.map((catId) => ({
+                      id: catId,
+                      label: getImageCaptionCategoryLabel(catId),
+                    })),
+                    ...(filterOptions.hasHistologyPatches ? [{ id: HISTOLOGY_PATCH_CATEGORY.id, label: HISTOLOGY_PATCH_CATEGORY.label }] : []),
+                  ]}
+                  selectedIds={new Set([
+                    ...selectedWsiDataSizeCategories,
+                    ...selectedImageCaptionCategories,
+                    ...(selectedHistologyPatches ? [HISTOLOGY_PATCH_CATEGORY.id] : []),
+                  ])}
+                  onToggle={(catId) => {
+                    if (catId.startsWith("ic-")) {
+                      toggleFilter(catId, setSelectedImageCaptionCategories);
+                    } else if (catId === HISTOLOGY_PATCH_CATEGORY.id) {
+                      setSelectedHistologyPatches(!selectedHistologyPatches);
+                    } else {
+                      toggleFilter(catId, setSelectedWsiDataSizeCategories);
+                    }
+                  }}
+                  onSelectAll={selectAllDataSizeCategories}
+                  onClearAll={clearAllDataSizeCategories}
+                />
 
-                      {/* Training Method Dropdown */}
-                      <MultiSelectDropdown
-                        label="Training"
-                        options={filterOptions.methodCategories.map((category) => ({
-                          id: category,
-                          label: category,
-                        }))}
-                        selectedIds={selectedMethodCategories}
-                        onToggle={(category) => toggleFilter(category, setSelectedMethodCategories)}
-                        onSelectAll={selectAllMethodCategories}
-                        onClearAll={clearAllMethodCategories}
-                      />
+                {/* Training Method Dropdown */}
+                <MultiSelectDropdown
+                  label="Training"
+                  size="sm"
+                  options={filterOptions.methodCategories.map((category) => ({
+                    id: category,
+                    label: category,
+                  }))}
+                  selectedIds={selectedMethodCategories}
+                  onToggle={(category) => toggleFilter(category, setSelectedMethodCategories)}
+                  onSelectAll={selectAllMethodCategories}
+                  onClearAll={clearAllMethodCategories}
+                />
 
-                      {/* Models Dropdown */}
-                      <MultiSelectDropdown
-                        label="Models"
-                        options={sortedModels.map((model) => ({
-                          id: model.id,
-                          label: model.name,
-                        }))}
-                        selectedIds={selectedModelIds}
-                        onToggle={toggleModel}
-                        onSelectAll={selectAllModels}
-                        onClearAll={clearAllModels}
-                      />
+                {/* Model Type Dropdown */}
+                <MultiSelectDropdown
+                  label="Type"
+                  size="sm"
+                  options={filterOptions.modelTypes.map((type) => ({
+                    id: type,
+                    label: getModelTypeLabel(type),
+                  }))}
+                  selectedIds={selectedModelTypes}
+                  onToggle={(type) => toggleFilter(type, setSelectedModelTypes)}
+                  onSelectAll={selectAllModelTypes}
+                  onClearAll={clearAllModelTypes}
+                />
 
-                      <Button variant="outline" size="sm" onClick={resetAllFilters}>
-                        Reset All
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                {/* License Dropdown */}
+                <MultiSelectDropdown
+                  label="License"
+                  size="sm"
+                  options={filterOptions.licenseCategories.map((license) => ({
+                    id: license,
+                    label: getLicenseLabel(license),
+                  }))}
+                  selectedIds={selectedLicenses}
+                  onToggle={(license) => toggleFilter(license, setSelectedLicenses)}
+                  onSelectAll={selectAllLicenses}
+                  onClearAll={clearAllLicenses}
+                />
+
+                {/* Publication Year Dropdown */}
+                <MultiSelectDropdown
+                  label="Year"
+                  size="sm"
+                  options={filterOptions.publicationYears.map((year) => ({
+                    id: year,
+                    label: year,
+                  }))}
+                  selectedIds={selectedYears}
+                  onToggle={(year) => toggleFilter(year, setSelectedYears)}
+                  onSelectAll={selectAllYears}
+                  onClearAll={clearAllYears}
+                />
+
+                {/* Publication Type Dropdown */}
+                <MultiSelectDropdown
+                  label="Publication"
+                  size="sm"
+                  options={filterOptions.publicationTypes.map((pubType) => ({
+                    id: pubType,
+                    label: getPublicationTypeLabel(pubType),
+                  }))}
+                  selectedIds={selectedPublicationTypes}
+                  onToggle={(pubType) => toggleFilter(pubType, setSelectedPublicationTypes)}
+                  onSelectAll={selectAllPublicationTypes}
+                  onClearAll={clearAllPublicationTypes}
+                />
+
+                {/* Models Dropdown */}
+                <MultiSelectDropdown
+                  label="Models"
+                  size="sm"
+                  options={sortedModels.map((model) => ({
+                    id: model.id,
+                    label: model.name,
+                  }))}
+                  selectedIds={selectedModelIds}
+                  onToggle={toggleModel}
+                  onSelectAll={selectAllModels}
+                  onClearAll={clearAllModels}
+                />
+
+                <Button variant="outline" size="sm" className="text-xs h-8" onClick={resetAllFilters}>
+                  Reset All
+                </Button>
+
+                <span className="text-xs text-muted-foreground">
+                  ({effectiveSelectedIds.size}/{allModelIds.length} models)
+                </span>
               </div>
 
               <LeaderboardTable

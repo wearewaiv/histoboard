@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,12 +21,12 @@ const VLM_TRAINING_METHODS = [
   "Contrastive (custom)",
 ];
 
-const TRAINING_METHOD_COLORS: Record<string, string> = {
-  DINOv2: "bg-blue-500",
-  "DINOv2 (distillation)": "bg-blue-400",
-  DINO: "bg-sky-500",
-  iBOT: "bg-purple-500",
-  SRCL: "bg-teal-500",
+const TRAINING_METHOD_COLORS: Record<string, { bg: string; text: string }> = {
+  DINOv2: { bg: "bg-blue-500/10", text: "text-blue-700" },
+  "DINOv2 (distillation)": { bg: "bg-blue-400/10", text: "text-blue-600" },
+  DINO: { bg: "bg-sky-500/10", text: "text-sky-700" },
+  iBOT: { bg: "bg-purple-500/10", text: "text-purple-700" },
+  SRCL: { bg: "bg-teal-500/10", text: "text-teal-700" },
 };
 
 function isVLMModel(model: Model): boolean {
@@ -36,9 +36,9 @@ function isVLMModel(model: Model): boolean {
   );
 }
 
-function getTrainingMethodColor(method?: string): string {
-  if (!method) return "bg-gray-400";
-  return TRAINING_METHOD_COLORS[method] || "bg-gray-400";
+function getTrainingMethodColors(method?: string): { bg: string; text: string } {
+  if (!method) return { bg: "bg-gray-400/10", text: "text-gray-600" };
+  return TRAINING_METHOD_COLORS[method] || { bg: "bg-gray-400/10", text: "text-gray-600" };
 }
 
 interface TimelineEntry {
@@ -48,11 +48,7 @@ interface TimelineEntry {
   models: Model[];
 }
 
-type FilterType = "all" | "vlm" | string;
-
 export default function TimelinePage() {
-  const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
-
   // Group models by publication date and sort chronologically
   const timelineData = useMemo(() => {
     const grouped = new Map<string, Model[]>();
@@ -84,17 +80,6 @@ export default function TimelinePage() {
     return entries;
   }, []);
 
-  // Get unique training methods for non-VLM models only
-  const visionTrainingMethods = useMemo(() => {
-    const methods = new Set<string>();
-    models.forEach((model) => {
-      if (!isVLMModel(model) && model.trainingMethod) {
-        methods.add(model.trainingMethod);
-      }
-    });
-    return Array.from(methods).sort();
-  }, []);
-
   // Count VLM models (including VLM-style training methods)
   const vlmCount = useMemo(() => {
     return models.filter((m) => isVLMModel(m)).length;
@@ -121,40 +106,6 @@ export default function TimelinePage() {
     ];
     return months[month - 1] || "Unknown";
   };
-
-  const filteredTimelineData = useMemo(() => {
-    if (selectedFilter === "all") return timelineData;
-    if (selectedFilter === "vlm") {
-      return timelineData
-        .map((entry) => ({
-          ...entry,
-          models: entry.models.filter((m) => isVLMModel(m)),
-        }))
-        .filter((entry) => entry.models.length > 0);
-    }
-    // Filter by training method for non-VLM models
-    return timelineData
-      .map((entry) => ({
-        ...entry,
-        models: entry.models.filter(
-          (m) => !isVLMModel(m) && m.trainingMethod === selectedFilter
-        ),
-      }))
-      .filter((entry) => entry.models.length > 0);
-  }, [timelineData, selectedFilter]);
-
-  const filteredEntriesByYear = useMemo(() => {
-    const byYear = new Map<number, TimelineEntry[]>();
-    filteredTimelineData.forEach((entry) => {
-      if (!byYear.has(entry.year)) {
-        byYear.set(entry.year, []);
-      }
-      byYear.get(entry.year)!.push(entry);
-    });
-    return byYear;
-  }, [filteredTimelineData]);
-
-  const filteredYears = Array.from(filteredEntriesByYear.keys()).sort((a, b) => b - a);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -195,67 +146,9 @@ export default function TimelinePage() {
         </CardContent>
       </Card>
 
-      {/* Legend */}
-      <Card className="mb-8">
-        <CardContent className="pt-6">
-          <p className="text-sm font-medium text-muted-foreground mb-3">
-            Filter by type (click to filter)
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedFilter("all")}
-              className={cn(
-                "px-3 py-1.5 text-sm rounded-full border transition-all",
-                selectedFilter === "all"
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-background hover:bg-muted border-input"
-              )}
-            >
-              All
-            </button>
-            <button
-              onClick={() =>
-                setSelectedFilter(selectedFilter === "vlm" ? "all" : "vlm")
-              }
-              className={cn(
-                "px-3 py-1.5 text-sm rounded-full border transition-all flex items-center gap-2",
-                selectedFilter === "vlm"
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-background hover:bg-muted border-input"
-              )}
-            >
-              <span className="w-3 h-3 rounded-full bg-indigo-500" />
-              VLM ({vlmCount})
-            </button>
-            {visionTrainingMethods.map((method) => (
-              <button
-                key={method}
-                onClick={() =>
-                  setSelectedFilter(selectedFilter === method ? "all" : method)
-                }
-                className={cn(
-                  "px-3 py-1.5 text-sm rounded-full border transition-all flex items-center gap-2",
-                  selectedFilter === method
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background hover:bg-muted border-input"
-                )}
-              >
-                <span
-                  className={cn(
-                    "w-3 h-3 rounded-full",
-                    getTrainingMethodColor(method)
-                  )}
-                />
-                {method}
-              </button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Timeline */}
       <div className="relative">
-        {filteredYears.map((year) => (
+        {years.map((year) => (
           <div key={year} className="mb-12">
             {/* Year marker */}
             <div className="sticky top-20 z-10 mb-6">
@@ -266,7 +159,7 @@ export default function TimelinePage() {
 
             {/* Timeline line */}
             <div className="relative ml-4 pl-8 border-l-2 border-muted-foreground/20">
-              {filteredEntriesByYear.get(year)?.map((entry) => (
+              {entriesByYear.get(year)?.map((entry) => (
                 <div key={entry.date} className="mb-8 relative">
                   {/* Timeline dot */}
                   <div className="absolute -left-[41px] w-4 h-4 rounded-full bg-primary border-4 border-background" />
@@ -301,13 +194,16 @@ export default function TimelinePage() {
                                     VLM
                                   </Badge>
                                 ) : (
-                                  <div
+                                  <Badge
+                                    variant="outline"
                                     className={cn(
-                                      "w-3 h-3 rounded-full flex-shrink-0 mt-0.5",
-                                      getTrainingMethodColor(model.trainingMethod)
+                                      "text-xs flex-shrink-0 border-transparent",
+                                      getTrainingMethodColors(model.trainingMethod).bg,
+                                      getTrainingMethodColors(model.trainingMethod).text
                                     )}
-                                    title={model.trainingMethod || "Unknown"}
-                                  />
+                                  >
+                                    {model.trainingMethod || "Unknown"}
+                                  </Badge>
                                 )}
                               </div>
                               <p className="text-xs text-muted-foreground mb-2">

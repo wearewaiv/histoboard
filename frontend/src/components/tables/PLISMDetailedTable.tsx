@@ -186,7 +186,7 @@ export function PLISMDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>PLISM Benchmark</strong> (from Owkin) evaluates embedding consistency across scanners and staining
+          <strong>Plismbench</strong> (MICCAI, 2025) evaluates embedding consistency across scanners and staining
           variations using cosine similarity and top-10 retrieval accuracy. Data sourced from the{" "}
           <a
             href="https://github.com/owkin/plism-benchmark"
@@ -194,7 +194,7 @@ export function PLISMDetailedTable({
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official PLISM GitHub
+            official Plismbench GitHub
           </a>.
         </p>
       </div>
@@ -210,7 +210,7 @@ export function PLISMDetailedTable({
           onClearAll={() => setSelectedCategories(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskOptions}
           selectedIds={selectedTasks}
           onToggle={toggleTask}

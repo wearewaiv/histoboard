@@ -35,6 +35,11 @@ export function PathoBenchDetailedTable({
   results,
   modelRankings,
 }: PathoBenchDetailedTableProps) {
+  // Get unique organs for filtering
+  const organs = useMemo(() => {
+    return [...new Set(tasks.map((t) => t.organ))].sort();
+  }, [tasks]);
+
   // Get unique categories for filtering
   const categories = useMemo(() => {
     return [...new Set(tasks.map((t) => t.category as string))].sort();
@@ -46,6 +51,9 @@ export function PathoBenchDetailedTable({
   }, [tasks]);
 
   // Filter states
+  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
+    () => new Set(organs)
+  );
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     () => new Set(categories)
   );
@@ -55,6 +63,18 @@ export function PathoBenchDetailedTable({
   const [searchQuery, setSearchQuery] = useState("");
 
   // Toggle helpers
+  const toggleOrgan = (organ: string) => {
+    setSelectedOrgans((prev) => {
+      const next = new Set(prev);
+      if (next.has(organ)) {
+        next.delete(organ);
+      } else {
+        next.add(organ);
+      }
+      return next;
+    });
+  };
+
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) => {
       const next = new Set(prev);
@@ -79,29 +99,38 @@ export function PathoBenchDetailedTable({
     });
   };
 
-  // Filter tasks by selected categories, selected task names, and search query
+  // Filter tasks by selected organs, categories, task names, and search query
   // When there's a search query, it searches across ALL tasks (ignoring filters)
   const filteredTasks = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
 
     let filtered: Task[];
     // If there's a search query, search across all tasks
+    // All query words must be present in the searchable text
     if (query) {
-      filtered = tasks.filter((t) =>
-        t.name.toLowerCase().includes(query) ||
-        (t.category as string).toLowerCase().includes(query) ||
-        t.metric.toLowerCase().includes(query)
-      );
+      const queryWords = query.split(/\s+/);
+      filtered = tasks.filter((t) => {
+        const searchableText = [
+          t.name,
+          t.category as string,
+          t.organ,
+          t.metric,
+        ].join(" ").toLowerCase();
+        return queryWords.every((word) => searchableText.includes(word));
+      });
     } else {
       // Otherwise, apply all filters
       filtered = tasks.filter(
-        (t) => selectedCategories.has(t.category as string) && selectedTasks.has(t.name)
+        (t) =>
+          selectedOrgans.has(t.organ) &&
+          selectedCategories.has(t.category as string) &&
+          selectedTasks.has(t.name)
       );
     }
 
     // Sort alphabetically by task name
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }, [tasks, selectedCategories, selectedTasks, searchQuery]);
+  }, [tasks, selectedOrgans, selectedCategories, selectedTasks, searchQuery]);
 
   // Create a lookup map for results: modelId -> taskId -> value
   const resultsMap = useMemo(() => {
@@ -215,7 +244,7 @@ export function PathoBenchDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>Patho-Bench</strong> is a standardized benchmark suite from the Mahmood Lab for evaluating pathology
+          <strong>Patho-Bench</strong> (arXiv, 2025) is a standardized benchmark suite from the Mahmood Lab for evaluating pathology
           foundation models, featuring 41 weakly-supervised slide classification tasks for biomarker and outcome prediction
           across 9 cancer types. See the{" "}
           <a
@@ -244,6 +273,19 @@ export function PathoBenchDetailedTable({
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
+          label="Indications"
+          options={organs
+            .map((organ) => ({
+              id: organ,
+              label: organ.charAt(0).toUpperCase() + organ.slice(1),
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={selectedOrgans}
+          onToggle={toggleOrgan}
+          onSelectAll={() => setSelectedOrgans(new Set(organs))}
+          onClearAll={() => setSelectedOrgans(new Set())}
+        />
+        <MultiSelectDropdown
           label="Task Category"
           options={categories
             .map((category) => ({
@@ -257,7 +299,7 @@ export function PathoBenchDetailedTable({
           onClearAll={() => setSelectedCategories(new Set())}
         />
         <MultiSelectDropdown
-          label="Tasks"
+          label="All Tasks"
           options={taskNames
             .map((taskName) => ({
               id: taskName,

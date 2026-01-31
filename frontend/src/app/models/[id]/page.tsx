@@ -24,7 +24,7 @@ const BENCHMARKS = [
   { id: "stamp", name: "STAMP" },
   { id: "thunder", name: "THUNDER" },
   { id: "pathorob", name: "PathoROB" },
-  { id: "plism", name: "PLISM" },
+  { id: "plism", name: "Plismbench" },
 ];
 
 function getMedal(rank: number): string | null {
