@@ -1,10 +1,14 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search } from "lucide-react";
+import { ChevronDown, ChevronUp, Filter } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 import { LeaderboardTable } from "@/components/tables/LeaderboardTable";
 import { DetailedResultsTable } from "@/components/tables/DetailedResultsTable";
 import { PathBenchDetailedTable } from "@/components/tables/PathBenchDetailedTable";
@@ -31,11 +35,273 @@ const results = resultsData as Result[];
 const benchmarks = benchmarksData as Benchmark[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
 
-export default function LeaderboardPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+// Helper to parse size strings like "632M", "1.3B", "307M" to numeric values (in millions)
+function parseParamSize(size: string): number {
+  const match = size.match(/^([\d.]+)\s*(B|M|K)?/i);
+  if (!match) return 0;
+  const num = parseFloat(match[1]);
+  const unit = (match[2] || "").toUpperCase();
+  if (unit === "B") return num * 1000;
+  if (unit === "K") return num / 1000;
+  return num; // M or no unit
+}
 
-  // Create a map for quick model lookup
-  const modelMap = useMemo(() => new Map(models.map((m) => [m.id, m])), []);
+// Model size categories
+const SIZE_CATEGORIES = [
+  { id: "below-50", label: "< 50M", min: 0, max: 50 },
+  { id: "50-100", label: "50M - 100M", min: 50, max: 100 },
+  { id: "100-500", label: "100M - 500M", min: 100, max: 500 },
+  { id: "500-1000", label: "500M - 1B", min: 500, max: 1000 },
+  { id: "above-1000", label: "> 1B", min: 1000, max: Infinity },
+] as const;
+
+// Get size category for a given params string
+function getSizeCategory(params: string): string {
+  const sizeInM = parseParamSize(params);
+  for (const cat of SIZE_CATEGORIES) {
+    if (sizeInM >= cat.min && sizeInM < cat.max) {
+      return cat.id;
+    }
+  }
+  return SIZE_CATEGORIES[SIZE_CATEGORIES.length - 1].id;
+}
+
+// Helper to parse pretraining data size strings like "3M+ WSIs", "100K+ WSIs" to numeric (in thousands)
+function parseDataSize(size: string): number {
+  const match = size.match(/^([\d.]+)\s*(M|K)?\+?\s*/i);
+  if (!match) return 0;
+  const num = parseFloat(match[1]);
+  const unit = (match[2] || "").toUpperCase();
+  if (unit === "M") return num * 1000;
+  return num; // K or no unit
+}
+
+// Check if pretraining data mentions WSIs
+function isWSIData(data: string): boolean {
+  return data.toLowerCase().includes("wsi");
+}
+
+// Check if pretraining data mentions image-caption/text pairs
+function isImageCaptionData(data: string): boolean {
+  const lower = data.toLowerCase();
+  return (
+    lower.includes("image-caption") ||
+    lower.includes("image-text") ||
+    lower.includes("caption group")
+  );
+}
+
+// Check if pretraining data mentions histology patches (like "50M+ images")
+function isHistologyPatchData(data: string): boolean {
+  const lower = data.toLowerCase();
+  // "50M+ images" is histology patches, not image-caption pairs
+  return lower.includes("images") && !isImageCaptionData(data);
+}
+
+// Pretraining data size categories (for WSI data, in thousands)
+const DATA_SIZE_CATEGORIES = [
+  { id: "below-10k", label: "< 10K WSIs", min: 0, max: 10 },
+  { id: "10k-50k", label: "10K - 50K WSIs", min: 10, max: 50 },
+  { id: "50k-100k", label: "50K - 100K WSIs", min: 50, max: 100 },
+  { id: "100k-500k", label: "100K - 500K WSIs", min: 100, max: 500 },
+  { id: "500k-1m", label: "500K - 1M WSIs", min: 500, max: 1000 },
+  { id: "1m-2m", label: "1M - 2M WSIs", min: 1000, max: 2000 },
+  { id: "2m-3m", label: "2M - 3M WSIs", min: 2000, max: 3000 },
+  { id: "above-3m", label: "> 3M WSIs", min: 3000, max: Infinity },
+] as const;
+
+// Image-caption pair categories (in thousands)
+const IMAGE_CAPTION_CATEGORIES = [
+  { id: "ic-below-1m", label: "< 1M image-caption pairs", min: 0, max: 1000 },
+  { id: "ic-1m-2m", label: "1M - 2M image-caption pairs", min: 1000, max: 2000 },
+  { id: "ic-above-2m", label: "> 2M image-caption pairs", min: 2000, max: Infinity },
+] as const;
+
+// Special category for histology patches
+const HISTOLOGY_PATCH_CATEGORY = { id: "histology-patches", label: "50M+ histology patches" };
+
+// Get data size category for a given pretrainingData string
+function getDataSizeCategory(data: string): string | null {
+  if (isWSIData(data)) {
+    const sizeInK = parseDataSize(data);
+    for (const cat of DATA_SIZE_CATEGORIES) {
+      if (sizeInK >= cat.min && sizeInK < cat.max) {
+        return cat.id;
+      }
+    }
+    return DATA_SIZE_CATEGORIES[DATA_SIZE_CATEGORIES.length - 1].id;
+  }
+
+  if (isImageCaptionData(data)) {
+    const sizeInK = parseDataSize(data);
+    for (const cat of IMAGE_CAPTION_CATEGORIES) {
+      if (sizeInK >= cat.min && sizeInK < cat.max) {
+        return cat.id;
+      }
+    }
+    return IMAGE_CAPTION_CATEGORIES[IMAGE_CAPTION_CATEGORIES.length - 1].id;
+  }
+
+  if (isHistologyPatchData(data)) {
+    return HISTOLOGY_PATCH_CATEGORY.id;
+  }
+
+  return null; // Other non-categorized data
+}
+
+// Training methods that are considered VLM-style (same as timeline page)
+const VLM_TRAINING_METHODS = [
+  "CLIP",
+  "CoCa, iBOT",
+  "CoCa, BEiT-3",
+  "iBOT, CoCa",
+  "Contrastive (custom)",
+];
+
+// Check if a model is a VLM
+function isVLMModel(model: Model): boolean {
+  return (
+    model.modelType === "vision-language" ||
+    VLM_TRAINING_METHODS.includes(model.trainingMethod || "")
+  );
+}
+
+// Get training method category (VLM or specific method)
+function getTrainingMethodCategory(model: Model): string {
+  if (isVLMModel(model)) {
+    return "VLM";
+  }
+  return model.trainingMethod || "Unknown";
+}
+
+export default function LeaderboardPage() {
+  const [filterExpanded, setFilterExpanded] = useState(true);
+
+  // Get all models that have rankings
+  const rankedModels = useMemo(() => {
+    return models.filter((m) => benchmarks.some((b) => rankings[b.id]?.[m.id]));
+  }, []);
+
+  // Get all model IDs that have rankings
+  const allModelIds = useMemo(() => rankedModels.map((m) => m.id), [rankedModels]);
+
+  // Extract unique filter values from ranked models
+  const filterOptions = useMemo(() => {
+    const sizeCategories = new Set<string>();
+    const wsiDataSizeCategories = new Set<string>();
+    const imageCaptionCategories = new Set<string>();
+    const hasHistologyPatches = { value: false };
+    const methodCategories = new Set<string>();
+
+    rankedModels.forEach((m) => {
+      if (m.params) sizeCategories.add(getSizeCategory(m.params));
+      if (m.pretrainingData) {
+        const cat = getDataSizeCategory(m.pretrainingData);
+        if (cat) {
+          // Check which type of category it is
+          if (cat.startsWith("ic-")) {
+            imageCaptionCategories.add(cat);
+          } else if (cat === HISTOLOGY_PATCH_CATEGORY.id) {
+            hasHistologyPatches.value = true;
+          } else {
+            wsiDataSizeCategories.add(cat);
+          }
+        }
+      }
+      methodCategories.add(getTrainingMethodCategory(m));
+    });
+
+    // Return size categories in order, only those that have models
+    const orderedSizeCategories = SIZE_CATEGORIES
+      .filter((cat) => sizeCategories.has(cat.id))
+      .map((cat) => cat.id);
+
+    // Return WSI data size categories in order, only those that have models
+    const orderedWsiDataSizeCategories = DATA_SIZE_CATEGORIES
+      .filter((cat) => wsiDataSizeCategories.has(cat.id))
+      .map((cat) => cat.id);
+
+    // Return image-caption categories in order, only those that have models
+    const orderedImageCaptionCategories = IMAGE_CAPTION_CATEGORIES
+      .filter((cat) => imageCaptionCategories.has(cat.id))
+      .map((cat) => cat.id);
+
+    // Put VLM first, then sort the rest alphabetically
+    const sortedMethodCategories = [...methodCategories].sort((a, b) => {
+      if (a === "VLM") return -1;
+      if (b === "VLM") return 1;
+      return a.localeCompare(b);
+    });
+
+    return {
+      sizeCategories: orderedSizeCategories,
+      wsiDataSizeCategories: orderedWsiDataSizeCategories,
+      imageCaptionCategories: orderedImageCaptionCategories,
+      hasHistologyPatches: hasHistologyPatches.value,
+      methodCategories: sortedMethodCategories,
+    };
+  }, [rankedModels]);
+
+  // Filter states (default: all selected)
+  const [selectedSizeCategories, setSelectedSizeCategories] = useState<Set<string>>(
+    () => new Set(filterOptions.sizeCategories)
+  );
+  const [selectedWsiDataSizeCategories, setSelectedWsiDataSizeCategories] = useState<Set<string>>(
+    () => new Set(filterOptions.wsiDataSizeCategories)
+  );
+  const [selectedImageCaptionCategories, setSelectedImageCaptionCategories] = useState<Set<string>>(
+    () => new Set(filterOptions.imageCaptionCategories)
+  );
+  const [selectedHistologyPatches, setSelectedHistologyPatches] = useState<boolean>(
+    () => filterOptions.hasHistologyPatches
+  );
+  const [selectedMethodCategories, setSelectedMethodCategories] = useState<Set<string>>(
+    () => new Set(filterOptions.methodCategories)
+  );
+
+  // Selected models based on attribute filters
+  const filteredByAttributes = useMemo(() => {
+    return rankedModels.filter((m) => {
+      const sizeMatch = !m.params || selectedSizeCategories.has(getSizeCategory(m.params));
+
+      // Data match: check which category type the data belongs to
+      let dataMatch = true;
+      if (m.pretrainingData) {
+        const dataCat = getDataSizeCategory(m.pretrainingData);
+        if (dataCat) {
+          if (dataCat.startsWith("ic-")) {
+            // Image-caption category
+            dataMatch = selectedImageCaptionCategories.has(dataCat);
+          } else if (dataCat === HISTOLOGY_PATCH_CATEGORY.id) {
+            // Histology patches
+            dataMatch = selectedHistologyPatches;
+          } else {
+            // WSI category
+            dataMatch = selectedWsiDataSizeCategories.has(dataCat);
+          }
+        }
+      }
+
+      const methodMatch = selectedMethodCategories.has(getTrainingMethodCategory(m));
+      return sizeMatch && dataMatch && methodMatch;
+    });
+  }, [rankedModels, selectedSizeCategories, selectedWsiDataSizeCategories, selectedImageCaptionCategories, selectedHistologyPatches, selectedMethodCategories]);
+
+  // Model IDs after attribute filtering
+  const filteredModelIds = useMemo(
+    () => new Set(filteredByAttributes.map((m) => m.id)),
+    [filteredByAttributes]
+  );
+
+  // Selected models (default: all that pass attribute filters)
+  const [selectedModelIds, setSelectedModelIds] = useState<Set<string>>(
+    () => new Set(allModelIds)
+  );
+
+  // Effective selected models = intersection of manual selection and attribute filters
+  const effectiveSelectedIds = useMemo(() => {
+    return new Set([...selectedModelIds].filter((id) => filteredModelIds.has(id)));
+  }, [selectedModelIds, filteredModelIds]);
 
   // Collect per-benchmark average ranks for each model
   const modelRankings = useMemo(() => {
@@ -86,23 +352,108 @@ export default function LeaderboardPage() {
     return rankingsList;
   }, []);
 
-  // Filter rankings based on search query
+  // Filter rankings based on effective selected models
   const filteredModelRankings = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return modelRankings;
-    }
+    return modelRankings.filter((ranking) => effectiveSelectedIds.has(ranking.modelId));
+  }, [modelRankings, effectiveSelectedIds]);
 
-    const query = searchQuery.toLowerCase();
-    return modelRankings.filter((ranking) => {
-      const model = modelMap.get(ranking.modelId);
-      if (!model) return false;
-      return (
-        model.name.toLowerCase().includes(query) ||
-        model.organization.toLowerCase().includes(query) ||
-        model.architecture.toLowerCase().includes(query)
-      );
+  // Toggle helpers for attribute filters
+  const toggleFilter = (
+    value: string,
+    setter: React.Dispatch<React.SetStateAction<Set<string>>>
+  ) => {
+    setter((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) {
+        next.delete(value);
+      } else {
+        next.add(value);
+      }
+      return next;
     });
-  }, [modelRankings, searchQuery, modelMap]);
+  };
+
+  // Toggle a single model
+  const toggleModel = (modelId: string) => {
+    toggleFilter(modelId, setSelectedModelIds);
+  };
+
+  // Select all models (that pass attribute filters)
+  const selectAllModels = () => {
+    setSelectedModelIds(new Set(allModelIds));
+  };
+
+  // Clear all models
+  const clearAllModels = () => {
+    setSelectedModelIds(new Set());
+  };
+
+  // Reset all filters
+  const resetAllFilters = () => {
+    setSelectedSizeCategories(new Set(filterOptions.sizeCategories));
+    setSelectedWsiDataSizeCategories(new Set(filterOptions.wsiDataSizeCategories));
+    setSelectedImageCaptionCategories(new Set(filterOptions.imageCaptionCategories));
+    setSelectedHistologyPatches(filterOptions.hasHistologyPatches);
+    setSelectedMethodCategories(new Set(filterOptions.methodCategories));
+    setSelectedModelIds(new Set(allModelIds));
+  };
+
+  // Select/clear all for size categories
+  const selectAllSizeCategories = () => {
+    setSelectedSizeCategories(new Set(filterOptions.sizeCategories));
+  };
+  const clearAllSizeCategories = () => {
+    setSelectedSizeCategories(new Set());
+  };
+
+  // Select/clear all for data size categories
+  const selectAllDataSizeCategories = () => {
+    setSelectedWsiDataSizeCategories(new Set(filterOptions.wsiDataSizeCategories));
+    setSelectedImageCaptionCategories(new Set(filterOptions.imageCaptionCategories));
+    setSelectedHistologyPatches(filterOptions.hasHistologyPatches);
+  };
+  const clearAllDataSizeCategories = () => {
+    setSelectedWsiDataSizeCategories(new Set());
+    setSelectedImageCaptionCategories(new Set());
+    setSelectedHistologyPatches(false);
+  };
+
+  // Select/clear all for method categories
+  const selectAllMethodCategories = () => {
+    setSelectedMethodCategories(new Set(filterOptions.methodCategories));
+  };
+  const clearAllMethodCategories = () => {
+    setSelectedMethodCategories(new Set());
+  };
+
+  // Helper to get category labels
+  const getSizeCategoryLabel = (catId: string) => {
+    return SIZE_CATEGORIES.find((c) => c.id === catId)?.label || catId;
+  };
+
+  const getWsiDataSizeCategoryLabel = (catId: string) => {
+    return DATA_SIZE_CATEGORIES.find((c) => c.id === catId)?.label || catId;
+  };
+
+  const getImageCaptionCategoryLabel = (catId: string) => {
+    return IMAGE_CAPTION_CATEGORIES.find((c) => c.id === catId)?.label || catId;
+  };
+
+  // Count total data categories for display
+  const totalDataCategories =
+    filterOptions.wsiDataSizeCategories.length +
+    filterOptions.imageCaptionCategories.length +
+    (filterOptions.hasHistologyPatches ? 1 : 0);
+
+  const selectedDataCategoriesCount =
+    selectedWsiDataSizeCategories.size +
+    selectedImageCaptionCategories.size +
+    (selectedHistologyPatches ? 1 : 0);
+
+  // Get sorted models for display in filter (only those passing attribute filters)
+  const sortedModels = useMemo(() => {
+    return [...filteredByAttributes].sort((a, b) => a.name.localeCompare(b.name));
+  }, [filteredByAttributes]);
 
   // Compute integer ranks per benchmark for detail tables
   const evaModelRankings = useMemo(() => {
@@ -185,8 +536,14 @@ export default function LeaderboardPage() {
       </div>
 
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Model Rankings</CardTitle>
+          <Link
+            href="/benchmarks"
+            className="text-sm text-primary hover:underline flex items-center gap-1"
+          >
+            View all benchmarks →
+          </Link>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="rankings">
@@ -208,15 +565,78 @@ export default function LeaderboardPage() {
               <p className="mb-4 text-sm text-muted-foreground">
                 Click column headers to sort. Rankings are taken directly from the official benchmarks and serve as the reference. For each benchmark and model, we also provide the average ranking across the corresponding tasks. &quot;-&quot; indicates the model was not evaluated on that benchmark.
               </p>
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Search models by name, organization, or architecture..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
+
+              {/* Filters */}
+              <div className="mb-4 border rounded-lg">
+                <button
+                  onClick={() => setFilterExpanded(!filterExpanded)}
+                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-medium">Filters</span>
+                    <span className="text-sm text-muted-foreground">
+                      ({effectiveSelectedIds.size}/{allModelIds.length} models shown)
+                    </span>
+                  </div>
+                  {filterExpanded ? (
+                    <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </button>
+
+                {filterExpanded && (
+                  <div className="px-4 pb-4 border-t">
+                    {/* Reset button and dropdown filters */}
+                    <div className="flex flex-wrap items-center gap-3 pt-3">
+                      {/* Model Size Dropdown */}
+                      <MultiSelectDropdown
+                        label="Model Size"
+                        options={filterOptions.sizeCategories.map((catId) => ({
+                          id: catId,
+                          label: getSizeCategoryLabel(catId),
+                        }))}
+                        selectedIds={selectedSizeCategories}
+                        onToggle={(catId) => toggleFilter(catId, setSelectedSizeCategories)}
+                        onSelectAll={selectAllSizeCategories}
+                        onClearAll={clearAllSizeCategories}
+                      />
+
+                      {/* Training Method Dropdown */}
+                      <MultiSelectDropdown
+                        label="Training"
+                        options={filterOptions.methodCategories.map((category) => ({
+                          id: category,
+                          label: category,
+                        }))}
+                        selectedIds={selectedMethodCategories}
+                        onToggle={(category) => toggleFilter(category, setSelectedMethodCategories)}
+                        onSelectAll={selectAllMethodCategories}
+                        onClearAll={clearAllMethodCategories}
+                      />
+
+                      {/* Models Dropdown */}
+                      <MultiSelectDropdown
+                        label="Models"
+                        options={sortedModels.map((model) => ({
+                          id: model.id,
+                          label: model.name,
+                        }))}
+                        selectedIds={selectedModelIds}
+                        onToggle={toggleModel}
+                        onSelectAll={selectAllModels}
+                        onClearAll={clearAllModels}
+                      />
+
+                      <Button variant="outline" size="sm" onClick={resetAllFilters}>
+                        Reset All
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
+
               <LeaderboardTable
                 modelRankings={filteredModelRankings}
                 models={models}
@@ -225,13 +645,6 @@ export default function LeaderboardPage() {
             </TabsContent>
 
             <TabsContent value="eva-details">
-              <p className="mb-4 text-sm text-muted-foreground">
-                EVA evaluates FMs on a variety of WSI classification &amp; segmentation tasks.
-                It reports Balanced Accuracy for binary &amp; multiclass tasks and Dice Score (without background) for segmentation tasks.
-                Scores show the average performance over 5 runs for patch-level classification &amp; segmentation tasks, and 20 runs for slide-level (due to higher standard deviation among runs).
-                Colors indicate relative performance (green = best, red = worst).
-                Note: There are discrepancies between the average values computed here and those reported by EVA (e.g., they report 0.798 for Virchow2 but the correct average without BACH is 0.815).
-              </p>
               <DetailedResultsTable
                 models={models.filter(m => rankings.eva?.[m.id])}
                 tasks={tasks.filter(t => t.benchmarkId === "eva")}
@@ -268,10 +681,6 @@ export default function LeaderboardPage() {
             </TabsContent>
 
             <TabsContent value="pathobench-details">
-              <p className="mb-4 text-sm text-muted-foreground">
-                Patho-Bench results from Mahmood Lab showing C-Index values across molecular prediction,
-                TME characterization, grading, survival, and treatment response tasks.
-              </p>
               <PathoBenchDetailedTable
                 models={models.filter(m => rankings.pathobench?.[m.id])}
                 tasks={tasks.filter(t => t.benchmarkId === "pathobench")}
@@ -281,10 +690,6 @@ export default function LeaderboardPage() {
             </TabsContent>
 
             <TabsContent value="sinai-details">
-              <p className="mb-4 text-sm text-muted-foreground">
-                Sinai SSL Tile Benchmarks results showing AUC values across cancer detection and biomarker prediction tasks.
-                Values reported as mean ± std over 20 MCCV splits.
-              </p>
               <SinaiDetailedTable
                 models={models.filter(m => rankings.sinai?.[m.id])}
                 tasks={tasks.filter(t => t.benchmarkId === "sinai")}
@@ -294,10 +699,6 @@ export default function LeaderboardPage() {
             </TabsContent>
 
             <TabsContent value="stamp-details">
-              <p className="mb-4 text-sm text-muted-foreground">
-                STAMP benchmark from Nature Biomedical Engineering showing AUROC values for weakly supervised
-                slide-level classification across morphology, biomarker, and prognosis tasks.
-              </p>
               <STAMPDetailedTable
                 models={models.filter(m => rankings.stamp?.[m.id])}
                 tasks={tasks.filter(t => t.benchmarkId === "stamp")}
@@ -307,10 +708,6 @@ export default function LeaderboardPage() {
             </TabsContent>
 
             <TabsContent value="thunder-details">
-              <p className="mb-4 text-sm text-muted-foreground">
-                THUNDER benchmark evaluating pathology foundation models across KNN classification, linear probing,
-                few-shot learning, segmentation, calibration, and adversarial robustness tasks. Rankings are based on rank-sum.
-              </p>
               <THUNDERDetailedTable
                 models={models.filter(m => rankings.thunder?.[m.id])}
                 tasks={tasks.filter(t => t.benchmarkId === "thunder")}
@@ -320,10 +717,6 @@ export default function LeaderboardPage() {
             </TabsContent>
 
             <TabsContent value="pathorob-details">
-              <p className="mb-4 text-sm text-muted-foreground">
-                PathoROB benchmark evaluating robustness to domain shifts across TCGA 2x2 splits, Camelyon breast cancer,
-                and Tolkach esophageal cancer datasets. Higher robustness index indicates better generalization.
-              </p>
               <PathoROBDetailedTable
                 models={models.filter(m => rankings.pathorob?.[m.id])}
                 tasks={tasks.filter(t => t.benchmarkId === "pathorob")}
@@ -333,10 +726,6 @@ export default function LeaderboardPage() {
             </TabsContent>
 
             <TabsContent value="plism-details">
-              <p className="mb-4 text-sm text-muted-foreground">
-                PLISM benchmark from Owkin evaluating embedding consistency across scanner and staining variations.
-                Metrics include cosine similarity and top-10 retrieval accuracy for cross-domain robustness.
-              </p>
               <PLISMDetailedTable
                 models={models.filter(m => rankings.plism?.[m.id])}
                 tasks={tasks.filter(t => t.benchmarkId === "plism")}

@@ -172,3 +172,11 @@ This project aggregates data from multiple benchmark sources. Please cite the or
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
+## TODO
+
+- [] Add scaling laws page (filtering on task / indication would be great)
+- [] Used inside products ?
+- [] Scrapper of literature 
+- [] ChatBot
+- [] Arena

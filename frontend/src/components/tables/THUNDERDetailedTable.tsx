@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
+import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 
 interface THUNDERDetailedTableProps {
   models: Model[];
@@ -23,17 +24,53 @@ export function THUNDERDetailedTable({
 }: THUNDERDetailedTableProps) {
   // Get unique categories for filtering
   const categories = useMemo(() => {
-    const uniqueCategories = [...new Set(tasks.map((t) => t.category))].sort();
-    return ["all", ...uniqueCategories];
+    return [...new Set(tasks.map((t) => t.category as string))].sort();
   }, [tasks]);
 
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  // Get unique task names for filtering
+  const taskNames = useMemo(() => {
+    return [...new Set(tasks.map((t) => t.name))].sort();
+  }, [tasks]);
 
-  // Filter tasks by selected category
+  // Filter states - all selected by default
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
+    () => new Set(categories)
+  );
+  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
+    () => new Set(taskNames)
+  );
+
+  // Toggle helpers
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(category)) {
+        next.delete(category);
+      } else {
+        next.add(category);
+      }
+      return next;
+    });
+  };
+
+  const toggleTask = (taskName: string) => {
+    setSelectedTasks((prev) => {
+      const next = new Set(prev);
+      if (next.has(taskName)) {
+        next.delete(taskName);
+      } else {
+        next.add(taskName);
+      }
+      return next;
+    });
+  };
+
+  // Filter tasks by selected categories AND selected task names
   const filteredTasks = useMemo(() => {
-    if (selectedCategory === "all") return tasks;
-    return tasks.filter((t) => t.category === selectedCategory);
-  }, [tasks, selectedCategory]);
+    return tasks.filter(
+      (t) => selectedCategories.has(t.category as string) && selectedTasks.has(t.name)
+    );
+  }, [tasks, selectedCategories, selectedTasks]);
 
   // Create a lookup map for results: modelId -> taskId -> value
   const resultsMap = useMemo(() => {
@@ -106,6 +143,26 @@ export function THUNDERDetailedTable({
     return avgRanks;
   }, [models, filteredTasks, results]);
 
+  // Compute average metric value per model (across filtered tasks)
+  const modelAvgValues = useMemo(() => {
+    const avgValues = new Map<string, number>();
+
+    for (const model of models) {
+      const values: number[] = [];
+      for (const task of filteredTasks) {
+        const value = resultsMap.get(model.id)?.get(task.id);
+        if (value !== undefined) {
+          values.push(value);
+        }
+      }
+      if (values.length > 0) {
+        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
+      }
+    }
+
+    return avgValues;
+  }, [models, filteredTasks, resultsMap]);
+
   // Sort models by average rank
   const sortedModels = useMemo(() => {
     return [...models].sort((a, b) => {
@@ -153,55 +210,80 @@ export function THUNDERDetailedTable({
     return "Bal. Acc.";
   }
 
+  // Build options for dropdowns
+  const categoryOptions = categories.map((cat) => ({ id: cat, label: cat }));
+  const taskOptions = taskNames.map((name) => ({ id: name, label: name }));
+
   return (
     <div>
-      {/* Category filter */}
-      <div className="mb-4 flex flex-wrap gap-2">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={cn(
-              "px-3 py-1.5 text-sm rounded-md border transition-colors",
-              selectedCategory === category
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background hover:bg-muted border-border"
-            )}
+      {/* Benchmark description */}
+      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
+        <p className="text-sm text-muted-foreground">
+          <strong>THUNDER Benchmark</strong> comprehensively evaluates pathology foundation models across KNN classification,
+          linear probing, few-shot learning, segmentation, calibration, and adversarial robustness tasks.
+          Data sourced from the{" "}
+          <a
+            href="https://mics-lab.github.io/thunder/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
           >
-            {category === "all" ? "All" : category}
-          </button>
-        ))}
+            official THUNDER website
+          </a>.
+        </p>
+      </div>
+
+      {/* Filters */}
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <MultiSelectDropdown
+          label="Indications"
+          options={categoryOptions}
+          selectedIds={selectedCategories}
+          onToggle={toggleCategory}
+          onSelectAll={() => setSelectedCategories(new Set(categories))}
+          onClearAll={() => setSelectedCategories(new Set())}
+        />
+        <MultiSelectDropdown
+          label="Tasks"
+          options={taskOptions}
+          selectedIds={selectedTasks}
+          onToggle={toggleTask}
+          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
+          onClearAll={() => setSelectedTasks(new Set())}
+        />
       </div>
 
       <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks{selectedCategory !== "all" ? ` for "${selectedCategory}"` : ""}.
+        Showing {filteredTasks.length} tasks.
         Rankings based on rank-sum across tasks. Lower calibration (ECE) and adversarial success rate (ASR) are better.
       </p>
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b bg-muted/50">
-              <th className="sticky left-0 z-10 bg-muted/50 px-3 py-2 text-left font-semibold min-w-[150px]">
+          <thead className="sticky top-0 z-20">
+            <tr className="border-b bg-muted">
+              <th className="sticky left-0 z-30 bg-muted px-3 py-2 text-left font-semibold min-w-[150px]">
                 Model
+              </th>
+              <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
+                <div className="text-xs leading-tight">Average<br />rank</div>
+              </th>
+              <th className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[100px] bg-muted/80">
+                <div className="text-xs">Average metric</div>
               </th>
               {filteredTasks.map((task) => (
                 <th
                   key={task.id}
-                  className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[90px]"
-                  title={task.name}
+                  className="px-2 py-2 text-center font-semibold min-w-[90px] max-w-[150px] bg-muted"
                 >
-                  <div className="text-xs truncate max-w-[100px]" title={task.name}>
-                    {task.name.length > 14 ? task.name.slice(0, 14) + "..." : task.name}
+                  <div className="text-xs whitespace-normal leading-tight">
+                    {task.name}
                   </div>
-                  <div className="text-[10px] text-muted-foreground font-normal">
+                  <div className="text-[10px] text-muted-foreground font-normal whitespace-nowrap mt-0.5">
                     {getMetricLabel(task.id)}
                   </div>
                 </th>
               ))}
-              <th className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[80px] bg-muted/80">
-                <div className="text-xs">Avg Rank</div>
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -233,6 +315,12 @@ export function THUNDERDetailedTable({
                       </Link>
                     </div>
                   </td>
+                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
+                    {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
+                  </td>
+                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
+                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                  </td>
                   {filteredTasks.map((task) => {
                     const value = modelResults?.get(task.id);
                     return (
@@ -251,9 +339,6 @@ export function THUNDERDetailedTable({
                       </td>
                     );
                   })}
-                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
-                  </td>
                 </tr>
               );
             })}

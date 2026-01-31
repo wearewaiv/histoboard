@@ -67,10 +67,11 @@
     "name": "HEST-Benchmark",
     "shortName": "HEST",
     "category": "spatial-transcriptomics",
-    "description": "Spatial transcriptomics benchmark evaluating gene expression prediction from H&E images across 9 cancer types.",
+    "description": "HEST-Benchmark is a spatial transcriptomics benchmark from the Mahmood Lab evaluating foundation models on gene expression prediction from H&E images. The benchmark assesses how well models can predict spatially-resolved gene expression patterns directly from histology across 9 cancer types using Pearson correlation as the primary metric. Results are sourced from the official HEST GitHub README.",
     "url": "https://github.com/mahmoodlab/HEST",
     "paperUrl": "https://www.nature.com/articles/s41592-024-02461-y",
     "datasetUrl": "https://huggingface.co/datasets/MahmoodLab/hest",
+    "resultsUrl": "https://github.com/mahmoodlab/HEST/blob/main/README.md#hest-benchmark-results-011426",
     "organs": [
       "breast",
       "prostate",

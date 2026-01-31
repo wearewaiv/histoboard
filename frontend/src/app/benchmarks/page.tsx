@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, FileText, Database } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ExternalLink, FileText, Database, Search } from "lucide-react";
 
 import benchmarksData from "@/data/benchmarks.json";
 import tasksData from "@/data/tasks.json";
@@ -34,6 +35,8 @@ function getBaseTaskName(name: string): string {
 }
 
 export default function BenchmarksPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   const tasksByBenchmark = tasks.reduce((acc, task) => {
     if (!acc[task.benchmarkId]) {
       acc[task.benchmarkId] = [];
@@ -41,6 +44,36 @@ export default function BenchmarksPage() {
     acc[task.benchmarkId].push(task);
     return acc;
   }, {} as Record<string, Task[]>);
+
+  // Filter benchmarks based on search query
+  const filteredBenchmarks = useMemo(() => {
+    if (!searchQuery.trim()) return benchmarks;
+
+    const query = searchQuery.toLowerCase().trim();
+    const queryWords = query.split(/\s+/);
+
+    return benchmarks.filter((benchmark) => {
+      const benchmarkTasks = tasksByBenchmark[benchmark.id] || [];
+
+      // Searchable fields
+      const searchableText = [
+        benchmark.name,
+        benchmark.shortName,
+        benchmark.description,
+        ...(Array.isArray(benchmark.category) ? benchmark.category : [benchmark.category]),
+        ...benchmark.organs,
+        ...benchmarkTasks.map((t) => t.name),
+        ...benchmarkTasks.map((t) => t.category as string),
+        ...benchmarkTasks.map((t) => t.organ),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      // Match if all query words are found in searchable text
+      return queryWords.every((word) => searchableText.includes(word));
+    });
+  }, [searchQuery, tasksByBenchmark]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -52,8 +85,27 @@ export default function BenchmarksPage() {
         </p>
       </div>
 
+      {/* Search bar */}
+      <div className="mb-6">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search benchmarks by name, organ, task, category..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        {searchQuery && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Showing {filteredBenchmarks.length} of {benchmarks.length} benchmarks
+          </p>
+        )}
+      </div>
+
       <div className="grid gap-6">
-        {benchmarks.map((benchmark) => {
+        {filteredBenchmarks.map((benchmark) => {
           const benchmarkTasks = tasksByBenchmark[benchmark.id] || [];
           return (
             <Card key={benchmark.id}>

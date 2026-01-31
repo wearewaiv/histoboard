@@ -77,8 +77,8 @@ export default function TimelinePage() {
         };
       })
       .sort((a, b) => {
-        if (a.year !== b.year) return a.year - b.year;
-        return a.month - b.month;
+        if (a.year !== b.year) return b.year - a.year;
+        return b.month - a.month;
       });
 
     return entries;
@@ -112,7 +112,7 @@ export default function TimelinePage() {
     return byYear;
   }, [timelineData]);
 
-  const years = Array.from(entriesByYear.keys()).sort();
+  const years = Array.from(entriesByYear.keys()).sort((a, b) => b - a);
 
   const formatMonth = (month: number) => {
     const months = [
@@ -154,7 +154,7 @@ export default function TimelinePage() {
     return byYear;
   }, [filteredTimelineData]);
 
-  const filteredYears = Array.from(filteredEntriesByYear.keys()).sort();
+  const filteredYears = Array.from(filteredEntriesByYear.keys()).sort((a, b) => b - a);
 
   return (
     <div className="container mx-auto px-4 py-8">

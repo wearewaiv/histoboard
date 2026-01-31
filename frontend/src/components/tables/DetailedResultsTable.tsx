@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 
 interface DetailedResultsTableProps {
   models: Model[];
@@ -19,7 +21,7 @@ function getEvaMetricDisplay(taskName: string): string {
   if (name.includes("consep") || name.includes("monusac")) {
     return "Dice";
   }
-  return "Bal. Acc";
+  return "Balanced Accuracy";
 }
 
 export function DetailedResultsTable({
@@ -30,17 +32,63 @@ export function DetailedResultsTable({
 }: DetailedResultsTableProps) {
   // Get unique organs for filtering
   const organs = useMemo(() => {
-    const uniqueOrgans = [...new Set(tasks.map((t) => t.organ))].sort();
-    return ["all", ...uniqueOrgans];
+    return [...new Set(tasks.map((t) => t.organ))].sort();
   }, [tasks]);
 
-  const [selectedOrgan, setSelectedOrgan] = useState<string>("all");
+  // Get unique task names for filtering
+  const taskNames = useMemo(() => {
+    return [...new Set(tasks.map((t) => t.name))].sort();
+  }, [tasks]);
 
-  // Filter tasks by selected organ
+  // Filter states
+  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
+    new Set<string>()
+  );
+  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
+    new Set<string>()
+  );
+  const initializedRef = useRef(false);
+
+  // Initialize selected values when options become available (only once)
+  useEffect(() => {
+    if (!initializedRef.current && organs.length > 0 && taskNames.length > 0) {
+      setSelectedOrgans(new Set(organs));
+      setSelectedTasks(new Set(taskNames));
+      initializedRef.current = true;
+    }
+  }, [organs, taskNames]);
+
+  // Toggle helpers
+  const toggleOrgan = (organ: string) => {
+    setSelectedOrgans((prev) => {
+      const next = new Set(prev);
+      if (next.has(organ)) {
+        next.delete(organ);
+      } else {
+        next.add(organ);
+      }
+      return next;
+    });
+  };
+
+  const toggleTask = (taskName: string) => {
+    setSelectedTasks((prev) => {
+      const next = new Set(prev);
+      if (next.has(taskName)) {
+        next.delete(taskName);
+      } else {
+        next.add(taskName);
+      }
+      return next;
+    });
+  };
+
+  // Filter tasks by selected organs AND selected task names
   const filteredTasks = useMemo(() => {
-    if (selectedOrgan === "all") return tasks;
-    return tasks.filter((t) => t.organ === selectedOrgan);
-  }, [tasks, selectedOrgan]);
+    return tasks.filter(
+      (t) => selectedOrgans.has(t.organ) && selectedTasks.has(t.name)
+    );
+  }, [tasks, selectedOrgans, selectedTasks]);
 
   // Create a lookup map for results: modelId -> taskId -> value
   const resultsMap = useMemo(() => {
@@ -79,7 +127,7 @@ export function DetailedResultsTable({
     const taskRanks = new Map<string, Map<string, number>>();
     for (const task of filteredTasks) {
       const taskResults = results
-        .filter(r => r.taskId === task.id)
+        .filter((r) => r.taskId === task.id)
         .sort((a, b) => b.value - a.value); // Higher is better
 
       const ranks = new Map<string, number>();
@@ -153,55 +201,85 @@ export function DetailedResultsTable({
 
   return (
     <div>
-      {/* Organ filter */}
-      <div className="mb-4 flex flex-wrap gap-2">
-        {organs.map((organ) => (
-          <button
-            key={organ}
-            onClick={() => setSelectedOrgan(organ)}
-            className={cn(
-              "px-3 py-1.5 text-sm rounded-md border transition-colors capitalize",
-              selectedOrgan === organ
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background hover:bg-muted border-border"
-            )}
+      {/* Benchmark description */}
+      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
+        <p className="text-sm text-muted-foreground">
+          <strong>EVA Benchmark</strong> evaluates pathology foundation models on WSI classification and segmentation tasks.
+          It reports Balanced Accuracy for binary and multiclass tasks, and Dice Score (without background) for segmentation.
+          Scores show average performance over 5 runs for patch-level classification and segmentation, and 20 runs for slide-level
+          tasks (due to higher variance). Colors indicate relative performance (green = best, red = worst).
+          Results sourced from the{" "}
+          <a
+            href="https://github.com/kaiko-ai/eva/blob/main/tools/data/leaderboards/pathology.csv"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
           >
-            {organ === "all" ? "All" : organ}
-          </button>
-        ))}
+            official EVA leaderboard CSV
+          </a>.
+        </p>
+      </div>
+
+      {/* Filters */}
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <MultiSelectDropdown
+          label="Indications"
+          options={organs
+            .map((organ) => ({
+              id: organ,
+              label: organ.charAt(0).toUpperCase() + organ.slice(1),
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={selectedOrgans}
+          onToggle={toggleOrgan}
+          onSelectAll={() => setSelectedOrgans(new Set(organs))}
+          onClearAll={() => setSelectedOrgans(new Set())}
+        />
+        <MultiSelectDropdown
+          label="Tasks"
+          options={taskNames
+            .map((taskName) => ({
+              id: taskName,
+              label: taskName,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={selectedTasks}
+          onToggle={toggleTask}
+          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
+          onClearAll={() => setSelectedTasks(new Set())}
+        />
       </div>
 
       <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks{selectedOrgan !== "all" ? ` for ${selectedOrgan}` : ""}.
+        Showing {filteredTasks.length} tasks.
       </p>
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="border-b bg-muted/50">
-              <th className="sticky left-0 z-10 bg-muted/50 px-3 py-2 text-left font-semibold min-w-[150px]">
+            <tr className="border-b bg-muted">
+              <th className="sticky left-0 z-10 bg-muted px-3 py-2 text-left font-semibold min-w-[150px]">
                 Model
+              </th>
+              <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
+                <div className="text-xs leading-tight">Average<br />rank</div>
+              </th>
+              <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
+                <div className="text-xs leading-tight">Average<br />metric</div>
               </th>
               {filteredTasks.map((task) => (
                 <th
                   key={task.id}
-                  className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[100px]"
-                  title={`${task.name} (${getEvaMetricDisplay(task.name)})`}
+                  className="px-2 py-2 text-center font-semibold min-w-[100px] max-w-[150px] bg-muted"
                 >
-                  <div className="text-xs truncate max-w-[120px]" title={task.name}>
+                  <div className="text-xs whitespace-normal leading-tight">
                     {task.name}
                   </div>
-                  <div className="text-[10px] text-muted-foreground font-normal">
+                  <div className="text-[10px] text-muted-foreground font-normal whitespace-nowrap mt-0.5">
                     {getEvaMetricDisplay(task.name)}
                   </div>
                 </th>
               ))}
-              <th className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[80px] bg-muted/80">
-                <div className="text-xs">Average</div>
-              </th>
-              <th className="px-2 py-2 text-center font-semibold whitespace-nowrap min-w-[80px] bg-muted/80">
-                <div className="text-xs">Avg Rank</div>
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -233,6 +311,12 @@ export function DetailedResultsTable({
                       </Link>
                     </div>
                   </td>
+                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
+                    {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
+                  </td>
+                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
+                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                  </td>
                   {filteredTasks.map((task) => {
                     const value = modelResults?.get(task.id);
                     return (
@@ -247,12 +331,6 @@ export function DetailedResultsTable({
                       </td>
                     );
                   })}
-                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
-                  </td>
-                  <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
-                  </td>
                 </tr>
               );
             })}

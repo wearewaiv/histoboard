@@ -127,9 +127,9 @@ export function LeaderboardTable({
   return (
     <div className="overflow-x-auto max-h-[70vh]">
       <table className="w-full border-collapse">
-        <thead className="sticky top-0 z-10">
+        <thead className="sticky top-0 z-20">
           <tr className="border-b bg-muted">
-            <th className="px-4 py-3 text-left text-sm font-semibold">Model</th>
+            <th className="sticky left-0 z-30 bg-muted px-4 py-3 text-left text-sm font-semibold min-w-[180px]">Model</th>
             <th className="px-4 py-3 text-left text-sm font-semibold">
               Organization
             </th>
@@ -214,7 +214,7 @@ export function LeaderboardTable({
                 key={ranking.modelId as string}
                 className="border-b transition-colors hover:bg-muted/50"
               >
-                <td className="px-4 py-3">
+                <td className="sticky left-0 z-10 bg-background px-4 py-3 border-r">
                   <Link
                     href={`/models/${ranking.modelId}`}
                     className="font-medium text-primary hover:underline"
