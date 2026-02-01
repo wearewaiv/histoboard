@@ -6,6 +6,54 @@ import { cn, formatNumber, formatMetricLabel, formatOrganLabel } from "@/lib/uti
 import { ChevronDown, ChevronRight } from "lucide-react";
 import type { Model, Task, Benchmark } from "@/types";
 
+// Format cryptic Stanford PathBench task names to be more readable
+function formatStanfordTaskName(name: string): string {
+  const nameMap: Record<string, string> = {
+    "lung exp subtype": "Lung Expression Subtype",
+    "lusc vs luad": "LUSC vs LUAD",
+    "CPTAC-MYC": "MYC Activation (CPTAC)",
+    "Chrom": "Chromatin Remodeling",
+    "CPTAC-grade": "Tumor Grade (CPTAC)",
+    "tumor label": "Tumor Label",
+    "MTOR": "mTOR Pathway",
+    "P53": "P53 Pathway",
+    "SWI": "SWI/SNF Pathway",
+    "gi subtype": "GI Subtype",
+    "ERG status": "ERG Status",
+    "prad mrna cluster": "Prostate mRNA Cluster",
+    "lung hist OOD1": "Lung Histology (OOD 1)",
+    "lung hist OOD2": "Lung Histology (OOD 2)",
+    "lung stage OOD": "Lung Stage (OOD)",
+    "lung stage": "Lung Stage",
+    "lung grade": "Lung Grade",
+    "brain necrosis": "Brain Necrosis",
+    "brain exp subtype": "Brain Expression Subtype",
+    "brain hist subtype": "Brain Histology Subtype",
+    "MGMT OOD": "MGMT Status (OOD)",
+    "MGMT": "MGMT Status",
+    "IDH": "IDH Status",
+    "Immunegroup": "Immune Group",
+    "MYC": "MYC Status",
+    "PI3K": "PI3K Pathway",
+    "TCGA-Grade": "Tumor Grade (TCGA)",
+    "PAM50 status": "PAM50 Status",
+    "ER status": "ER Status",
+    "PR status": "PR Status",
+    "blca hist subtype": "Bladder Histology Subtype",
+    "blca mrna cluster": "Bladder mRNA Cluster",
+    "kidney subtype": "Kidney Subtype",
+  };
+  return nameMap[name] || name;
+}
+
+// Format task name based on benchmark
+function formatTaskName(task: Task): string {
+  if (task.benchmarkId === "stanford") {
+    return formatStanfordTaskName(task.name);
+  }
+  return task.name;
+}
+
 interface ArenaComparisonTableProps {
   selectedModels: Model[];
   filteredTasks: Task[];  // Tasks where ALL selected models have results
@@ -215,7 +263,7 @@ export function ArenaComparisonTable({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto border rounded-lg">
+        <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
           <table className="w-full border-collapse text-sm">
             <thead className="sticky top-0 z-20">
               <tr className="border-b bg-muted">
@@ -225,7 +273,7 @@ export function ArenaComparisonTable({
                 {sortedModels.map((model) => (
                   <th
                     key={model.id}
-                    className="px-3 py-3 text-center font-semibold min-w-[120px]"
+                    className="px-3 py-3 text-center font-semibold min-w-[120px] bg-muted"
                   >
                     <div className="text-xs leading-tight">{model.name}</div>
                   </th>
@@ -288,7 +336,7 @@ export function ArenaComparisonTable({
                             className="border-b hover:bg-muted/30 transition-colors"
                           >
                             <td className="sticky left-0 z-10 bg-background px-4 py-2 pl-10">
-                              <div className="text-sm">{task.name}</div>
+                              <div className="text-sm">{formatTaskName(task)}</div>
                               <div className="text-xs text-muted-foreground">
                                 {formatOrganLabel(task.organ)} | {formatMetricLabel(task.metric)}
                               </div>

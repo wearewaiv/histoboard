@@ -243,7 +243,7 @@ export function SinaiDetailedTable({
       {/* Benchmark description */}
       <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
         <p className="text-sm text-muted-foreground">
-          <strong>Sinai SSL Tile Benchmarks</strong> (Nature Communications, 2025) is a comprehensive benchmark from Mount Sinai evaluating pathology
+          <strong>Sinai SSL Benchmark</strong> (Nature Communications, 2025) is a comprehensive benchmark from Mount Sinai evaluating pathology
           foundation models on cancer detection and biomarker prediction tasks across multiple organs and institutions.
           Data sourced from the{" "}
           <a

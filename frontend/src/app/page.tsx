@@ -200,9 +200,8 @@ export default function HomePage() {
           Scaling Laws
         </h2>
         <p className="mb-6 text-muted-foreground">
-          Relationship between robustness and performance.
-          Per-benchmark average metrics were normalized within [0, 1]. Point size represents model parameters.
-          Only models evaluated on the selected benchmarks are shown.
+          Relationship between robustness and performance as a function of model size. For each benchmark, metrics are normalized across models within [0, 1] then averaged. Point size represents model parameters.
+          Only the models evaluated on the selected benchmarks are shown.
         </p>
         <Card>
           <CardContent className="pt-6">

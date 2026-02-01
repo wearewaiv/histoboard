@@ -126,7 +126,7 @@
   },
   {
     "id": "sinai",
-    "name": "Sinai SSL Tile Benchmarks",
+    "name": "Sinai SSL Benchmark",
     "shortName": "Sinai",
     "category": [
       "pathology",

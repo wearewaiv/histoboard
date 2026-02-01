@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frontend/public/logo.png" alt="Histoboard Logo" width="80" height="80">
+  <img src="frontend/public/logo.svg" alt="Histoboard Logo" width="80" height="80">
 </p>
 
 <h1 align="center">Histoboard</h1>
@@ -20,14 +20,14 @@
 
 ---
 
-## What is Histoboard?
+## What is Histoboard ?
 
 Histoboard provides a **unified view** of pathology foundation model performance across multiple benchmarks. It enables researchers and practitioners to make informed decisions when selecting models for computational pathology applications.
 
 | Metric | Count |
 |--------|-------|
 | Benchmarks | 10 |
-| Models | 69 |
+| Models | 35 |
 | Evaluation Tasks | 400+ |
 | Organs/Indications | 20+ |
 
@@ -41,16 +41,16 @@ Histoboard provides a **unified view** of pathology foundation model performance
 
 ## Supported Benchmarks
 
-| Benchmark | Tasks | Category |
-|-----------|-------|----------|
-| [EVA](https://github.com/kaiko-ai/eva) | 13 | Patch-level classification |
+| Benchmark | Tasks | Task Type |
+|-----------|-------|-----------|
+| [EVA](https://github.com/kaiko-ai/eva) | 13 | Patch-level classification, Slide-level classification, Segmentation |
 | [PathBench](https://github.com/birkhoffkiki/PathBench) | 229 | Slide-level classification |
-| [Stanford PathBench](https://pathbench.stanford.edu) | 41 | Slide-level classification |
+| [Stanford PathBench](https://pathbench.stanford.edu) | 41 | Patch-level classification, Slide-level classification |
 | [HEST](https://github.com/mahmoodlab/HEST) | 9 | Spatial transcriptomics |
 | [Patho-Bench](https://github.com/mahmoodlab/Patho-Bench) | 95 | Slide-level classification |
-| [Sinai](https://github.com/sinai-computational-pathology/SSL_tile_benchmarks) | 22 | Patch-level classification |
+| [Sinai](https://github.com/sinai-computational-pathology/SSL_tile_benchmarks) | 22 | Slide-level classification |
 | [STAMP](https://github.com/KatherLab/STAMP-Benchmark) | 31 | Slide-level classification |
-| [THUNDER](https://github.com/MICS-Lab/thunder) | 6 | Multi-task |
+| [THUNDER](https://github.com/MICS-Lab/thunder) | 6 | Patch-level classification, Calibration, Robustness, Segmentation |
 | [PathoROB](https://github.com/bifold-pathomics/PathoROB) | 3 | Robustness |
 | [Plismbench](https://github.com/owkin/plism-benchmark) | 4 | Robustness |
 
@@ -169,7 +169,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 - [] Make it real time
 - [] Add alerts if modifications
-- [] Revamp README
 - [] Used inside products ?
 - [] Scrapper of literature
 
