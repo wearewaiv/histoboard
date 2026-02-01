@@ -9,7 +9,7 @@ on:
       force_email:
         description: 'Send email even if no changes detected (for testing)'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 permissions:
@@ -36,18 +36,30 @@ jobs:
         id: monitor
         working-directory: scraper
         run: |
-          python -m src.monitor || echo "has_changes=true" >> $GITHUB_OUTPUT
+          set -euo pipefail
 
-          # Check if changes were detected
+          python -m src.monitor || echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
+          # Check if changes were detected and safely parse JSON with Python
           if [ -f data/changes_detected.json ]; then
-            HAS_CHANGES=$(python -c "import json; print(json.load(open('data/changes_detected.json'))['has_changes'])")
-            echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
+            python3 -c "
+          import json
+          import os
 
-            if [ "$HAS_CHANGES" = "True" ]; then
-              # Get the report file path
-              REPORT_FILE=$(python -c "import json; print(json.load(open('data/changes_detected.json')).get('report_file', ''))")
-              echo "report_file=$REPORT_FILE" >> $GITHUB_OUTPUT
-            fi
+          with open('data/changes_detected.json') as f:
+              data = json.load(f)
+
+          has_changes = str(data.get('has_changes', False))
+          report_file = data.get('report_file', '')
+
+          # Safely write to GITHUB_OUTPUT
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write(f'has_changes={has_changes}\n')
+              if has_changes == 'True' and report_file:
+                  # Sanitize report_file path to prevent injection
+                  safe_report_file = report_file.replace('\n', '').replace('\r', '')
+                  out.write(f'report_file={safe_report_file}\n')
+          "
           fi
 
       - name: Read report content
@@ -55,15 +67,27 @@ jobs:
         if: steps.monitor.outputs.has_changes == 'True' || github.event.inputs.force_email == 'true'
         working-directory: scraper
         run: |
+          set -euo pipefail
+
+          # Use Python to safely read and output report content
+          python3 -c "
+          import glob
+          import os
+
           # Find the latest report file
-          REPORT_FILE=$(ls -t data/reports/report_*.txt 2>/dev/null | head -1)
-          if [ -n "$REPORT_FILE" ]; then
-            # Read report content (limit to 50000 chars for email)
-            REPORT_CONTENT=$(head -c 50000 "$REPORT_FILE")
-            echo "report_content<<EOF" >> $GITHUB_OUTPUT
-            echo "$REPORT_CONTENT" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          fi
+          report_files = sorted(glob.glob('data/reports/report_*.txt'), reverse=True)
+          if report_files:
+              report_file = report_files[0]
+              # Read and limit content
+              with open(report_file, 'r', encoding='utf-8', errors='replace') as f:
+                  content = f.read(50000)
+
+              # Write to GITHUB_OUTPUT using heredoc-safe delimiter
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+                  out.write('report_content<<REPORT_EOF\n')
+                  out.write(content)
+                  out.write('\nREPORT_EOF\n')
+          "
 
       - name: Send email notification
         if: steps.monitor.outputs.has_changes == 'True' || github.event.inputs.force_email == 'true'

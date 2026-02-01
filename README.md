@@ -166,3 +166,6 @@ This project aggregates data from multiple benchmark sources. Please cite the or
 
 MIT License - see [LICENSE](LICENSE) for details.
 
+## License
+
+- Implement a literature scrapper 

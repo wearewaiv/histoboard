@@ -1,10 +1,50 @@
 "use client";
 
+/**
+ * STAMP Detailed Table Component
+ *
+ * Displays a detailed performance table for the STAMP benchmark.
+ * This component demonstrates how to use the shared `useDetailedTableData` hook
+ * to build benchmark-specific tables without duplicating computation logic.
+ *
+ * ## What This Component Does
+ *
+ * 1. Shows filter dropdowns (Indications, Task Categories, etc.)
+ * 2. Renders a table with:
+ *    - Rows: One per model, sorted by average rank
+ *    - Columns: One per task, plus "Average Rank" and "Average Metric"
+ *    - Cells: Colored based on relative performance (green=good, red=bad)
+ *
+ * ## How Filtering Works
+ *
+ * Users can filter tasks by:
+ * - **Indication (organ)**: e.g., breast, colon, lung
+ * - **Category**: Biomarker, Morphology, Prognosis
+ * - **Task name**: Specific task selection
+ * - **Search**: Text search across all task attributes
+ *
+ * When the user types in the search box, all filter dropdowns are bypassed
+ * and we search across all tasks. When the search box is empty, the dropdown
+ * filters are applied.
+ *
+ * ## Key Data Flow
+ *
+ * ```
+ * Props (models, tasks, results)
+ *     ↓
+ * [Filter tasks by user selections] → filteredTasks
+ *     ↓
+ * [useDetailedTableData hook] → resultsMap, taskStats, modelAvgRanks, sortedModels
+ *     ↓
+ * [Render table] → Display sorted models with colored cells
+ * ```
+ */
+
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
-import { cn, formatNumber } from "@/lib/utils";
+import { cn, formatNumber, getValueColor } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
@@ -14,6 +54,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
 interface STAMPDetailedTableProps {
   models: Model[];
@@ -26,19 +67,16 @@ export function STAMPDetailedTable({
   models,
   tasks,
   results,
-  modelRankings,
 }: STAMPDetailedTableProps) {
-  // Get unique organs for filtering (Indications)
+  // Get unique filter options
   const organs = useMemo(() => {
     return [...new Set(tasks.map((t) => t.organ))].sort();
   }, [tasks]);
 
-  // Get unique categories for filtering (Task Type)
   const categories = useMemo(() => {
     return [...new Set(tasks.map((t) => t.category as string))].sort();
   }, [tasks]);
 
-  // Get unique task names for filtering
   const taskNames = useMemo(() => {
     return [...new Set(tasks.map((t) => t.name))].sort();
   }, [tasks]);
@@ -59,11 +97,8 @@ export function STAMPDetailedTable({
   const toggleOrgan = (organ: string) => {
     setSelectedOrgans((prev) => {
       const next = new Set(prev);
-      if (next.has(organ)) {
-        next.delete(organ);
-      } else {
-        next.add(organ);
-      }
+      if (next.has(organ)) next.delete(organ);
+      else next.add(organ);
       return next;
     });
   };
@@ -71,11 +106,8 @@ export function STAMPDetailedTable({
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) => {
       const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
+      if (next.has(category)) next.delete(category);
+      else next.add(category);
       return next;
     });
   };
@@ -83,35 +115,28 @@ export function STAMPDetailedTable({
   const toggleTask = (taskName: string) => {
     setSelectedTasks((prev) => {
       const next = new Set(prev);
-      if (next.has(taskName)) {
-        next.delete(taskName);
-      } else {
-        next.add(taskName);
-      }
+      if (next.has(taskName)) next.delete(taskName);
+      else next.add(taskName);
       return next;
     });
   };
 
-  // Filter tasks by selected organs, categories, task names, and search query
-  // When there's a search query, it searches across ALL tasks (ignoring filters)
+  // Filter tasks by selected filters and search query
   const filteredTasks = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
 
     let filtered: Task[];
-    // If there's a search query, search across all tasks
-    // All query words must be present in the searchable text
     if (query) {
+      // Search across all tasks when query is present
       const queryWords = query.split(/\s+/);
       filtered = tasks.filter((t) => {
-        const searchableText = [
-          t.name,
-          t.category as string,
-          t.organ,
-        ].join(" ").toLowerCase();
+        const searchableText = [t.name, t.category as string, t.organ]
+          .join(" ")
+          .toLowerCase();
         return queryWords.every((word) => searchableText.includes(word));
       });
     } else {
-      // Otherwise, apply all filters
+      // Apply filters
       filtered = tasks.filter(
         (t) =>
           selectedOrgans.has(t.organ) &&
@@ -120,127 +145,41 @@ export function STAMPDetailedTable({
       );
     }
 
-    // Sort alphabetically by task name
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
   }, [tasks, selectedOrgans, selectedCategories, selectedTasks, searchQuery]);
 
-  // Create a lookup map for results: modelId -> taskId -> value
-  const resultsMap = useMemo(() => {
-    const map = new Map<string, Map<string, number>>();
-    for (const result of results) {
-      if (!map.has(result.modelId)) {
-        map.set(result.modelId, new Map());
-      }
-      map.get(result.modelId)!.set(result.taskId, result.value);
-    }
-    return map;
-  }, [results]);
+  // Use shared hook for common computations
+  const {
+    resultsMap,
+    taskStats,
+    modelAvgRanks,
+    modelAvgValues,
+    sortedModels,
+  } = useDetailedTableData({ models, filteredTasks, results });
 
-  // Get min/max for each task for color scaling
-  const taskStats = useMemo(() => {
-    const stats = new Map<string, { min: number; max: number }>();
-    for (const task of filteredTasks) {
-      const values = results
-        .filter((r) => r.taskId === task.id)
-        .map((r) => r.value);
-      if (values.length > 0) {
-        stats.set(task.id, {
-          min: Math.min(...values),
-          max: Math.max(...values),
-        });
-      }
-    }
-    return stats;
-  }, [filteredTasks, results]);
+  // Build dropdown options
+  const organOptions = organs
+    .map((organ) => ({
+      id: organ,
+      label: organ.charAt(0).toUpperCase() + organ.slice(1),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
-  // Compute average rank per model (across filtered tasks)
-  const modelAvgRanks = useMemo(() => {
-    const avgRanks = new Map<string, number>();
+  const categoryOptions = categories
+    .map((cat) => ({
+      id: cat,
+      label:
+        cat === "Biomarker"
+          ? "Biomarker prediction"
+          : cat === "Morphology"
+          ? "Morphology prediction"
+          : cat,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
-    // For each task, compute ranks
-    const taskRanks = new Map<string, Map<string, number>>();
-    for (const task of filteredTasks) {
-      const taskResults = results
-        .filter((r) => r.taskId === task.id)
-        .sort((a, b) => b.value - a.value); // Higher is better
-
-      const ranks = new Map<string, number>();
-      taskResults.forEach((r, idx) => {
-        ranks.set(r.modelId, idx + 1);
-      });
-      taskRanks.set(task.id, ranks);
-    }
-
-    // Compute average rank per model
-    for (const model of models) {
-      const ranks: number[] = [];
-      for (const task of filteredTasks) {
-        const rank = taskRanks.get(task.id)?.get(model.id);
-        if (rank !== undefined) {
-          ranks.push(rank);
-        }
-      }
-      if (ranks.length > 0) {
-        avgRanks.set(model.id, ranks.reduce((a, b) => a + b, 0) / ranks.length);
-      }
-    }
-
-    return avgRanks;
-  }, [models, filteredTasks, results]);
-
-  // Compute average metric value per model (across filtered tasks)
-  const modelAvgValues = useMemo(() => {
-    const avgValues = new Map<string, number>();
-
-    for (const model of models) {
-      const values: number[] = [];
-      for (const task of filteredTasks) {
-        const value = resultsMap.get(model.id)?.get(task.id);
-        if (value !== undefined) {
-          values.push(value);
-        }
-      }
-      if (values.length > 0) {
-        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
-      }
-    }
-
-    return avgValues;
-  }, [models, filteredTasks, resultsMap]);
-
-  // Sort models by average rank
-  const sortedModels = useMemo(() => {
-    return [...models].sort((a, b) => {
-      const rankA = modelAvgRanks.get(a.id) ?? 999;
-      const rankB = modelAvgRanks.get(b.id) ?? 999;
-      return rankA - rankB;
-    });
-  }, [models, modelAvgRanks]);
-
-  // Get value color based on relative performance
-  function getValueColor(value: number, taskId: string): string {
-    const stats = taskStats.get(taskId);
-    if (!stats || stats.max === stats.min) return "";
-
-    const normalized = (value - stats.min) / (stats.max - stats.min);
-
-    if (normalized >= 0.9) return "bg-emerald-100 text-emerald-800";
-    if (normalized >= 0.7) return "bg-green-50 text-green-700";
-    if (normalized >= 0.3) return "bg-gray-50";
-    if (normalized >= 0.1) return "bg-orange-50 text-orange-700";
-    return "bg-red-50 text-red-700";
-  }
-
-  // Build options for dropdowns
-  const organOptions = organs.map((organ) => ({
-    id: organ,
-    label: organ.charAt(0).toUpperCase() + organ.slice(1),
-  })).sort((a, b) => a.label.localeCompare(b.label));
-  const categoryOptions = categories.map((cat) => ({
-    id: cat,
-    label: cat === "Biomarker" ? "Biomarker prediction" : cat === "Morphology" ? "Morphology prediction" : cat,
-  })).sort((a, b) => a.label.localeCompare(b.label));
-  const taskOptions = taskNames.map((name) => ({ id: name, label: name })).sort((a, b) => a.label.localeCompare(b.label));
+  const taskOptions = taskNames
+    .map((name) => ({ id: name, label: name }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div>
@@ -386,20 +325,26 @@ export function STAMPDetailedTable({
                     {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                    {modelAvgValues.get(model.id) !== undefined
+                      ? formatNumber(modelAvgValues.get(model.id)!, 3)
+                      : "-"}
                   </td>
                   {filteredTasks.map((task) => {
-                    const value = modelResults?.get(task.id);
+                    const result = modelResults?.get(task.id);
+                    const value = result?.value;
                     return (
                       <td
                         key={task.id}
                         className={cn(
                           "px-2 py-2 text-center tabular-nums",
-                          value !== undefined && getValueColor(value, task.id)
+                          value !== undefined &&
+                            getValueColor(value, taskStats.get(task.id))
                         )}
                       >
                         {value !== undefined ? (
-                          <span className="font-medium">{formatNumber(value, 3)}</span>
+                          <span className="font-medium">
+                            {formatNumber(value, 3)}
+                          </span>
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}

@@ -1,34 +1,87 @@
+/**
+ * Scaling Laws visualization module for Histoboard
+ *
+ * This module computes data for the robustness vs. performance scatter plot.
+ * Each model is represented as a point where:
+ * - X-axis: Robustness score (normalized average across robustness benchmarks)
+ * - Y-axis: Performance score (normalized average across selected benchmarks)
+ * - Bubble size: Number of model parameters
+ *
+ * All metrics are normalized to [0, 1] for fair comparison across benchmarks
+ * with different scales.
+ *
+ * @module lib/scalingLaws
+ */
+
 import type { Result, Task, Model } from "@/types";
 
+// =============================================================================
+// Types
+// =============================================================================
+
+/**
+ * A data point for the scaling laws scatter plot.
+ * Represents a single model's position in the robustness-performance space.
+ */
 export interface ScalingLawsDataPoint {
+  /** Model identifier */
   modelId: string;
+  /** Model display name */
   modelName: string;
+  /** Organization that developed the model */
   organization: string;
+  /** Normalized robustness score (0-1, higher is better) */
   robustness: number;
+  /** Normalized performance score (0-1, higher is better) */
   performance: number;
+  /** Number of parameters in millions */
   params: number;
+  /** Number of benchmarks included in the performance average */
   benchmarkCount: number;
 }
 
-// Parse model params: "632M" → 632, "1.1B" → 1100
-export function parseModelParams(params: string): number {
-  const value = parseFloat(params);
-  if (params.toUpperCase().includes("B")) {
-    return value * 1000; // Convert billions to millions
-  }
-  return value; // Already in millions
+/**
+ * Represents a selectable benchmark option in the UI.
+ */
+interface BenchmarkOption {
+  /** Benchmark identifier */
+  id: string;
+  /** Display label */
+  label: string;
 }
 
-// Robustness benchmarks configuration
-export const ALL_ROBUSTNESS_BENCHMARKS = [
+/**
+ * Min/max statistics for normalization.
+ */
+interface NormalizationStats {
+  min: number;
+  max: number;
+}
+
+// =============================================================================
+// Configuration
+// =============================================================================
+
+/**
+ * Available robustness benchmarks.
+ * These measure model stability under distribution shifts.
+ */
+export const ALL_ROBUSTNESS_BENCHMARKS: BenchmarkOption[] = [
   { id: "pathorob", label: "PathoROB" },
   { id: "plism", label: "Plismbench" },
 ];
 
+/**
+ * Default selection for robustness benchmarks.
+ */
 export const DEFAULT_SELECTED_ROBUSTNESS = new Set(["pathorob", "plism"]);
 
-// Robustness task IDs by benchmark
-const ROBUSTNESS_TASK_IDS_BY_BENCHMARK: Record<string, string[]> = {
+/**
+ * Mapping from robustness benchmark IDs to their task IDs.
+ * These are hardcoded because robustness benchmarks have specific tasks
+ * that need to be aggregated differently than performance benchmarks.
+ */
+const ROBUSTNESS_TASK_IDS: Record<string, string[]> = {
   pathorob: [
     "pathorob_tcga_2x2",
     "pathorob_camelyon",
@@ -42,8 +95,16 @@ const ROBUSTNESS_TASK_IDS_BY_BENCHMARK: Record<string, string[]> = {
   ],
 };
 
-// All available performance benchmarks (excluding robustness benchmarks)
-export const ALL_PERFORMANCE_BENCHMARKS = [
+/**
+ * Benchmarks where lower values are better.
+ * For these, we invert the normalized score so that 1 always means "best".
+ */
+const INVERTED_BENCHMARKS = new Set(["thunder"]);
+
+/**
+ * Available performance benchmarks (excluding robustness-focused ones).
+ */
+export const ALL_PERFORMANCE_BENCHMARKS: BenchmarkOption[] = [
   { id: "eva", label: "EVA" },
   { id: "pathbench", label: "PathBench" },
   { id: "stanford", label: "Stanford" },
@@ -54,64 +115,136 @@ export const ALL_PERFORMANCE_BENCHMARKS = [
   { id: "thunder", label: "THUNDER" },
 ];
 
-// Default selected benchmarks
+/**
+ * Default selection for performance benchmarks.
+ */
 export const DEFAULT_SELECTED_BENCHMARKS = new Set(["eva"]);
 
-// Get robustness score (avg of selected robustness benchmark tasks)
+// =============================================================================
+// Utility Functions
+// =============================================================================
+
+/**
+ * Parse model parameter count from string notation.
+ * Handles both millions (M) and billions (B) notation.
+ *
+ * @param params - Parameter string (e.g., "632M", "1.1B")
+ * @returns Number of parameters in millions
+ *
+ * @example
+ * parseModelParams("632M")  // 632
+ * parseModelParams("1.1B")  // 1100
+ */
+export function parseModelParams(params: string): number {
+  const value = parseFloat(params);
+  if (params.toUpperCase().includes("B")) {
+    return value * 1000; // Convert billions to millions
+  }
+  return value; // Already in millions
+}
+
+/**
+ * Normalize a value to the [0, 1] range given min/max bounds.
+ *
+ * @param value - The raw value to normalize
+ * @param stats - Min and max values for normalization
+ * @returns Normalized value in [0, 1], or 0.5 if min === max
+ */
+function normalizeValue(value: number, stats: NormalizationStats): number {
+  if (stats.max === stats.min) {
+    return 0.5; // No variance, return middle value
+  }
+  return (value - stats.min) / (stats.max - stats.min);
+}
+
+/**
+ * Compute the arithmetic mean of an array of numbers.
+ */
+function mean(values: number[]): number {
+  if (values.length === 0) return 0;
+  return values.reduce((sum, v) => sum + v, 0) / values.length;
+}
+
+/**
+ * Get task IDs for selected robustness benchmarks.
+ */
+function getRobustnessTaskIds(selectedRobustness: Set<string>): string[] {
+  const taskIds: string[] = [];
+  for (const benchmarkId of selectedRobustness) {
+    const ids = ROBUSTNESS_TASK_IDS[benchmarkId];
+    if (ids) {
+      taskIds.push(...ids);
+    }
+  }
+  return taskIds;
+}
+
+// =============================================================================
+// Score Computation
+// =============================================================================
+
+/**
+ * Compute the average robustness score for a model.
+ *
+ * @param modelId - The model to compute the score for
+ * @param results - All evaluation results
+ * @param selectedRobustness - Set of selected robustness benchmark IDs
+ * @returns Average robustness score, or null if no data available
+ */
 export function getRobustnessScore(
   modelId: string,
   results: Result[],
   selectedRobustness: Set<string>
 ): number | null {
-  // Build list of task IDs from selected robustness benchmarks
-  const taskIds: string[] = [];
-  for (const benchmarkId of selectedRobustness) {
-    const ids = ROBUSTNESS_TASK_IDS_BY_BENCHMARK[benchmarkId];
-    if (ids) taskIds.push(...ids);
-  }
-
+  const taskIds = getRobustnessTaskIds(selectedRobustness);
   if (taskIds.length === 0) return null;
 
   const robustnessResults = results.filter(
     (r) => r.modelId === modelId && taskIds.includes(r.taskId)
   );
 
-  if (robustnessResults.length === 0) {
-    return null;
-  }
+  if (robustnessResults.length === 0) return null;
 
-  const sum = robustnessResults.reduce((acc, r) => acc + r.value, 0);
-  return sum / robustnessResults.length;
+  return mean(robustnessResults.map((r) => r.value));
 }
 
-// Get performance stats for normalization (based on ALL model averages from results, not just displayed models)
+/**
+ * Compute min/max statistics for a benchmark across all models.
+ * This is used for normalizing performance values.
+ *
+ * @param benchmarkId - The benchmark to compute stats for
+ * @param results - All evaluation results
+ * @param tasks - Task definitions
+ * @returns Min/max of model average performances, or null if no data
+ */
 function getBenchmarkStats(
   benchmarkId: string,
   results: Result[],
   tasks: Task[]
-): { min: number; max: number } | null {
-  const benchmarkTaskIds = tasks
-    .filter((t) => t.benchmarkId === benchmarkId)
-    .map((t) => t.id);
+): NormalizationStats | null {
+  // Get task IDs for this benchmark
+  const benchmarkTaskIds = new Set(
+    tasks.filter((t) => t.benchmarkId === benchmarkId).map((t) => t.id)
+  );
 
   // Get all results for this benchmark
-  const benchmarkResults = results.filter((r) => benchmarkTaskIds.includes(r.taskId));
+  const benchmarkResults = results.filter((r) =>
+    benchmarkTaskIds.has(r.taskId)
+  );
 
-  // Group by model ID and compute averages
-  const modelResultsMap: Record<string, number[]> = {};
+  // Group results by model and compute averages
+  const valuesByModel = new Map<string, number[]>();
   for (const r of benchmarkResults) {
-    if (!modelResultsMap[r.modelId]) {
-      modelResultsMap[r.modelId] = [];
+    if (!valuesByModel.has(r.modelId)) {
+      valuesByModel.set(r.modelId, []);
     }
-    modelResultsMap[r.modelId].push(r.value);
+    valuesByModel.get(r.modelId)!.push(r.value);
   }
 
   // Compute each model's average
-  const modelAverages: number[] = [];
-  for (const values of Object.values(modelResultsMap)) {
-    const avg = values.reduce((acc, v) => acc + v, 0) / values.length;
-    modelAverages.push(avg);
-  }
+  const modelAverages = Array.from(valuesByModel.values()).map((values) =>
+    mean(values)
+  );
 
   if (modelAverages.length === 0) return null;
 
@@ -121,28 +254,54 @@ function getBenchmarkStats(
   };
 }
 
-// Get average performance for a model on a benchmark
+/**
+ * Compute a model's average performance on a benchmark.
+ *
+ * @param modelId - The model to compute performance for
+ * @param benchmarkId - The benchmark to measure
+ * @param results - All evaluation results
+ * @param tasks - Task definitions
+ * @returns Average performance, or null if no data
+ */
 function getModelBenchmarkPerformance(
   modelId: string,
   benchmarkId: string,
   results: Result[],
   tasks: Task[]
 ): number | null {
-  const benchmarkTaskIds = tasks
-    .filter((t) => t.benchmarkId === benchmarkId)
-    .map((t) => t.id);
+  const benchmarkTaskIds = new Set(
+    tasks.filter((t) => t.benchmarkId === benchmarkId).map((t) => t.id)
+  );
 
   const modelResults = results.filter(
-    (r) => r.modelId === modelId && benchmarkTaskIds.includes(r.taskId)
+    (r) => r.modelId === modelId && benchmarkTaskIds.has(r.taskId)
   );
 
   if (modelResults.length === 0) return null;
 
-  const sum = modelResults.reduce((acc, r) => acc + r.value, 0);
-  return sum / modelResults.length;
+  return mean(modelResults.map((r) => r.value));
 }
 
-// Build scatter data points (one per model, averaged across selected benchmarks)
+// =============================================================================
+// Main Data Builder
+// =============================================================================
+
+/**
+ * Build scatter plot data points for the scaling laws visualization.
+ *
+ * For each model, computes:
+ * 1. Normalized robustness (average across selected robustness benchmarks)
+ * 2. Normalized performance (average across selected performance benchmarks)
+ *
+ * Models are only included if they have data for ALL selected benchmarks.
+ *
+ * @param models - All models to consider
+ * @param tasks - Task definitions
+ * @param results - All evaluation results
+ * @param selectedBenchmarks - Set of performance benchmark IDs to include
+ * @param selectedRobustness - Set of robustness benchmark IDs to include
+ * @returns Array of data points for the scatter plot
+ */
 export function buildScalingLawsData(
   models: Model[],
   tasks: Task[],
@@ -150,62 +309,61 @@ export function buildScalingLawsData(
   selectedBenchmarks: Set<string>,
   selectedRobustness: Set<string>
 ): ScalingLawsDataPoint[] {
-  const dataPoints: ScalingLawsDataPoint[] = [];
   const benchmarkIds = Array.from(selectedBenchmarks);
 
-  if (benchmarkIds.length === 0 || selectedRobustness.size === 0) return dataPoints;
+  // Early exit if no benchmarks selected
+  if (benchmarkIds.length === 0 || selectedRobustness.size === 0) {
+    return [];
+  }
 
-  // Precompute benchmark stats for normalization (based on ALL model averages from results)
-  const benchmarkStats: Record<string, { min: number; max: number }> = {};
+  // Pre-compute benchmark stats for normalization
+  const benchmarkStats = new Map<string, NormalizationStats>();
   for (const benchmarkId of benchmarkIds) {
     const stats = getBenchmarkStats(benchmarkId, results, tasks);
     if (stats) {
-      benchmarkStats[benchmarkId] = stats;
+      benchmarkStats.set(benchmarkId, stats);
     }
   }
 
-  // Compute robustness stats for normalization (based on ALL models with robustness data)
-  // Get all unique model IDs that have robustness results
-  const robustnessTaskIds: string[] = [];
-  for (const benchmarkId of selectedRobustness) {
-    const ids = ROBUSTNESS_TASK_IDS_BY_BENCHMARK[benchmarkId];
-    if (ids) robustnessTaskIds.push(...ids);
-  }
-  const robustnessResults = results.filter((r) => robustnessTaskIds.includes(r.taskId));
+  // Compute robustness stats for normalization
+  const robustnessTaskIds = getRobustnessTaskIds(selectedRobustness);
+  const robustnessResults = results.filter((r) =>
+    robustnessTaskIds.includes(r.taskId)
+  );
   const robustnessModelIds = [...new Set(robustnessResults.map((r) => r.modelId))];
 
-  const allRobustnessScores: number[] = [];
-  for (const modelId of robustnessModelIds) {
-    const score = getRobustnessScore(modelId, results, selectedRobustness);
-    if (score !== null) {
-      allRobustnessScores.push(score);
-    }
-  }
-  const robustnessStats = allRobustnessScores.length > 0
-    ? { min: Math.min(...allRobustnessScores), max: Math.max(...allRobustnessScores) }
-    : null;
+  const allRobustnessScores = robustnessModelIds
+    .map((modelId) => getRobustnessScore(modelId, results, selectedRobustness))
+    .filter((score): score is number => score !== null);
+
+  const robustnessStats: NormalizationStats | null =
+    allRobustnessScores.length > 0
+      ? {
+          min: Math.min(...allRobustnessScores),
+          max: Math.max(...allRobustnessScores),
+        }
+      : null;
 
   // Process each model
+  const dataPoints: ScalingLawsDataPoint[] = [];
+
   for (const model of models) {
-    // Check if model has robustness data
-    const rawRobustness = getRobustnessScore(model.id, results, selectedRobustness);
+    // Compute robustness score
+    const rawRobustness = getRobustnessScore(
+      model.id,
+      results,
+      selectedRobustness
+    );
     if (rawRobustness === null || robustnessStats === null) continue;
 
-    // Normalize robustness to [0, 1] (1 = best)
-    let robustness: number;
-    if (robustnessStats.max === robustnessStats.min) {
-      robustness = 0.5;
-    } else {
-      robustness = (rawRobustness - robustnessStats.min) / (robustnessStats.max - robustnessStats.min);
-    }
-
-    const params = parseModelParams(model.params);
+    // Normalize robustness
+    const robustness = normalizeValue(rawRobustness, robustnessStats);
 
     // Collect normalized performance across all selected benchmarks
     const normalizedPerformances: number[] = [];
 
     for (const benchmarkId of benchmarkIds) {
-      const stats = benchmarkStats[benchmarkId];
+      const stats = benchmarkStats.get(benchmarkId);
       if (!stats) continue;
 
       const rawPerformance = getModelBenchmarkPerformance(
@@ -216,42 +374,29 @@ export function buildScalingLawsData(
       );
       if (rawPerformance === null) continue;
 
-      // Normalize performance to [0, 1]
-      let normalizedPerformance: number;
-      if (stats.max === stats.min) {
-        normalizedPerformance = 0.5;
-      } else {
-        normalizedPerformance =
-          (rawPerformance - stats.min) / (stats.max - stats.min);
-      }
+      let normalizedPerformance = normalizeValue(rawPerformance, stats);
 
-      // THUNDER uses rank sum (lower is better), so invert
-      if (benchmarkId === "thunder") {
+      // Invert for benchmarks where lower is better
+      if (INVERTED_BENCHMARKS.has(benchmarkId)) {
         normalizedPerformance = 1 - normalizedPerformance;
       }
 
       normalizedPerformances.push(normalizedPerformance);
     }
 
-    // Only add if we have performance data for ALL selected benchmarks
+    // Only include models with data for ALL selected benchmarks
     if (normalizedPerformances.length !== benchmarkIds.length) continue;
-
-    // Average performance across benchmarks
-    const avgPerformance =
-      normalizedPerformances.reduce((a, b) => a + b, 0) /
-      normalizedPerformances.length;
 
     dataPoints.push({
       modelId: model.id,
       modelName: model.name,
       organization: model.organization,
       robustness,
-      performance: avgPerformance,
-      params,
+      performance: mean(normalizedPerformances),
+      params: parseModelParams(model.params),
       benchmarkCount: normalizedPerformances.length,
     });
   }
 
   return dataPoints;
 }
-
