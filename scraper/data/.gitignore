@@ -1,0 +1,9 @@
+# Ignore snapshots and reports (generated during monitoring)
+snapshots/
+reports/
+
+# Keep the hashes file to track state
+!source_hashes.json
+
+# Keep changes detection file
+!changes_detected.json
