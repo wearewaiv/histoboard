@@ -65,7 +65,9 @@ export function RankingBarChart({
           tick={{ fontSize: 12 }}
         />
         <Tooltip
-          formatter={(value: number) => [value.toFixed(2), "Mean Rank"]}
+          formatter={(value: number | undefined) =>
+            value !== undefined ? [value.toFixed(2), "Mean Rank"] : ["-", "Mean Rank"]
+          }
           contentStyle={{
             backgroundColor: "white",
             border: "1px solid #e5e7eb",
