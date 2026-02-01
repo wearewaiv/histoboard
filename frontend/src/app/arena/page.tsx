@@ -23,19 +23,99 @@ const benchmarks = benchmarksData as Benchmark[];
 
 const MAX_MODELS = 5;
 
-// Get unique organs from tasks
-function getUniqueOrgans(tasks: Task[]): string[] {
-  return [...new Set(tasks.map((t) => t.organ))].sort();
+// Organ grouping configuration: display label -> array of underlying organ values
+const ORGAN_GROUPS: Record<string, string[]> = {
+  "Cervix": ["cervical", "cervix"],
+  "Colorectal": ["colon", "colorectal", "rectum"],
+  "Gastric": ["gastric", "gi"],
+  "Multi-organ": ["multi-organ", "pan-cancer"],
+};
+
+// Task category grouping configuration: display label -> array of underlying raw category values
+const TASK_CATEGORY_GROUPS: Record<string, string[]> = {
+  "Biomarker prediction": ["Biomarker", "Biomarker Status Prediction", "Molecular Prediction"],
+  "Cancer detection": ["Detection"],
+  "Classification NOS": ["Classification", "classification", "slide-level", "patch-level"],
+  "Gene expression prediction": ["Gene Expression Prediction"],
+  "Histological subtype prediction": ["Diagnostic: Primary Diagnosis and Histologic Subtyping", "Diagnostic: Histologic Subtyping"],
+  "Molecular subtype prediction": ["Gene Expression Subtype Prediction"],
+  "Morphology prediction": ["Morphology"],
+  "Other": ["Diagnostic: Other"],
+  "Pathway activation status prediction": ["Pathway Activation Status Prediction"],
+  "Primary diagnosis prediction": ["Diagnostic: Primary Diagnosis"],
+  "Robustness": ["Robustness", "Combined Robustness", "Stain Robustness", "Scanner Robustness", "Domain Shift", "Embedding Consistency"],
+  "Segmentation": ["Segmentation", "segmentation"],
+  "Survival prediction": ["survival", "Survival Prediction", "Prognosis"],
+  "Tissue type classification": ["Diagnostic: Tissue type classification"],
+  "TME characterization": ["TME Characterization"],
+  "Treatment response": ["Treatment Response"],
+  "Tumor grading": ["Tumor Grading", "Diagnostic: Tumor Grading", "Diagnostic: Primary Diagnosis and Tumor Grading"],
+  "Tumor staging": ["Diagnostic: Tumor Staging"],
+};
+
+// Build reverse mapping: raw organ -> group label (or formatted organ if not grouped)
+function getOrganGroupLabel(organ: string): string {
+  for (const [groupLabel, organs] of Object.entries(ORGAN_GROUPS)) {
+    if (organs.includes(organ.toLowerCase())) {
+      return groupLabel;
+    }
+  }
+  // Not in a group - return formatted label
+  return organ.charAt(0).toUpperCase() + organ.slice(1);
 }
 
-// Get unique task categories from tasks
+// Get unique grouped organs from tasks
+function getUniqueOrgans(tasks: Task[]): string[] {
+  const groupedOrgans = new Set<string>();
+  for (const task of tasks) {
+    groupedOrgans.add(getOrganGroupLabel(task.organ));
+  }
+  return [...groupedOrgans].sort();
+}
+
+// Expand a grouped organ label back to its underlying values
+function expandOrganGroup(organLabel: string): string[] {
+  if (ORGAN_GROUPS[organLabel]) {
+    return ORGAN_GROUPS[organLabel];
+  }
+  // Not a group - return lowercase version for matching
+  return [organLabel.toLowerCase()];
+}
+
+// Get the grouped category label for a raw category value
+function getCategoryGroupLabel(category: string): string {
+  for (const [groupLabel, categories] of Object.entries(TASK_CATEGORY_GROUPS)) {
+    if (categories.includes(category)) {
+      return groupLabel;
+    }
+  }
+  // Not in a group - return as-is
+  return category;
+}
+
+// Get unique grouped task categories from tasks
 function getUniqueCategories(tasks: Task[]): string[] {
-  return [...new Set(tasks.map((t) => t.category as string))].filter(Boolean).sort();
+  const groupedCategories = new Set<string>();
+  for (const task of tasks) {
+    if (task.category) {
+      groupedCategories.add(getCategoryGroupLabel(task.category as string));
+    }
+  }
+  return [...groupedCategories].sort();
+}
+
+// Expand a grouped category label back to its underlying raw values
+function expandCategoryGroup(categoryLabel: string): string[] {
+  if (TASK_CATEGORY_GROUPS[categoryLabel]) {
+    return TASK_CATEGORY_GROUPS[categoryLabel];
+  }
+  // Not a group - return as-is
+  return [categoryLabel];
 }
 
 // Get unique task types (based on benchmark category)
 function getTaskTypes(): string[] {
-  return ["patch-level", "slide-level", "robustness", "spatial-transcriptomics"];
+  return ["calibration", "patch-level", "robustness", "segmentation", "slide-level"];
 }
 
 // Map task to its type based on benchmark
@@ -45,8 +125,9 @@ function getTaskType(task: Task, benchmarkMap: Map<string, Benchmark>): string {
 
   const categories = Array.isArray(benchmark.category) ? benchmark.category : [benchmark.category];
 
+  if (categories.includes("calibration")) return "calibration";
   if (categories.includes("robustness")) return "robustness";
-  if (categories.includes("spatial-transcriptomics")) return "spatial-transcriptomics";
+  if (categories.includes("segmentation")) return "segmentation";
   if (categories.includes("patch-level")) return "patch-level";
   if (categories.includes("slide-level")) return "slide-level";
 
@@ -73,17 +154,22 @@ export default function ArenaPage() {
   const [selectedTaskTypes, setSelectedTaskTypes] = useState<Set<string>>(() => new Set(taskTypes));
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(() => new Set(categories));
 
-  // Filter models by search query
+  // Filter and sort models by search query (alphabetically by name)
   const filteredModels = useMemo(() => {
-    if (!modelSearchQuery.trim()) return models;
+    let filtered = models;
 
-    const query = modelSearchQuery.toLowerCase().trim();
-    const queryWords = query.split(/\s+/);
+    if (modelSearchQuery.trim()) {
+      const query = modelSearchQuery.toLowerCase().trim();
+      const queryWords = query.split(/\s+/);
 
-    return models.filter((m) => {
-      const searchableText = [m.name, m.organization, m.architecture].join(" ").toLowerCase();
-      return queryWords.every((word) => searchableText.includes(word));
-    });
+      filtered = models.filter((m) => {
+        const searchableText = [m.name, m.organization, m.architecture].join(" ").toLowerCase();
+        return queryWords.every((word) => searchableText.includes(word));
+      });
+    }
+
+    // Sort alphabetically by name
+    return [...filtered].sort((a, b) => a.name.localeCompare(b.name));
   }, [modelSearchQuery]);
 
   // Get selected models
@@ -103,17 +189,39 @@ export default function ArenaPage() {
     return map;
   }, []);
 
+  // Expand selected organ groups to raw organ values for filtering
+  const expandedSelectedOrgans = useMemo(() => {
+    const expanded = new Set<string>();
+    for (const organLabel of selectedOrgans) {
+      for (const rawOrgan of expandOrganGroup(organLabel)) {
+        expanded.add(rawOrgan);
+      }
+    }
+    return expanded;
+  }, [selectedOrgans]);
+
+  // Expand selected category groups to raw category values for filtering
+  const expandedSelectedCategories = useMemo(() => {
+    const expanded = new Set<string>();
+    for (const categoryLabel of selectedCategories) {
+      for (const rawCategory of expandCategoryGroup(categoryLabel)) {
+        expanded.add(rawCategory);
+      }
+    }
+    return expanded;
+  }, [selectedCategories]);
+
   // Filter tasks based on selected filters
   const filteredTasksByFilters = useMemo(() => {
     return tasks.filter((t) => {
       const taskType = getTaskType(t, benchmarkMap);
       return (
-        selectedOrgans.has(t.organ) &&
+        expandedSelectedOrgans.has(t.organ.toLowerCase()) &&
         selectedTaskTypes.has(taskType) &&
-        selectedCategories.has(t.category as string)
+        expandedSelectedCategories.has(t.category as string)
       );
     });
-  }, [selectedOrgans, selectedTaskTypes, selectedCategories, benchmarkMap]);
+  }, [expandedSelectedOrgans, selectedTaskTypes, expandedSelectedCategories, benchmarkMap]);
 
   // Further filter to only tasks where ALL selected models have results
   const filteredTasks = useMemo(() => {
@@ -260,10 +368,11 @@ export default function ArenaPage() {
 
   // Task type label mapping
   const taskTypeLabels: Record<string, string> = {
-    "patch-level": "Patch-level",
-    "slide-level": "Slide-level",
+    "calibration": "Calibration",
+    "patch-level": "Patch-level classification",
     "robustness": "Robustness",
-    "spatial-transcriptomics": "Spatial transcriptomics",
+    "segmentation": "Segmentation",
+    "slide-level": "Slide-level classification",
   };
 
   // Count benchmarks with filtered tasks
@@ -394,6 +503,9 @@ export default function ArenaPage() {
               {filteredTasks.length} tasks across {benchmarkCount} benchmarks
             </span>
           </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Task categories were grouped into semantically similar patterns. Please let us know if you find any inconsistency between task categories and reported tasks in the detailed comparison.
+          </p>
         </CardContent>
       </Card>
 

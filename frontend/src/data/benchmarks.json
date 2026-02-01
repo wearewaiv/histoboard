@@ -78,7 +78,7 @@
     "id": "hest",
     "name": "HEST-Benchmark",
     "shortName": "HEST",
-    "category": "spatial-transcriptomics",
+    "category": ["spatial-transcriptomics", "H&E"],
     "description": "HEST-Benchmark is a spatial transcriptomics benchmark from the Mahmood Lab evaluating foundation models on gene expression prediction from H&E images. The benchmark assesses how well models can predict spatially-resolved gene expression patterns directly from histology across 9 cancer types using Pearson correlation as the primary metric. Results are sourced from the official HEST GitHub README.",
     "url": "https://github.com/mahmoodlab/HEST",
     "githubUrl": "https://github.com/mahmoodlab/HEST",
@@ -191,6 +191,7 @@
     "name": "PathoROB",
     "shortName": "PathoROB",
     "category": [
+      "pathology",
       "robustness",
       "H&E"
     ],
@@ -211,6 +212,7 @@
     "name": "Plismbench",
     "shortName": "Plismbench",
     "category": [
+      "pathology",
       "robustness",
       "H&E"
     ],

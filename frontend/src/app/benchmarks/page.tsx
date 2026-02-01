@@ -5,13 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ExternalLink, FileText, Database, Search, Star, ChevronDown } from "lucide-react";
+import { ExternalLink, FileText, Database, Search, Star } from "lucide-react";
 
 import benchmarksData from "@/data/benchmarks.json";
 import tasksData from "@/data/tasks.json";
@@ -190,9 +184,7 @@ export default function BenchmarksPage() {
       </div>
 
       <div className="grid gap-6">
-        {filteredBenchmarks.map((benchmark) => {
-          const benchmarkTasks = tasksByBenchmark[benchmark.id] || [];
-          return (
+        {filteredBenchmarks.map((benchmark) => (
             <Card key={benchmark.id} className="relative">
               {benchmark.githubUrl && starCounts[benchmark.id] !== undefined && (
                 <a
@@ -272,88 +264,19 @@ export default function BenchmarksPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <h4 className="mb-2 text-sm font-medium">Organs Covered</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {benchmark.organs.map((organ) => (
-                        <Badge key={organ} variant="outline" className="capitalize">
-                          {organ}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="mb-2 text-sm font-medium">
-                      Tasks ({benchmark.taskCount})
-                    </h4>
-                    {benchmark.id === "pathbench" ? (
-                      // PathBench: show task type dropdown
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-8">
-                            Task type
-                            <ChevronDown className="ml-2 h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem>
-                            Slide-level Classification ({benchmarkTasks.length})
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    ) : benchmark.id === "hest" ? (
-                      // HEST: show task type dropdown
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-8">
-                            Task type
-                            <ChevronDown className="ml-2 h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem>
-                            Patch-level classification ({benchmarkTasks.length})
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    ) : benchmarkTasks.length < 10 ? (
-                      // Show all tasks individually if less than 10
-                      <div className="flex flex-wrap gap-2">
-                        {benchmarkTasks.map((task) => (
-                          <Badge key={task.id} variant="secondary">
-                            {task.name}
-                          </Badge>
-                        ))}
-                      </div>
-                    ) : (
-                      // Show task categories if 10 or more tasks
-                      <div className="flex flex-wrap gap-2">
-                        {Object.entries(
-                          benchmarkTasks.reduce((acc, task) => {
-                            const cat = task.category as string;
-                            if (!acc[cat]) acc[cat] = 0;
-                            acc[cat]++;
-                            return acc;
-                          }, {} as Record<string, number>)
-                        )
-                          .sort((a, b) => b[1] - a[1])
-                          .map(([category, count]) => (
-                            <Badge
-                              key={category}
-                              variant="secondary"
-                            >
-                              {category} ({count})
-                            </Badge>
-                          ))}
-                      </div>
-                    )}
+                <div>
+                  <h4 className="mb-2 text-sm font-medium">Organs Covered</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {benchmark.organs.map((organ) => (
+                      <Badge key={organ} variant="outline" className="capitalize">
+                        {organ}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </CardContent>
             </Card>
-          );
-        })}
+        ))}
       </div>
 
       {/* Attribution */}

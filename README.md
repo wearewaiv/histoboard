@@ -1,12 +1,58 @@
-# Histoboard
+<p align="center">
+  <img src="frontend/public/logo.png" alt="Histoboard Logo" width="80" height="80">
+</p>
 
-A centralized dashboard aggregating benchmark results to compare pathology foundation models.
+<h1 align="center">Histoboard</h1>
 
-**Live Demo:** [https://afiliot.github.io/histoboard](https://afiliot.github.io/histoboard)
+<p align="center">
+  <strong>The Pathology Foundation Model Leaderboard</strong>
+</p>
 
-## Overview
+<p align="center">
+  A centralized dashboard aggregating benchmark results to compare pathology foundation models.
+</p>
 
-Histoboard provides a unified view of pathology foundation model performance across **10 benchmarks**, **69 models**, and **400+ evaluation tasks**. It enables researchers and practitioners to make informed decisions when selecting models for computational pathology applications.
+<p align="center">
+  <a href="https://afiliot.github.io/histoboard"><img src="https://img.shields.io/badge/Live%20Demo-histoboard-blueviolet?style=for-the-badge" alt="Live Demo"></a>
+  <a href="https://github.com/afiliot/histoboard/stargazers"><img src="https://img.shields.io/github/stars/afiliot/histoboard?style=for-the-badge&color=yellow" alt="Stars"></a>
+  <a href="https://github.com/afiliot/histoboard/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"></a>
+</p>
+
+---
+
+## What is Histoboard?
+
+Histoboard provides a **unified view** of pathology foundation model performance across multiple benchmarks. It enables researchers and practitioners to make informed decisions when selecting models for computational pathology applications.
+
+| Metric | Count |
+|--------|-------|
+| Benchmarks | 10 |
+| Models | 69 |
+| Evaluation Tasks | 400+ |
+| Organs/Indications | 20+ |
+
+## Features
+
+- **Leaderboard** — Compare models across all benchmarks with detailed per-task rankings
+- **Arena** — Head-to-head comparison of 2-5 models with win/tie/loss statistics
+- **Model Profiles** — Detailed view of each model's performance, architecture, and metadata
+- **Scaling Laws** — Visualize the relationship between model size and performance
+- **Timeline** — Track model releases over time
+
+## Supported Benchmarks
+
+| Benchmark | Tasks | Category |
+|-----------|-------|----------|
+| [EVA](https://github.com/kaiko-ai/eva) | 13 | Patch-level classification |
+| [PathBench](https://github.com/birkhoffkiki/PathBench) | 229 | Slide-level classification |
+| [Stanford PathBench](https://pathbench.stanford.edu) | 41 | Slide-level classification |
+| [HEST](https://github.com/mahmoodlab/HEST) | 9 | Spatial transcriptomics |
+| [Patho-Bench](https://github.com/mahmoodlab/Patho-Bench) | 95 | Slide-level classification |
+| [Sinai](https://github.com/sinai-computational-pathology/SSL_tile_benchmarks) | 22 | Patch-level classification |
+| [STAMP](https://github.com/KatherLab/STAMP-Benchmark) | 31 | Slide-level classification |
+| [THUNDER](https://github.com/MICS-Lab/thunder) | 6 | Multi-task |
+| [PathoROB](https://github.com/bifold-pathomics/PathoROB) | 3 | Robustness |
+| [Plismbench](https://github.com/owkin/plism-benchmark) | 4 | Robustness |
 
 ## Tech Stack
 
@@ -16,36 +62,9 @@ Histoboard provides a unified view of pathology foundation model performance acr
 | Styling | Tailwind CSS, shadcn/ui, Radix UI |
 | Charts | Recharts |
 | Data | Static JSON (pre-processed) |
-| Hosting | GitHub Pages |
+| Hosting | Cloudflare Pages |
 
-## Project Structure
-
-```
-histoboard/
-├── frontend/                    # Next.js frontend application
-│   ├── src/
-│   │   ├── app/                # Pages (home, leaderboard, models, benchmarks)
-│   │   ├── components/         # React components
-│   │   │   ├── tables/         # Detailed benchmark tables
-│   │   │   └── ui/             # shadcn/ui components
-│   │   ├── data/               # Static JSON data
-│   │   │   ├── models.json     # 69 model definitions
-│   │   │   ├── tasks.json      # 400+ task definitions
-│   │   │   ├── results.json    # Performance results
-│   │   │   ├── benchmarks.json # Benchmark metadata
-│   │   │   └── rankings.json   # Pre-computed rankings
-│   │   ├── types/              # TypeScript definitions
-│   │   └── lib/                # Utilities
-│   └── package.json
-│
-├── scraper/                    # Python data collection (optional)
-│   └── ...
-│
-└── .github/workflows/          # CI/CD
-    └── deploy.yml              # GitHub Pages deployment
-```
-
-## Getting Started
+## Quick Start
 
 ### Prerequisites
 
@@ -77,6 +96,34 @@ npm run build
 
 Static files will be generated in `frontend/out/`.
 
+## Project Structure
+
+```
+histoboard/
+├── frontend/                    # Next.js frontend application
+│   ├── src/
+│   │   ├── app/                # Pages (home, leaderboard, arena, models, benchmarks)
+│   │   ├── components/         # React components
+│   │   │   ├── arena/          # Arena comparison components
+│   │   │   ├── charts/         # Visualization components
+│   │   │   ├── tables/         # Detailed benchmark tables
+│   │   │   └── ui/             # shadcn/ui components
+│   │   ├── data/               # Static JSON data
+│   │   │   ├── models.json     # Model definitions
+│   │   │   ├── tasks.json      # Task definitions
+│   │   │   ├── results.json    # Performance results
+│   │   │   ├── benchmarks.json # Benchmark metadata
+│   │   │   └── rankings.json   # Pre-computed rankings
+│   │   ├── types/              # TypeScript definitions
+│   │   └── lib/                # Utilities
+│   └── package.json
+│
+├── scraper/                    # Python data collection (optional)
+│
+└── .github/workflows/          # CI/CD
+    └── deploy.yml              # Deployment workflow
+```
+
 ## Adding New Benchmarks
 
 To add a new benchmark:
@@ -94,8 +141,7 @@ Contributions are welcome! Please feel free to:
 
 - Report bugs or request features via [Issues](https://github.com/afiliot/histoboard/issues)
 - Submit benchmark data updates via Pull Requests
-- Suggest new models to integrate via Issues
-- Suggest new benchmarks to integrate via Issues
+- Suggest new models or benchmarks to integrate
 
 ## Citation
 
@@ -118,11 +164,12 @@ This project aggregates data from multiple benchmark sources. Please cite the or
 
 MIT License - see [LICENSE](LICENSE) for details.
 
+
 ## TODO
 
-
+- [] Make it real time
+- [] Add alerts if modifications
+- [] Revamp README
 - [] Used inside products ?
-- [] Scrapper of literature 
-- [] ChatBot
-- [] Arena
-- [] Harmonize tasks
+- [] Scrapper of literature
+

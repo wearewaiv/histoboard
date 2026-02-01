@@ -65,6 +65,29 @@ const TASK_TYPE_LABELS: Record<string, string> = {
   "DSS": "DSS (Disease-specific Survival)",
 };
 
+// Task category grouping: group DFS, DSS, OS into "Survival"
+const TASK_CATEGORY_GROUPS: Record<string, string[]> = {
+  "Survival": ["OS", "DFS", "DSS"],
+};
+
+// Get grouped category label from detailed task type
+function getGroupedCategory(detailedType: string): string {
+  for (const [groupLabel, types] of Object.entries(TASK_CATEGORY_GROUPS)) {
+    if (types.includes(detailedType)) {
+      return groupLabel;
+    }
+  }
+  return detailedType;
+}
+
+// Expand a grouped category to its underlying task types
+function expandCategoryGroup(categoryLabel: string): string[] {
+  if (TASK_CATEGORY_GROUPS[categoryLabel]) {
+    return TASK_CATEGORY_GROUPS[categoryLabel];
+  }
+  return [categoryLabel];
+}
+
 // Extract broader task category from full task name
 // e.g., "Histological Grading (Biopsy) (Internal)" → "Histological Grading"
 // e.g., "Regional Lymph Node Metastasis (External H9)" → "Regional Lymph Node Metastasis"
@@ -102,9 +125,13 @@ export function PathBenchDetailedTable({
     return [...new Set(tasks.map((t) => t.organ))].sort();
   }, [tasks]);
 
-  // Get unique task types for filtering (Classification, OS, DFS, DSS)
-  const taskTypes = useMemo(() => {
-    return [...new Set(tasks.map((t) => getDetailedTaskType(t)))].sort();
+  // Get unique grouped task categories for filtering (Classification, Survival)
+  const taskCategories_grouped = useMemo(() => {
+    const groupedSet = new Set<string>();
+    for (const task of tasks) {
+      groupedSet.add(getGroupedCategory(getDetailedTaskType(task)));
+    }
+    return [...groupedSet].sort();
   }, [tasks]);
 
   // Get unique task categories for filtering (broader groupings from task names)
@@ -144,14 +171,14 @@ export function PathBenchDetailedTable({
 
   // Initialize selected values when options become available (only once)
   useEffect(() => {
-    if (!initializedRef.current && organs.length > 0 && taskTypes.length > 0 && taskCategories.length > 0 && allTaskIds.length > 0) {
+    if (!initializedRef.current && organs.length > 0 && taskCategories_grouped.length > 0 && taskCategories.length > 0 && allTaskIds.length > 0) {
       setSelectedOrgans(new Set(organs));
-      setSelectedTypes(new Set(taskTypes));
+      setSelectedTypes(new Set(taskCategories_grouped));
       setSelectedCategories(new Set(taskCategories));
       setSelectedTaskIds(new Set(allTaskIds));
       initializedRef.current = true;
     }
-  }, [organs, taskTypes, taskCategories, allTaskIds]);
+  }, [organs, taskCategories_grouped, taskCategories, allTaskIds]);
 
   // Toggle helpers
   const toggleOrgan = (organ: string) => {
@@ -202,6 +229,17 @@ export function PathBenchDetailedTable({
     });
   };
 
+  // Expand selected grouped categories to individual task types for filtering
+  const expandedSelectedTypes = useMemo(() => {
+    const expanded = new Set<string>();
+    for (const categoryLabel of selectedTypes) {
+      for (const detailedType of expandCategoryGroup(categoryLabel)) {
+        expanded.add(detailedType);
+      }
+    }
+    return expanded;
+  }, [selectedTypes]);
+
   // Filter tasks by selected organs, task types, task categories, tasks, and search query
   // When there's a search query, it searches across ALL tasks (ignoring filters)
   // Sort alphabetically by task name
@@ -223,10 +261,10 @@ export function PathBenchDetailedTable({
         return queryWords.every((word) => searchableText.includes(word));
       });
     } else {
-      // Otherwise, apply all filters
+      // Otherwise, apply all filters (using expanded types for grouped categories)
       filtered = tasks.filter((t) =>
         selectedOrgans.has(t.organ) &&
-        selectedTypes.has(getDetailedTaskType(t)) &&
+        expandedSelectedTypes.has(getDetailedTaskType(t)) &&
         selectedCategories.has(getTaskCategory(t.name)) &&
         selectedTaskIds.has(t.id)
       );
@@ -234,7 +272,7 @@ export function PathBenchDetailedTable({
 
     // Sort alphabetically by task name
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }, [tasks, selectedOrgans, selectedTypes, selectedCategories, selectedTaskIds, searchQuery]);
+  }, [tasks, selectedOrgans, expandedSelectedTypes, selectedCategories, selectedTaskIds, searchQuery]);
 
   // Create a lookup map for results: modelId -> taskId -> { value, std }
   const resultsMap = useMemo(() => {
@@ -395,15 +433,15 @@ export function PathBenchDetailedTable({
         </DropdownMenu>
         <MultiSelectDropdown
           label="Task Categories"
-          options={taskTypes
-            .map((type) => ({
-              id: type,
-              label: TASK_TYPE_LABELS[type] || type,
+          options={taskCategories_grouped
+            .map((category) => ({
+              id: category,
+              label: category,
             }))
             .sort((a, b) => a.label.localeCompare(b.label))}
           selectedIds={selectedTypes}
           onToggle={toggleType}
-          onSelectAll={() => setSelectedTypes(new Set(taskTypes))}
+          onSelectAll={() => setSelectedTypes(new Set(taskCategories_grouped))}
           onClearAll={() => setSelectedTypes(new Set())}
         />
         <MultiSelectDropdown

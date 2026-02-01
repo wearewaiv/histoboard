@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trophy, Database, BarChart3, Award, TrendingUp } from "lucide-react";
+import { Trophy, Database, BarChart3, Award, TrendingUp, Globe } from "lucide-react";
 import { ScalingLawsChart } from "@/components/charts/ScalingLawsChart";
 
 import modelsData from "@/data/models.json";
@@ -214,6 +214,49 @@ export default function HomePage() {
           </CardContent>
         </Card>
       </section>
+
+      {/* Visitor Map */}
+      <VisitorMap />
     </div>
+  );
+}
+
+function VisitorMap() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Check if script already loaded
+    const existingScript = document.getElementById("mapmyvisitors");
+    if (existingScript) return;
+
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.id = "mapmyvisitors";
+    script.src = "https://mapmyvisitors.com/map.js?cl=915793&w=300&t=tt&d=dJDHJ3-hyo0XeVx6oc7STY3ihPbjvz2CHCOP4-j6XOo&co=ffffff&cmo=ff53f0&cmn=5e3acc&ct=808080";
+    script.async = true;
+
+    containerRef.current.appendChild(script);
+
+    return () => {
+      // Cleanup on unmount
+      const scriptToRemove = document.getElementById("mapmyvisitors");
+      if (scriptToRemove) {
+        scriptToRemove.remove();
+      }
+    };
+  }, []);
+
+  return (
+    <section className="mb-8">
+      <h2 className="mb-4 flex items-center justify-center gap-2 text-xl font-bold text-muted-foreground">
+        <Globe className="h-5 w-5" />
+        Visitors from around the world
+      </h2>
+      <div className="flex justify-center">
+        <div ref={containerRef} />
+      </div>
+    </section>
   );
 }

@@ -228,7 +228,20 @@ export function HESTDetailedTable({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
-              Patch-level Classification
+              Patch-level classification
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="justify-between min-w-[180px]">
+              <span className="truncate">Task Categories (1/1)</span>
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              Spatial transcriptomics
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

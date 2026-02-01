@@ -47,6 +47,7 @@ export type BenchmarkCategory =
   | "segmentation"
   | "retrieval"
   | "robustness"
+  | "calibration"
   | "H&E";
 
 export interface Task {

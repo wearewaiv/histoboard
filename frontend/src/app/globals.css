@@ -22,7 +22,7 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: hsl(222.2 84% 4.9%);
+  background: hsl(280 40% 20%);
   color: white;
   padding: 8px 12px;
   border-radius: 6px;
@@ -37,11 +37,69 @@
   min-width: 150px;
   max-width: 300px;
   text-align: center;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow: 0 4px 12px -2px hsl(280 40% 20% / 0.3);
   margin-top: 4px;
 }
 
 .column-tooltip:hover::after {
   opacity: 1;
   visibility: visible;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px hsl(280 50% 40% / 0.15);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(280 55% 45%) 0%, hsl(350 60% 55%) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtle border gradient for cards */
+.border-gradient {
+  position: relative;
+}
+
+.border-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, hsl(280 55% 45% / 0.2) 0%, hsl(350 60% 55% / 0.2) 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Scrollbar styling - light theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(30 20% 94%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(280 30% 75%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(280 40% 60%);
 }
