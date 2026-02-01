@@ -4,11 +4,12 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { BarChart3, Home, Trophy, Database, BookOpen, Clock } from "lucide-react";
+import { BarChart3, Home, Trophy, Swords, Database, BookOpen, Clock } from "lucide-react";
 
 const navigation = [
   { name: "Home", href: "/", icon: Home },
   { name: "Leaderboard", href: "/leaderboard", icon: Trophy },
+  { name: "Arena", href: "/arena", icon: Swords },
   { name: "Models", href: "/models", icon: Database },
   { name: "Benchmarks", href: "/benchmarks", icon: BookOpen },
   { name: "Timeline", href: "/timeline", icon: Clock },

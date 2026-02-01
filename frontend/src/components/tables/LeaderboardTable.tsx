@@ -5,7 +5,8 @@ import Link from "next/link";
 import type { Model, Benchmark } from "@/types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ChevronUp, ChevronDown, Search, X } from "lucide-react";
 
 interface ModelRanking {
   modelId: string;
@@ -50,6 +51,7 @@ export function LeaderboardTable({
 }: LeaderboardTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
   const [sortByBenchmarkCount, setSortByBenchmarkCount] = useState<"asc" | "desc" | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const modelMap = new Map(models.map((m) => [m.id, m]));
 
   // Compute integer ranks per benchmark (1, 2, 3, ...) based on avgRank
@@ -87,10 +89,34 @@ export function LeaderboardTable({
     return counts;
   }, [benchmarks, benchmarkIntegerRanks]);
 
-  // Sort models based on current sort config
+  // Filter and sort models based on search query and sort config
   const sortedRankings = useMemo(() => {
+    // First, filter by search query
+    let filtered = modelRankings;
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      const queryWords = query.split(/\s+/);
+      filtered = modelRankings.filter((ranking) => {
+        const model = modelMap.get(ranking.modelId as string);
+        if (!model) return false;
+
+        // Build searchable text from model properties
+        const searchableText = [
+          model.name,
+          model.organization,
+          model.architecture,
+          model.params,
+          model.license,
+        ].filter(Boolean).join(" ").toLowerCase();
+
+        // All query words must be present
+        return queryWords.every((word) => searchableText.includes(word));
+      });
+    }
+
+    // Then sort
     if (sortByBenchmarkCount) {
-      return [...modelRankings].sort((a, b) => {
+      return [...filtered].sort((a, b) => {
         const countA = (a.benchmarkCount as number) || 0;
         const countB = (b.benchmarkCount as number) || 0;
         return sortByBenchmarkCount === "asc" ? countA - countB : countB - countA;
@@ -98,10 +124,10 @@ export function LeaderboardTable({
     }
 
     if (!sortConfig) {
-      return modelRankings;
+      return filtered;
     }
 
-    return [...modelRankings].sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       const rankA = benchmarkIntegerRanks[sortConfig.benchmarkId]?.get(a.modelId as string);
       const rankB = benchmarkIntegerRanks[sortConfig.benchmarkId]?.get(b.modelId as string);
 
@@ -112,7 +138,7 @@ export function LeaderboardTable({
 
       return sortConfig.direction === "asc" ? rankA - rankB : rankB - rankA;
     });
-  }, [modelRankings, sortConfig, sortByBenchmarkCount, benchmarkIntegerRanks]);
+  }, [modelRankings, sortConfig, sortByBenchmarkCount, benchmarkIntegerRanks, searchQuery, modelMap]);
 
   const handleSort = (benchmarkId: string) => {
     setSortByBenchmarkCount(null); // Clear benchmark count sort
@@ -138,7 +164,35 @@ export function LeaderboardTable({
   };
 
   return (
-    <div className="overflow-x-auto max-h-[70vh]">
+    <div>
+      {/* Search bar */}
+      <div className="mb-4">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search models by name, organization, architecture..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 pr-10"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        {searchQuery && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Showing {sortedRankings.length} of {modelRankings.length} models
+          </p>
+        )}
+      </div>
+
+      <div className="overflow-x-auto max-h-[70vh]">
       <table className="w-full border-collapse">
         <thead className="sticky top-0 z-20">
           <tr className="border-b bg-muted">
@@ -291,6 +345,7 @@ export function LeaderboardTable({
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

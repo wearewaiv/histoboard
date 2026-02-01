@@ -5,7 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ExternalLink, FileText, Database, Search, Star } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ExternalLink, FileText, Database, Search, Star, ChevronDown } from "lucide-react";
 
 import benchmarksData from "@/data/benchmarks.json";
 import tasksData from "@/data/tasks.json";
@@ -44,25 +50,6 @@ function formatStars(count: number): string {
   }
   return count.toString();
 }
-
-// Get PathBench task type (Classification, OS, DFS, DSS)
-function getPathBenchTaskType(task: Task): string {
-  if (task.category === "Classification" || task.category === "classification") {
-    return "Classification";
-  }
-  const name = task.name.toLowerCase();
-  if (name.includes("overall survival")) return "OS";
-  if (name.includes("disease-free survival")) return "DFS";
-  if (name.includes("disease-specific survival")) return "DSS";
-  return "Classification";
-}
-
-const PATHBENCH_TYPE_LABELS: Record<string, string> = {
-  "Classification": "Classification",
-  "OS": "OS (Overall Survival)",
-  "DFS": "DFS (Disease-free Survival)",
-  "DSS": "DSS (Disease-specific Survival)",
-};
 
 export default function BenchmarksPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -301,23 +288,35 @@ export default function BenchmarksPage() {
                       Tasks ({benchmark.taskCount})
                     </h4>
                     {benchmark.id === "pathbench" ? (
-                      // PathBench: show 4 task types (Classification, OS, DFS, DSS)
-                      <div className="flex flex-wrap gap-2">
-                        {Object.entries(
-                          benchmarkTasks.reduce((acc, task) => {
-                            const type = getPathBenchTaskType(task);
-                            if (!acc[type]) acc[type] = 0;
-                            acc[type]++;
-                            return acc;
-                          }, {} as Record<string, number>)
-                        )
-                          .sort((a, b) => b[1] - a[1])
-                          .map(([type, count]) => (
-                            <Badge key={type} variant="secondary">
-                              {PATHBENCH_TYPE_LABELS[type] || type} ({count})
-                            </Badge>
-                          ))}
-                      </div>
+                      // PathBench: show task type dropdown
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm" className="h-8">
+                            Task type
+                            <ChevronDown className="ml-2 h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem>
+                            Slide-level Classification ({benchmarkTasks.length})
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : benchmark.id === "hest" ? (
+                      // HEST: show task type dropdown
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm" className="h-8">
+                            Task type
+                            <ChevronDown className="ml-2 h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem>
+                            Patch-level classification ({benchmarkTasks.length})
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     ) : benchmarkTasks.length < 10 ? (
                       // Show all tasks individually if less than 10
                       <div className="flex flex-wrap gap-2">

@@ -2,11 +2,18 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, X } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Format metric names for display
 function formatMetricName(metric: string): string {
@@ -285,8 +292,21 @@ export function PathoBenchDetailedTable({
           onSelectAll={() => setSelectedOrgans(new Set(organs))}
           onClearAll={() => setSelectedOrgans(new Set())}
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="justify-between min-w-[140px]">
+              <span className="truncate">Task Type (1/1)</span>
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              Slide-level Classification
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <MultiSelectDropdown
-          label="Task Category"
+          label="Task Categories"
           options={categories
             .map((category) => ({
               id: category,

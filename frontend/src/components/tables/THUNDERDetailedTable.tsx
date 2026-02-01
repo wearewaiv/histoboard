@@ -184,8 +184,8 @@ export function THUNDERDetailedTable({
   }
 
   // Build options for dropdowns
-  const taskTypeOptions = taskTypes.map((type) => ({ id: type, label: type }));
-  const taskOptions = taskNames.map((name) => ({ id: name, label: name }));
+  const taskTypeOptions = taskTypes.map((type) => ({ id: type, label: type })).sort((a, b) => a.label.localeCompare(b.label));
+  const taskOptions = taskNames.map((name) => ({ id: name, label: name })).sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div>

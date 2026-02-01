@@ -5,6 +5,14 @@ import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
+import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HESTDetailedTableProps {
   models: Model[];
@@ -211,6 +219,19 @@ export function HESTDetailedTable({
           onSelectAll={() => setSelectedOrgans(new Set(organs))}
           onClearAll={() => setSelectedOrgans(new Set())}
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="justify-between min-w-[140px]">
+              <span className="truncate">Task Type (1/1)</span>
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              Patch-level Classification
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <MultiSelectDropdown
           label="All Tasks"
           options={taskNames

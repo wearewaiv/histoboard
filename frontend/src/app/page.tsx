@@ -172,23 +172,25 @@ export default function HomePage() {
         </Card>
       </section>
 
-      {/* Top Performers by Benchmark */}
+      {/* Champion Board */}
       <section className="mb-12">
-        <h2 className="mb-6 text-2xl font-bold">Top Performers by Benchmark</h2>
-
-        {/* Champion Board */}
-        <div className="mb-8">
-          <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="flex items-center gap-2 text-2xl font-bold">
             <Award className="h-5 w-5 text-yellow-500" />
             Champion Board
-          </h3>
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {podiums.map(({ benchmark, topModels }) => (
-              <PodiumCard key={benchmark.id} benchmark={benchmark} topModels={topModels} />
-            ))}
-          </div>
+          </h2>
+          <Link
+            href="/benchmarks"
+            className="text-sm text-muted-foreground hover:text-primary hover:underline"
+          >
+            View all benchmarks &rarr;
+          </Link>
         </div>
-
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          {podiums.map(({ benchmark, topModels }) => (
+            <PodiumCard key={benchmark.id} benchmark={benchmark} topModels={topModels} />
+          ))}
+        </div>
       </section>
 
       {/* Scaling Laws */}

@@ -2,11 +2,18 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, X } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface STAMPDetailedTableProps {
   models: Model[];
@@ -229,8 +236,11 @@ export function STAMPDetailedTable({
     id: organ,
     label: organ.charAt(0).toUpperCase() + organ.slice(1),
   })).sort((a, b) => a.label.localeCompare(b.label));
-  const categoryOptions = categories.map((cat) => ({ id: cat, label: cat }));
-  const taskOptions = taskNames.map((name) => ({ id: name, label: name }));
+  const categoryOptions = categories.map((cat) => ({
+    id: cat,
+    label: cat === "Biomarker" ? "Biomarker prediction" : cat === "Morphology" ? "Morphology prediction" : cat,
+  })).sort((a, b) => a.label.localeCompare(b.label));
+  const taskOptions = taskNames.map((name) => ({ id: name, label: name })).sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div>
@@ -261,8 +271,21 @@ export function STAMPDetailedTable({
           onSelectAll={() => setSelectedOrgans(new Set(organs))}
           onClearAll={() => setSelectedOrgans(new Set())}
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="justify-between min-w-[140px]">
+              <span className="truncate">Task Type (1/1)</span>
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              Slide-level Classification
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <MultiSelectDropdown
-          label="Task Category"
+          label="Task Categories"
           options={categoryOptions}
           selectedIds={selectedCategories}
           onToggle={toggleCategory}
