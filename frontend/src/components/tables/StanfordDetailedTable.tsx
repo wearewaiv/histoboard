@@ -430,12 +430,12 @@ export function StanfordDetailedTable({
           <strong>Stanford PathBench</strong> (medRxiv, 2025) is a comprehensive benchmark evaluating 31 foundation models across
           41 tasks from TCGA, CPTAC, and external datasets. Data sourced from the{" "}
           <a
-            href="https://pathbench.stanford.edu"
+            href="https://github.com/gevaertlab/benchmarking-path-models/blob/main/data/benchmarking_wci.csv"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official Stanford PathBench website
+            official benchmark data
           </a>.
         </p>
       </div>

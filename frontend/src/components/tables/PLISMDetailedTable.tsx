@@ -197,12 +197,12 @@ export function PLISMDetailedTable({
           <strong>Plismbench</strong> (MICCAI, 2025) evaluates embedding consistency across scanners and staining
           variations using cosine similarity and top-10 retrieval accuracy. Data sourced from the{" "}
           <a
-            href="https://github.com/owkin/plism-benchmark"
+            href="https://github.com/owkin/plism-benchmark#benchmark"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official Plismbench GitHub
+            official Plismbench benchmark
           </a>.
         </p>
       </div>

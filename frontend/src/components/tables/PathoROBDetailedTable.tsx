@@ -200,12 +200,12 @@ export function PathoROBDetailedTable({
           <strong>PathoROB</strong> (arXiv, 2025) is a robustness benchmark evaluating pathology foundation models across domain shift
           scenarios including TCGA 2x2 splits, Camelyon, and Tolkach ESCA datasets. Data sourced from the{" "}
           <a
-            href="https://github.com/bifold-pathomics/PathoROB"
+            href="https://github.com/bifold-pathomics/PathoROB#leaderboard-robustness-index"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official PathoROB GitHub
+            official PathoROB leaderboard
           </a>.
         </p>
       </div>

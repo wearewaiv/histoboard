@@ -247,12 +247,12 @@ export function SinaiDetailedTable({
           foundation models on cancer detection and biomarker prediction tasks across multiple organs and institutions.
           Data sourced from the{" "}
           <a
-            href="https://github.com/sinai-computational-pathology/SSL_tile_benchmarks"
+            href="https://github.com/sinai-computational-pathology/SSL_tile_benchmarks#leaderboard"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official Sinai GitHub
+            official Sinai leaderboard
           </a>.
         </p>
         <p className="text-sm text-muted-foreground mt-2">

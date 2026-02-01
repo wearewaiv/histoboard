@@ -196,12 +196,12 @@ export function THUNDERDetailedTable({
           linear probing, few-shot learning, segmentation, calibration, and adversarial robustness tasks.
           Data sourced from the{" "}
           <a
-            href="https://mics-lab.github.io/thunder/"
+            href="https://github.com/MICS-Lab/thunder/blob/main/docs/leaderboards.md#-up-to-date-rank-sum-leaderboard"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official THUNDER website
+            official THUNDER leaderboard
           </a>.
         </p>
       </div>

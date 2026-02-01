@@ -393,12 +393,12 @@ export function PathBenchDetailedTable({
           including classification, overall survival (OS), disease-free survival (DFS), and disease-specific survival (DSS)
           prediction. Data sourced from the{" "}
           <a
-            href="https://github.com/birkhoffkiki/PathBench"
+            href="https://github.com/birkhoffkiki/PathBench/blob/master/src/data/performance.json"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            official PathBench GitHub
+            official PathBench performance data
           </a>.
         </p>
       </div>

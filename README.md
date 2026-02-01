@@ -54,6 +54,8 @@ Histoboard provides a **unified view** of pathology foundation model performance
 | [PathoROB](https://github.com/bifold-pathomics/PathoROB) | 3 | Robustness |
 | [Plismbench](https://github.com/owkin/plism-benchmark) | 4 | Robustness |
 
+Results are checked every Sunday at midnight UTC.
+
 ## Tech Stack
 
 | Component | Technology |
@@ -163,12 +165,4 @@ This project aggregates data from multiple benchmark sources. Please cite the or
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
-
-## TODO
-
-- [] Make it real time
-- [] Add alerts if modifications
-- [] Used inside products ?
-- [] Scrapper of literature
 

@@ -1,13 +1,19 @@
-name: Scrape Benchmark Data
+name: Monitor Benchmark Data
 
 on:
   schedule:
     # Run weekly on Sunday at midnight UTC
     - cron: "0 0 * * 0"
   workflow_dispatch:
+    inputs:
+      force_email:
+        description: 'Send email even if no changes detected (for testing)'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
-  scrape:
+  monitor:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,27 +27,98 @@ jobs:
       - name: Install dependencies
         working-directory: scraper
         run: |
-          pip install -e .
+          pip install httpx rich
 
-      - name: Run scraper
+      - name: Run benchmark monitor
+        id: monitor
         working-directory: scraper
         run: |
-          python -m src.main
+          python -m src.monitor || echo "has_changes=true" >> $GITHUB_OUTPUT
 
-      - name: Check for changes
-        id: check_changes
-        run: |
-          if git diff --quiet frontend/src/data/; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+          # Check if changes were detected
+          if [ -f data/changes_detected.json ]; then
+            HAS_CHANGES=$(python -c "import json; print(json.load(open('data/changes_detected.json'))['has_changes'])")
+            echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
+
+            if [ "$HAS_CHANGES" = "True" ]; then
+              # Get the report file path
+              REPORT_FILE=$(python -c "import json; print(json.load(open('data/changes_detected.json')).get('report_file', ''))")
+              echo "report_file=$REPORT_FILE" >> $GITHUB_OUTPUT
+            fi
           fi
 
-      - name: Commit and push changes
-        if: steps.check_changes.outputs.has_changes == 'true'
+      - name: Read report content
+        id: report
+        if: steps.monitor.outputs.has_changes == 'True' || github.event.inputs.force_email == 'true'
+        working-directory: scraper
+        run: |
+          # Find the latest report file
+          REPORT_FILE=$(ls -t data/reports/report_*.txt 2>/dev/null | head -1)
+          if [ -n "$REPORT_FILE" ]; then
+            # Read report content (limit to 50000 chars for email)
+            REPORT_CONTENT=$(head -c 50000 "$REPORT_FILE")
+            echo "report_content<<EOF" >> $GITHUB_OUTPUT
+            echo "$REPORT_CONTENT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send email notification
+        if: steps.monitor.outputs.has_changes == 'True' || github.event.inputs.force_email == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "[Histoboard] Benchmark Data Changes Detected"
+          to: afiliot46@gmail.com
+          from: Histoboard Monitor <${{ secrets.EMAIL_USERNAME }}>
+          body: |
+            Histoboard has detected changes in one or more benchmark data sources.
+
+            Please review the changes below and update the Histoboard data if necessary.
+
+            ---
+
+            ${{ steps.report.outputs.report_content }}
+
+            ---
+
+            This is an automated message from the Histoboard benchmark monitoring system.
+            Repository: https://github.com/afiliot/histoboard
+
+      - name: Commit hash updates
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add frontend/src/data/
-          git commit -m "chore: update benchmark data [skip ci]"
-          git push
+
+          # Add hash files and snapshots
+          git add scraper/data/ || true
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update benchmark source hashes [skip ci]"
+            git push
+          fi
+
+      - name: Send failure notification
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "[Histoboard] ⚠️ Benchmark Monitor Failed"
+          to: afiliot46@gmail.com
+          from: Histoboard Monitor <${{ secrets.EMAIL_USERNAME }}>
+          body: |
+            The Histoboard benchmark monitoring workflow has failed.
+
+            Please check the workflow logs for details:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            ---
+
+            This is an automated message from the Histoboard benchmark monitoring system.
