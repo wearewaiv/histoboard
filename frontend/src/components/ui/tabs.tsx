@@ -45,7 +45,8 @@ export function TabsList({ children, className }: TabsListProps) {
   return (
     <div
       className={cn(
-        "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+        "inline-flex h-auto md:h-10 items-center rounded-md bg-muted p-1 text-muted-foreground",
+        "overflow-x-auto scrollbar-thin max-w-full",
         className
       )}
     >

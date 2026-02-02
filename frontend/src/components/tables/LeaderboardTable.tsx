@@ -192,21 +192,25 @@ export function LeaderboardTable({
         )}
       </div>
 
-      <div className="overflow-x-auto max-h-[70vh]">
-      <table className="w-full border-collapse">
-        <thead className="sticky top-0 z-20">
-          <tr className="border-b bg-muted">
-            <th className="sticky left-0 z-30 bg-muted px-4 py-3 text-left text-sm font-semibold min-w-[180px]">Model</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold">
-              Organization
-            </th>
-            <th className="px-4 py-3 text-center text-sm font-semibold">
+      <div className="relative">
+        {/* Scroll indicator for mobile */}
+        <div className="table-scroll-indicator" />
+        <div className="overflow-x-auto max-h-[70vh]">
+        <table className="w-full border-collapse text-xs md:text-sm">
+          <thead className="sticky top-0 z-20">
+            <tr className="border-b bg-muted">
+              <th className="sticky left-0 z-30 bg-muted px-2 md:px-4 py-2 md:py-3 text-left font-semibold min-w-[140px] md:min-w-[180px]">Model</th>
+              <th className="hidden md:table-cell px-4 py-3 text-left font-semibold">
+                Organization
+              </th>
+            <th className="px-2 md:px-4 py-2 md:py-3 text-center font-semibold">
               <button
                 onClick={handleBenchmarkCountSort}
                 className="inline-flex items-center gap-1 hover:text-primary transition-colors"
                 title="Sort by number of benchmarks"
               >
-                # Benchmarks
+                <span className="hidden md:inline"># Benchmarks</span>
+                <span className="md:hidden">#</span>
                 <span className="flex flex-col">
                   <ChevronUp
                     className={cn(
@@ -230,7 +234,7 @@ export function LeaderboardTable({
             {benchmarks.map((benchmark) => (
               <th
                 key={benchmark.id}
-                className="px-4 py-3 text-center text-sm font-semibold"
+                className="px-2 md:px-4 py-2 md:py-3 text-center font-semibold"
               >
                 <button
                   onClick={() => handleSort(benchmark.id)}
@@ -281,8 +285,8 @@ export function LeaderboardTable({
                 key={ranking.modelId as string}
                 className="border-b transition-colors hover:bg-muted/50"
               >
-                <td className="sticky left-0 z-10 bg-background px-4 py-3 border-r">
-                  <div className="flex items-center gap-2">
+                <td className="sticky left-0 z-10 bg-background px-2 md:px-4 py-2 md:py-3 border-r">
+                  <div className="flex items-center gap-1 md:gap-2">
                     <Link
                       href={`/models/${ranking.modelId}`}
                       className="font-medium text-primary hover:underline"
@@ -292,7 +296,7 @@ export function LeaderboardTable({
                     {model.license && (
                       <span
                         className={cn(
-                          "inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border",
+                          "hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border",
                           getLicenseBadge(model.license).className
                         )}
                         title={model.license === "non-commercial" ? "Non-commercial license" : model.license === "open-source" ? "Open source" : "Closed source"}
@@ -301,14 +305,14 @@ export function LeaderboardTable({
                       </span>
                     )}
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-[10px] md:text-xs text-muted-foreground">
                     {model.architecture} ({model.params})
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm text-muted-foreground">
+                <td className="hidden md:table-cell px-4 py-3 text-muted-foreground">
                   {model.organization}
                 </td>
-                <td className="px-4 py-3 text-center">
+                <td className="px-2 md:px-4 py-2 md:py-3 text-center">
                   <Badge variant="outline" className="font-medium">
                     {ranking.benchmarkCount || 0}
                   </Badge>
@@ -319,7 +323,7 @@ export function LeaderboardTable({
                   const medal = integerRank ? getMedal(integerRank) : null;
 
                   return (
-                    <td key={benchmark.id} className="px-4 py-3 text-center">
+                    <td key={benchmark.id} className="px-2 md:px-4 py-2 md:py-3 text-center">
                       {integerRank !== undefined ? (
                         <div className="flex items-center justify-center gap-1">
                           {medal && <span className="text-lg">{medal}</span>}
@@ -343,8 +347,9 @@ export function LeaderboardTable({
               </tr>
             );
           })}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+        </div>
       </div>
     </div>
   );

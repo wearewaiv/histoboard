@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 import { LeaderboardTable } from "@/components/tables/LeaderboardTable";
 import { DetailedResultsTable } from "@/components/tables/DetailedResultsTable";
@@ -303,6 +304,9 @@ export default function LeaderboardPage() {
   const [selectedPublicationTypes, setSelectedPublicationTypes] = useState<Set<string>>(
     () => new Set(filterOptions.publicationTypes)
   );
+
+  // Mobile filter visibility
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Selected models based on attribute filters
   const filteredByAttributes = useMemo(() => {
@@ -682,145 +686,173 @@ export default function LeaderboardPage() {
               </p>
 
               {/* Filters */}
-              <div className="mb-4 flex flex-wrap items-center gap-2">
-                {/* Model Size Dropdown */}
-                <MultiSelectDropdown
-                  label="Model Size"
-                  size="sm"
-                  options={filterOptions.sizeCategories.map((catId) => ({
-                    id: catId,
-                    label: getSizeCategoryLabel(catId),
-                  }))}
-                  selectedIds={selectedSizeCategories}
-                  onToggle={(catId) => toggleFilter(catId, setSelectedSizeCategories)}
-                  onSelectAll={selectAllSizeCategories}
-                  onClearAll={clearAllSizeCategories}
-                />
+              <div className="mb-4">
+                {/* Mobile filter toggle */}
+                <div className="flex md:hidden items-center gap-2 mb-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8"
+                    onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                  >
+                    <SlidersHorizontal className="h-4 w-4 mr-1.5" />
+                    Filters
+                    {mobileFiltersOpen ? (
+                      <ChevronUp className="h-3 w-3 ml-1" />
+                    ) : (
+                      <ChevronDown className="h-3 w-3 ml-1" />
+                    )}
+                  </Button>
+                  <span className="text-xs text-muted-foreground">
+                    ({effectiveSelectedIds.size}/{allModelIds.length} models)
+                  </span>
+                </div>
 
-                {/* Pretraining Data Dropdown */}
-                <MultiSelectDropdown
-                  label="Data"
-                  size="sm"
-                  options={[
-                    ...filterOptions.wsiDataSizeCategories.map((catId) => ({
+                {/* Filter dropdowns - hidden on mobile unless toggled */}
+                <div className={cn(
+                  "flex flex-wrap items-center gap-2",
+                  mobileFiltersOpen ? "flex" : "hidden md:flex"
+                )}>
+                  {/* Model Size Dropdown */}
+                  <MultiSelectDropdown
+                    label="Model Size"
+                    size="sm"
+                    options={filterOptions.sizeCategories.map((catId) => ({
                       id: catId,
-                      label: getWsiDataSizeCategoryLabel(catId),
-                    })),
-                    ...filterOptions.imageCaptionCategories.map((catId) => ({
-                      id: catId,
-                      label: getImageCaptionCategoryLabel(catId),
-                    })),
-                    ...(filterOptions.hasHistologyPatches ? [{ id: HISTOLOGY_PATCH_CATEGORY.id, label: HISTOLOGY_PATCH_CATEGORY.label }] : []),
-                  ]}
-                  selectedIds={new Set([
-                    ...selectedWsiDataSizeCategories,
-                    ...selectedImageCaptionCategories,
-                    ...(selectedHistologyPatches ? [HISTOLOGY_PATCH_CATEGORY.id] : []),
-                  ])}
-                  onToggle={(catId) => {
-                    if (catId.startsWith("ic-")) {
-                      toggleFilter(catId, setSelectedImageCaptionCategories);
-                    } else if (catId === HISTOLOGY_PATCH_CATEGORY.id) {
-                      setSelectedHistologyPatches(!selectedHistologyPatches);
-                    } else {
-                      toggleFilter(catId, setSelectedWsiDataSizeCategories);
-                    }
-                  }}
-                  onSelectAll={selectAllDataSizeCategories}
-                  onClearAll={clearAllDataSizeCategories}
-                />
+                      label: getSizeCategoryLabel(catId),
+                    }))}
+                    selectedIds={selectedSizeCategories}
+                    onToggle={(catId) => toggleFilter(catId, setSelectedSizeCategories)}
+                    onSelectAll={selectAllSizeCategories}
+                    onClearAll={clearAllSizeCategories}
+                  />
 
-                {/* Training Method Dropdown */}
-                <MultiSelectDropdown
-                  label="Training"
-                  size="sm"
-                  options={filterOptions.methodCategories.map((category) => ({
-                    id: category,
-                    label: category,
-                  }))}
-                  selectedIds={selectedMethodCategories}
-                  onToggle={(category) => toggleFilter(category, setSelectedMethodCategories)}
-                  onSelectAll={selectAllMethodCategories}
-                  onClearAll={clearAllMethodCategories}
-                />
+                  {/* Pretraining Data Dropdown */}
+                  <MultiSelectDropdown
+                    label="Data"
+                    size="sm"
+                    options={[
+                      ...filterOptions.wsiDataSizeCategories.map((catId) => ({
+                        id: catId,
+                        label: getWsiDataSizeCategoryLabel(catId),
+                      })),
+                      ...filterOptions.imageCaptionCategories.map((catId) => ({
+                        id: catId,
+                        label: getImageCaptionCategoryLabel(catId),
+                      })),
+                      ...(filterOptions.hasHistologyPatches ? [{ id: HISTOLOGY_PATCH_CATEGORY.id, label: HISTOLOGY_PATCH_CATEGORY.label }] : []),
+                    ]}
+                    selectedIds={new Set([
+                      ...selectedWsiDataSizeCategories,
+                      ...selectedImageCaptionCategories,
+                      ...(selectedHistologyPatches ? [HISTOLOGY_PATCH_CATEGORY.id] : []),
+                    ])}
+                    onToggle={(catId) => {
+                      if (catId.startsWith("ic-")) {
+                        toggleFilter(catId, setSelectedImageCaptionCategories);
+                      } else if (catId === HISTOLOGY_PATCH_CATEGORY.id) {
+                        setSelectedHistologyPatches(!selectedHistologyPatches);
+                      } else {
+                        toggleFilter(catId, setSelectedWsiDataSizeCategories);
+                      }
+                    }}
+                    onSelectAll={selectAllDataSizeCategories}
+                    onClearAll={clearAllDataSizeCategories}
+                  />
 
-                {/* Model Type Dropdown */}
-                <MultiSelectDropdown
-                  label="Type"
-                  size="sm"
-                  options={filterOptions.modelTypes.map((type) => ({
-                    id: type,
-                    label: getModelTypeLabel(type),
-                  }))}
-                  selectedIds={selectedModelTypes}
-                  onToggle={(type) => toggleFilter(type, setSelectedModelTypes)}
-                  onSelectAll={selectAllModelTypes}
-                  onClearAll={clearAllModelTypes}
-                />
+                  {/* Training Method Dropdown */}
+                  <MultiSelectDropdown
+                    label="Training"
+                    size="sm"
+                    options={filterOptions.methodCategories.map((category) => ({
+                      id: category,
+                      label: category,
+                    }))}
+                    selectedIds={selectedMethodCategories}
+                    onToggle={(category) => toggleFilter(category, setSelectedMethodCategories)}
+                    onSelectAll={selectAllMethodCategories}
+                    onClearAll={clearAllMethodCategories}
+                  />
 
-                {/* License Dropdown */}
-                <MultiSelectDropdown
-                  label="License"
-                  size="sm"
-                  options={filterOptions.licenseCategories.map((license) => ({
-                    id: license,
-                    label: getLicenseLabel(license),
-                  }))}
-                  selectedIds={selectedLicenses}
-                  onToggle={(license) => toggleFilter(license, setSelectedLicenses)}
-                  onSelectAll={selectAllLicenses}
-                  onClearAll={clearAllLicenses}
-                />
+                  {/* Model Type Dropdown */}
+                  <MultiSelectDropdown
+                    label="Type"
+                    size="sm"
+                    options={filterOptions.modelTypes.map((type) => ({
+                      id: type,
+                      label: getModelTypeLabel(type),
+                    }))}
+                    selectedIds={selectedModelTypes}
+                    onToggle={(type) => toggleFilter(type, setSelectedModelTypes)}
+                    onSelectAll={selectAllModelTypes}
+                    onClearAll={clearAllModelTypes}
+                  />
 
-                {/* Publication Year Dropdown */}
-                <MultiSelectDropdown
-                  label="Year"
-                  size="sm"
-                  options={filterOptions.publicationYears.map((year) => ({
-                    id: year,
-                    label: year,
-                  }))}
-                  selectedIds={selectedYears}
-                  onToggle={(year) => toggleFilter(year, setSelectedYears)}
-                  onSelectAll={selectAllYears}
-                  onClearAll={clearAllYears}
-                />
+                  {/* License Dropdown */}
+                  <MultiSelectDropdown
+                    label="License"
+                    size="sm"
+                    options={filterOptions.licenseCategories.map((license) => ({
+                      id: license,
+                      label: getLicenseLabel(license),
+                    }))}
+                    selectedIds={selectedLicenses}
+                    onToggle={(license) => toggleFilter(license, setSelectedLicenses)}
+                    onSelectAll={selectAllLicenses}
+                    onClearAll={clearAllLicenses}
+                  />
 
-                {/* Publication Type Dropdown */}
-                <MultiSelectDropdown
-                  label="Publication"
-                  size="sm"
-                  options={filterOptions.publicationTypes.map((pubType) => ({
-                    id: pubType,
-                    label: getPublicationTypeLabel(pubType),
-                  }))}
-                  selectedIds={selectedPublicationTypes}
-                  onToggle={(pubType) => toggleFilter(pubType, setSelectedPublicationTypes)}
-                  onSelectAll={selectAllPublicationTypes}
-                  onClearAll={clearAllPublicationTypes}
-                />
+                  {/* Publication Year Dropdown */}
+                  <MultiSelectDropdown
+                    label="Year"
+                    size="sm"
+                    options={filterOptions.publicationYears.map((year) => ({
+                      id: year,
+                      label: year,
+                    }))}
+                    selectedIds={selectedYears}
+                    onToggle={(year) => toggleFilter(year, setSelectedYears)}
+                    onSelectAll={selectAllYears}
+                    onClearAll={clearAllYears}
+                  />
 
-                {/* Models Dropdown */}
-                <MultiSelectDropdown
-                  label="Models"
-                  size="sm"
-                  options={sortedModels.map((model) => ({
-                    id: model.id,
-                    label: model.name,
-                  }))}
-                  selectedIds={selectedModelIds}
-                  onToggle={toggleModel}
-                  onSelectAll={selectAllModels}
-                  onClearAll={clearAllModels}
-                />
+                  {/* Publication Type Dropdown */}
+                  <MultiSelectDropdown
+                    label="Publication"
+                    size="sm"
+                    options={filterOptions.publicationTypes.map((pubType) => ({
+                      id: pubType,
+                      label: getPublicationTypeLabel(pubType),
+                    }))}
+                    selectedIds={selectedPublicationTypes}
+                    onToggle={(pubType) => toggleFilter(pubType, setSelectedPublicationTypes)}
+                    onSelectAll={selectAllPublicationTypes}
+                    onClearAll={clearAllPublicationTypes}
+                  />
 
-                <Button variant="outline" size="sm" className="text-xs h-8" onClick={resetAllFilters}>
-                  Reset All
-                </Button>
+                  {/* Models Dropdown */}
+                  <MultiSelectDropdown
+                    label="Models"
+                    size="sm"
+                    options={sortedModels.map((model) => ({
+                      id: model.id,
+                      label: model.name,
+                    }))}
+                    selectedIds={selectedModelIds}
+                    onToggle={toggleModel}
+                    onSelectAll={selectAllModels}
+                    onClearAll={clearAllModels}
+                  />
 
-                <span className="text-xs text-muted-foreground">
-                  ({effectiveSelectedIds.size}/{allModelIds.length} models)
-                </span>
+                  <Button variant="outline" size="sm" className="text-xs h-8" onClick={resetAllFilters}>
+                    Reset All
+                  </Button>
+
+                  {/* Model count - hidden on mobile (shown above) */}
+                  <span className="hidden md:inline text-xs text-muted-foreground">
+                    ({effectiveSelectedIds.size}/{allModelIds.length} models)
+                  </span>
+                </div>
               </div>
 
               <LeaderboardTable
