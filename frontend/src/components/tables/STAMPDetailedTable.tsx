@@ -183,23 +183,6 @@ export function STAMPDetailedTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>STAMP Benchmark</strong> (Nature Biomedical Engineering, 2025) evaluates 15 foundation models as feature
-          extractors for weakly supervised computational pathology across morphology, biomarker, and prognosis tasks.
-          Data sourced from the original publication (
-          <a
-            href="https://static-content.springer.com/esm/art%3A10.1038%2Fs41551-025-01516-3/MediaObjects/41551_2025_1516_MOESM5_ESM.xlsx"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            Figure 2 Source Data
-          </a>).
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
@@ -259,12 +242,8 @@ export function STAMPDetailedTable({
         </div>
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-        AUROC values from weakly supervised slide-level classification.
-      </p>
 
-      <div className="overflow-x-auto border rounded-lg">
+      <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="sticky top-0 z-20">
             <tr className="border-b bg-muted">

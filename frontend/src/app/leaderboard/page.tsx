@@ -2,35 +2,20 @@
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 import { LeaderboardTable } from "@/components/tables/LeaderboardTable";
-import { DetailedResultsTable } from "@/components/tables/DetailedResultsTable";
-import { PathBenchDetailedTable } from "@/components/tables/PathBenchDetailedTable";
-import { StanfordDetailedTable } from "@/components/tables/StanfordDetailedTable";
-import { HESTDetailedTable } from "@/components/tables/HESTDetailedTable";
-import { PathoBenchDetailedTable } from "@/components/tables/PathoBenchDetailedTable";
-import { SinaiDetailedTable } from "@/components/tables/SinaiDetailedTable";
-import { STAMPDetailedTable } from "@/components/tables/STAMPDetailedTable";
-import { THUNDERDetailedTable } from "@/components/tables/THUNDERDetailedTable";
-import { PathoROBDetailedTable } from "@/components/tables/PathoROBDetailedTable";
-import { PLISMDetailedTable } from "@/components/tables/PLISMDetailedTable";
 
 import modelsData from "@/data/models.json";
-import tasksData from "@/data/tasks.json";
-import resultsData from "@/data/results.json";
 import benchmarksData from "@/data/benchmarks.json";
 import rankingsData from "@/data/rankings.json";
 
-import type { Model, Task, Result, Benchmark } from "@/types";
+import type { Model, Benchmark } from "@/types";
 
 const models = modelsData as Model[];
-const tasks = tasksData as Task[];
-const results = resultsData as Result[];
 const benchmarks = benchmarksData as Benchmark[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
 
@@ -427,21 +412,6 @@ export default function LeaderboardPage() {
     });
   };
 
-  // Toggle a single model
-  const toggleModel = (modelId: string) => {
-    toggleFilter(modelId, setSelectedModelIds);
-  };
-
-  // Select all models (that pass attribute filters)
-  const selectAllModels = () => {
-    setSelectedModelIds(new Set(allModelIds));
-  };
-
-  // Clear all models
-  const clearAllModels = () => {
-    setSelectedModelIds(new Set());
-  };
-
   // Reset all filters
   const resetAllFilters = () => {
     setSelectedSizeCategories(new Set(filterOptions.sizeCategories));
@@ -558,93 +528,6 @@ export default function LeaderboardPage() {
     setSelectedPublicationTypes(new Set());
   };
 
-  // Count total data categories for display
-  const totalDataCategories =
-    filterOptions.wsiDataSizeCategories.length +
-    filterOptions.imageCaptionCategories.length +
-    (filterOptions.hasHistologyPatches ? 1 : 0);
-
-  const selectedDataCategoriesCount =
-    selectedWsiDataSizeCategories.size +
-    selectedImageCaptionCategories.size +
-    (selectedHistologyPatches ? 1 : 0);
-
-  // Get sorted models for display in filter (only those passing attribute filters)
-  const sortedModels = useMemo(() => {
-    return [...filteredByAttributes].sort((a, b) => a.name.localeCompare(b.name));
-  }, [filteredByAttributes]);
-
-  // Compute integer ranks per benchmark for detail tables
-  const evaModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.eva !== undefined)
-      .sort((a, b) => a.eva! - b.eva!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const pathbenchModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.pathbench !== undefined)
-      .sort((a, b) => a.pathbench! - b.pathbench!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const stanfordModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.stanford !== undefined)
-      .sort((a, b) => a.stanford! - b.stanford!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const hestModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.hest !== undefined)
-      .sort((a, b) => a.hest! - b.hest!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const pathobenchModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.pathobench !== undefined)
-      .sort((a, b) => a.pathobench! - b.pathobench!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const sinaiModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.sinai !== undefined)
-      .sort((a, b) => a.sinai! - b.sinai!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const stampModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.stamp !== undefined)
-      .sort((a, b) => a.stamp! - b.stamp!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const thunderModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.thunder !== undefined)
-      .sort((a, b) => a.thunder! - b.thunder!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const pathorobModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.pathorob !== undefined)
-      .sort((a, b) => a.pathorob! - b.pathorob!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
-  const plismModelRankings = useMemo(() => {
-    return modelRankings
-      .filter(r => r.plism !== undefined)
-      .sort((a, b) => a.plism! - b.plism!)
-      .map((r, index) => ({ modelId: r.modelId, overallRank: index + 1 }));
-  }, [modelRankings]);
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
@@ -655,36 +538,7 @@ export default function LeaderboardPage() {
       </div>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Model Rankings</CardTitle>
-          <Link
-            href="/benchmarks"
-            className="text-sm text-primary hover:underline flex items-center gap-1"
-          >
-            View all benchmarks →
-          </Link>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="rankings">
-            <TabsList className="flex-wrap">
-              <TabsTrigger value="rankings">Rankings</TabsTrigger>
-              <TabsTrigger value="eva-details">EVA</TabsTrigger>
-              <TabsTrigger value="pathbench-details">PathBench</TabsTrigger>
-              <TabsTrigger value="stanford-details">Stanford</TabsTrigger>
-              <TabsTrigger value="hest-details">HEST</TabsTrigger>
-              <TabsTrigger value="pathobench-details">Patho-Bench</TabsTrigger>
-              <TabsTrigger value="sinai-details">Sinai</TabsTrigger>
-              <TabsTrigger value="stamp-details">STAMP</TabsTrigger>
-              <TabsTrigger value="thunder-details">THUNDER</TabsTrigger>
-              <TabsTrigger value="pathorob-details">PathoROB <span className="ml-1 text-[10px] text-muted-foreground">(robustness)</span></TabsTrigger>
-              <TabsTrigger value="plism-details">Plismbench <span className="ml-1 text-[10px] text-muted-foreground">(robustness)</span></TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="rankings">
-              <p className="mb-4 text-sm text-muted-foreground">
-                Click column headers to sort. Rankings are taken directly from the official benchmarks and serve as the reference. For each benchmark and model, we also provide the average ranking across the corresponding tasks. &quot;-&quot; indicates the model was not evaluated on that benchmark.
-              </p>
-
+        <CardContent className="pt-6">
               {/* Filters */}
               <div className="mb-4">
                 {/* Mobile filter toggle */}
@@ -830,20 +684,6 @@ export default function LeaderboardPage() {
                     onClearAll={clearAllPublicationTypes}
                   />
 
-                  {/* Models Dropdown */}
-                  <MultiSelectDropdown
-                    label="Models"
-                    size="sm"
-                    options={sortedModels.map((model) => ({
-                      id: model.id,
-                      label: model.name,
-                    }))}
-                    selectedIds={selectedModelIds}
-                    onToggle={toggleModel}
-                    onSelectAll={selectAllModels}
-                    onClearAll={clearAllModels}
-                  />
-
                   <Button variant="outline" size="sm" className="text-xs h-8" onClick={resetAllFilters}>
                     Reset All
                   </Button>
@@ -852,6 +692,13 @@ export default function LeaderboardPage() {
                   <span className="hidden md:inline text-xs text-muted-foreground">
                     ({effectiveSelectedIds.size}/{allModelIds.length} models)
                   </span>
+
+                  <Link
+                    href="/benchmarks"
+                    className="text-sm text-primary hover:underline flex items-center gap-1 ml-auto"
+                  >
+                    View metrics →
+                  </Link>
                 </div>
               </div>
 
@@ -860,98 +707,6 @@ export default function LeaderboardPage() {
                 models={models}
                 benchmarks={benchmarks}
               />
-            </TabsContent>
-
-            <TabsContent value="eva-details">
-              <DetailedResultsTable
-                models={models.filter(m => rankings.eva?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "eva")}
-                results={results.filter(r => r.source === "eva")}
-                modelRankings={evaModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="pathbench-details">
-              <PathBenchDetailedTable
-                models={models.filter(m => rankings.pathbench?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "pathbench")}
-                results={results.filter(r => r.source === "pathbench")}
-                modelRankings={pathbenchModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="stanford-details">
-              <StanfordDetailedTable
-                models={models.filter(m => rankings.stanford?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "stanford")}
-                results={results.filter(r => r.source === "stanford") as any}
-                modelRankings={stanfordModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="hest-details">
-              <HESTDetailedTable
-                models={models.filter(m => rankings.hest?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "hest")}
-                results={results.filter(r => r.source === "hest")}
-                modelRankings={hestModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="pathobench-details">
-              <PathoBenchDetailedTable
-                models={models.filter(m => rankings.pathobench?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "pathobench")}
-                results={results.filter(r => r.source === "pathobench")}
-                modelRankings={pathobenchModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="sinai-details">
-              <SinaiDetailedTable
-                models={models.filter(m => rankings.sinai?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "sinai")}
-                results={results.filter(r => r.source === "sinai") as any}
-                modelRankings={sinaiModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="stamp-details">
-              <STAMPDetailedTable
-                models={models.filter(m => rankings.stamp?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "stamp")}
-                results={results.filter(r => r.source === "stamp")}
-                modelRankings={stampModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="thunder-details">
-              <THUNDERDetailedTable
-                models={models.filter(m => rankings.thunder?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "thunder")}
-                results={results.filter(r => r.source === "thunder")}
-                modelRankings={thunderModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="pathorob-details">
-              <PathoROBDetailedTable
-                models={models.filter(m => rankings.pathorob?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "pathorob")}
-                results={results.filter(r => r.source === "pathorob")}
-                modelRankings={pathorobModelRankings}
-              />
-            </TabsContent>
-
-            <TabsContent value="plism-details">
-              <PLISMDetailedTable
-                models={models.filter(m => rankings.plism?.[m.id])}
-                tasks={tasks.filter(t => t.benchmarkId === "plism")}
-                results={results.filter(r => r.source === "plism")}
-                modelRankings={plismModelRankings}
-              />
-            </TabsContent>
-          </Tabs>
         </CardContent>
       </Card>
     </div>

@@ -237,25 +237,6 @@ export function DetailedResultsTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>EVA Benchmark</strong> (NeurIPS, 2024) evaluates pathology foundation models on WSI classification and segmentation tasks.
-          It reports Balanced Accuracy for binary and multiclass tasks, and Dice Score (without background) for segmentation.
-          Scores show average performance over 5 runs for patch-level classification and segmentation, and 20 runs for slide-level
-          tasks (due to higher variance). Colors indicate relative performance (green = best, red = worst).
-          Results sourced from the{" "}
-          <a
-            href="https://github.com/kaiko-ai/eva/blob/main/tools/data/leaderboards/pathology.csv"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official EVA leaderboard CSV
-          </a>.
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
@@ -299,15 +280,12 @@ export function DetailedResultsTable({
         />
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-      </p>
 
-      <div className="overflow-x-auto border rounded-lg">
+      <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
-          <thead>
+          <thead className="sticky top-0 z-20">
             <tr className="border-b bg-muted">
-              <th className="sticky left-0 z-10 bg-muted px-3 py-2 text-left font-semibold min-w-[150px]">
+              <th className="sticky left-0 z-30 bg-muted px-3 py-2 text-left font-semibold min-w-[150px]">
                 Model
               </th>
               <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">

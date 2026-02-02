@@ -22,7 +22,7 @@
 
 ## What is Histoboard ?
 
-Histoboard provides a **unified view** of pathology foundation model performance across multiple benchmarks. It enables researchers and practitioners to make informed decisions when selecting models for computational pathology applications.
+Histoboard provides a **unified view** of pathology foundation model performance across multiple benchmarks. It enables researchers and practitioners to make informed decisions when selecting models for computational pathology applications. Data sources are taken directly from the official benchmarks or papers. 
 
 | Metric | Count |
 |--------|-------|
@@ -165,7 +165,3 @@ This project aggregates data from multiple benchmark sources. Please cite the or
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
-## License
-
-- Implement a literature scrapper 

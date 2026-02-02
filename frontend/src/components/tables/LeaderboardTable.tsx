@@ -200,37 +200,6 @@ export function LeaderboardTable({
           <thead className="sticky top-0 z-20">
             <tr className="border-b bg-muted">
               <th className="sticky left-0 z-30 bg-muted px-2 md:px-4 py-2 md:py-3 text-left font-semibold min-w-[140px] md:min-w-[180px]">Model</th>
-              <th className="hidden md:table-cell px-4 py-3 text-left font-semibold">
-                Organization
-              </th>
-            <th className="px-2 md:px-4 py-2 md:py-3 text-center font-semibold">
-              <button
-                onClick={handleBenchmarkCountSort}
-                className="inline-flex items-center gap-1 hover:text-primary transition-colors"
-                title="Sort by number of benchmarks"
-              >
-                <span className="hidden md:inline"># Benchmarks</span>
-                <span className="md:hidden">#</span>
-                <span className="flex flex-col">
-                  <ChevronUp
-                    className={cn(
-                      "h-3 w-3 -mb-1",
-                      sortByBenchmarkCount === "asc"
-                        ? "text-primary"
-                        : "text-muted-foreground/50"
-                    )}
-                  />
-                  <ChevronDown
-                    className={cn(
-                      "h-3 w-3",
-                      sortByBenchmarkCount === "desc"
-                        ? "text-primary"
-                        : "text-muted-foreground/50"
-                    )}
-                  />
-                </span>
-              </button>
-            </th>
             {benchmarks.map((benchmark) => (
               <th
                 key={benchmark.id}
@@ -273,6 +242,37 @@ export function LeaderboardTable({
                 </button>
               </th>
             ))}
+              <th className="px-2 md:px-4 py-2 md:py-3 text-center font-semibold">
+                <button
+                  onClick={handleBenchmarkCountSort}
+                  className="inline-flex items-center gap-1 hover:text-primary transition-colors"
+                  title="Sort by number of benchmarks"
+                >
+                  <span className="hidden md:inline"># Benchmarks</span>
+                  <span className="md:hidden">#</span>
+                  <span className="flex flex-col">
+                    <ChevronUp
+                      className={cn(
+                        "h-3 w-3 -mb-1",
+                        sortByBenchmarkCount === "asc"
+                          ? "text-primary"
+                          : "text-muted-foreground/50"
+                      )}
+                    />
+                    <ChevronDown
+                      className={cn(
+                        "h-3 w-3",
+                        sortByBenchmarkCount === "desc"
+                          ? "text-primary"
+                          : "text-muted-foreground/50"
+                      )}
+                    />
+                  </span>
+                </button>
+              </th>
+              <th className="hidden md:table-cell px-4 py-3 text-left font-semibold">
+                Organization
+              </th>
           </tr>
         </thead>
         <tbody>
@@ -309,14 +309,6 @@ export function LeaderboardTable({
                     {model.architecture} ({model.params})
                   </div>
                 </td>
-                <td className="hidden md:table-cell px-4 py-3 text-muted-foreground">
-                  {model.organization}
-                </td>
-                <td className="px-2 md:px-4 py-2 md:py-3 text-center">
-                  <Badge variant="outline" className="font-medium">
-                    {ranking.benchmarkCount || 0}
-                  </Badge>
-                </td>
                 {benchmarks.map((benchmark) => {
                   const integerRank = benchmarkIntegerRanks[benchmark.id]?.get(ranking.modelId as string);
                   const total = benchmarkModelCounts[benchmark.id];
@@ -344,6 +336,14 @@ export function LeaderboardTable({
                     </td>
                   );
                 })}
+                <td className="px-2 md:px-4 py-2 md:py-3 text-center">
+                  <Badge variant="outline" className="font-medium">
+                    {ranking.benchmarkCount || 0}
+                  </Badge>
+                </td>
+                <td className="hidden md:table-cell px-4 py-3 text-muted-foreground">
+                  {model.organization}
+                </td>
               </tr>
             );
           })}

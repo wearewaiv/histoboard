@@ -248,35 +248,6 @@ export function PathoBenchDetailedTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>Patho-Bench</strong> (arXiv, 2025) is a standardized benchmark suite from the Mahmood Lab for evaluating pathology
-          foundation models, featuring 41 weakly-supervised slide classification tasks for biomarker and outcome prediction
-          across 9 cancer types. See the{" "}
-          <a
-            href="https://github.com/mahmoodlab/Patho-Bench"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official Patho-Bench GitHub
-          </a>{" "}
-          for details.
-        </p>
-        <p className="text-sm text-muted-foreground mt-2">
-          ⚠️ <strong>Note:</strong> Results shown here are retrieved from Table 2 of the{" "}
-          <a
-            href="https://arxiv.org/html/2601.05148"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            Atlas 2 preprint
-          </a>, not from the official Patho-Bench benchmark release.
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
@@ -351,10 +322,6 @@ export function PathoBenchDetailedTable({
         </div>
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-        Values are shown as decimals (e.g., 0.836 = 83.6%).
-      </p>
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">

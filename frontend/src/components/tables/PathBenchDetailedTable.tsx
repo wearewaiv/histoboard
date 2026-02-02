@@ -386,23 +386,6 @@ export function PathBenchDetailedTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>PathBench</strong> (arXiv, 2025) is a large-scale benchmark for pathology foundation models across 229 tasks
-          including classification, overall survival (OS), disease-free survival (DFS), and disease-specific survival (DSS)
-          prediction. Data sourced from the{" "}
-          <a
-            href="https://github.com/birkhoffkiki/PathBench/blob/master/src/data/performance.json"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official PathBench performance data
-          </a>.
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
@@ -490,9 +473,6 @@ export function PathBenchDetailedTable({
         </div>
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks. Values show mean ± std over 10 folds.
-      </p>
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">

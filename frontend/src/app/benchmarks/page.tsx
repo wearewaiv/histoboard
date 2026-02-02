@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ExternalLink, FileText, Database, Search, Star } from "lucide-react";
+import { ExternalLink, FileText, Database, Search, Star, Trophy, Table } from "lucide-react";
+import Link from "next/link";
 
 import benchmarksData from "@/data/benchmarks.json";
 import tasksData from "@/data/tasks.json";
@@ -205,98 +206,83 @@ export default function BenchmarksPage() {
                 </div>
               )}
               <CardHeader>
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div className="pr-16">
-                    <CardTitle className="flex items-center gap-2">
-                      {benchmark.name}
-                      {Array.isArray(benchmark.category) ? (
-                        benchmark.category.map((cat) => (
-                          <Badge key={cat} className={categoryColors[cat] || ""}>
-                            {cat}
-                          </Badge>
-                        ))
-                      ) : (
-                        <Badge className={categoryColors[benchmark.category] || ""}>
-                          {benchmark.category}
+                <div className="pr-16">
+                  <CardTitle className="flex items-center gap-2">
+                    {benchmark.name}
+                    {Array.isArray(benchmark.category) ? (
+                      benchmark.category.map((cat) => (
+                        <Badge key={cat} className={categoryColors[cat] || ""}>
+                          {cat}
                         </Badge>
-                      )}
-                    </CardTitle>
-                    <CardDescription className="mt-2">
-                      {benchmark.description}
-                    </CardDescription>
-                  </div>
-                  <div className="flex gap-2">
-                    {benchmark.paperUrl && (
-                      <a
-                        href={benchmark.paperUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button variant="outline">
-                          <FileText className="mr-2 h-4 w-4" />
-                          Paper
-                        </Button>
-                      </a>
+                      ))
+                    ) : (
+                      <Badge className={categoryColors[benchmark.category] || ""}>
+                        {benchmark.category}
+                      </Badge>
                     )}
-                    {benchmark.datasetUrl && (
-                      <a
-                        href={benchmark.datasetUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button variant="outline">
-                          <Database className="mr-2 h-4 w-4" />
-                          Dataset
-                        </Button>
-                      </a>
-                    )}
+                  </CardTitle>
+                  <CardDescription className="mt-2">
+                    {benchmark.description}
+                  </CardDescription>
+                </div>
+                <div className="flex gap-2 flex-wrap mt-4">
+                  <Link href={`/benchmarks/${benchmark.id}`}>
+                    <Button>
+                      <Trophy className="mr-2 h-4 w-4" />
+                      View Rankings
+                    </Button>
+                  </Link>
+                  {benchmark.paperUrl && (
                     <a
-                      href={benchmark.url}
+                      href={benchmark.paperUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <Button variant="outline">
-                        <ExternalLink className="mr-2 h-4 w-4" />
+                        <FileText className="mr-2 h-4 w-4" />
+                        Paper
+                      </Button>
+                    </a>
+                  )}
+                  {benchmark.resultsUrl && (
+                    <a
+                      href={benchmark.resultsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline">
+                        <Table className="mr-2 h-4 w-4" />
                         Source
                       </Button>
                     </a>
-                  </div>
+                  )}
+                  <a
+                    href={benchmark.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline">
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      Github
+                    </Button>
+                  </a>
+                  {benchmark.datasetUrl && (
+                    <a
+                      href={benchmark.datasetUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline">
+                        <Database className="mr-2 h-4 w-4" />
+                        Dataset
+                      </Button>
+                    </a>
+                  )}
                 </div>
               </CardHeader>
-              <CardContent>
-                <div>
-                  <h4 className="mb-2 text-sm font-medium">Organs Covered</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {benchmark.organs.map((organ) => (
-                      <Badge key={organ} variant="outline" className="capitalize">
-                        {organ}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
             </Card>
         ))}
       </div>
-
-      {/* Attribution */}
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>Data Attribution</CardTitle>
-        </CardHeader>
-        <CardContent className="prose prose-sm max-w-none text-muted-foreground">
-          <p>
-            Histoboard aggregates publicly available benchmark results to provide
-            a unified view of pathology foundation model performance. All data
-            is sourced from the original benchmark publications and websites.
-          </p>
-          <p className="mt-4">
-            If you use Histoboard in your research, please cite the original
-            benchmark sources. If you believe any data is incorrect or missing,
-            please open an issue on our GitHub repository.
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 }

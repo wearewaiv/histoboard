@@ -1,4 +1,8 @@
-import React from "react";
+// Build-time date for "Last updated" footer text
+const BUILD_DATE = new Date().toLocaleDateString("en-US", {
+  month: "long",
+  year: "numeric",
+});
 
 export function Footer() {
   return (
@@ -9,35 +13,11 @@ export function Footer() {
             {/* Left: Description */}
             <div className="flex flex-col gap-1 text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                Histoboard aggregates benchmark results from multiple sources.
-                Data is collected from public benchmarks and papers.
+                Histoboard aggregates results from official benchmarks and papers (see benchmark cards for exact data sources). If you believe any data is incorrect or missing, please open an issue on our GitHub repository.
               </p>
               <p className="text-xs text-muted-foreground">
-                Last updated: January 2025
+                Last updated: {BUILD_DATE}
               </p>
-            </div>
-
-            {/* Right: Contact info */}
-            <div className="flex items-center gap-3">
-              <p className="text-sm text-muted-foreground">Developed and maintained by Alexandre Filiot</p>
-              <div className="flex items-center gap-2">
-                <a
-                  href="mailto:afiliot46@gmail.com"
-                  className="text-lg hover:scale-110 transition-transform"
-                  title="Send email"
-                >
-                  📧
-                </a>
-                <a
-                  href="https://afiliot.github.io"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-lg hover:scale-110 transition-transform"
-                  title="Personal website"
-                >
-                  🌐
-                </a>
-              </div>
             </div>
           </div>
         </div>

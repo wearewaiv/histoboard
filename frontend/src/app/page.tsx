@@ -196,13 +196,9 @@ export default function HomePage() {
       {/* Scaling Laws */}
       <section className="mb-12">
         <h2 className="mb-2 flex items-center gap-2 text-2xl font-bold">
-          <TrendingUp className="h-6 w-6" />
+          <TrendingUp className="h-5 w-5" />
           Scaling Laws
         </h2>
-        <p className="mb-6 text-muted-foreground">
-          Relationship between robustness and performance as a function of model size. For each benchmark, metrics are normalized across models within [0, 1] then averaged. Point size represents model parameters.
-          Only the models evaluated on the selected benchmarks are shown.
-        </p>
         <Card>
           <CardContent className="pt-6">
             <ScalingLawsChart
