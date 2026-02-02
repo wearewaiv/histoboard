@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Home, Trophy, Swords, Database, BookOpen, Clock, Star, Menu, X } from "lucide-react";
+import { Home, Trophy, Swords, Database, BookOpen, Clock, Info, Star, Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 
 const navigation = [
@@ -14,6 +14,7 @@ const navigation = [
   { name: "Models", href: "/models", icon: Database },
   { name: "Benchmarks", href: "/benchmarks", icon: BookOpen },
   { name: "Timeline", href: "/timeline", icon: Clock },
+  { name: "About", href: "/about", icon: Info },
 ];
 
 function formatStars(count: number): string {
