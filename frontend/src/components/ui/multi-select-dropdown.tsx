@@ -55,7 +55,7 @@ export function MultiSelectDropdown({
           <ChevronDown className={cn("shrink-0 opacity-50", size === "sm" ? "ml-1 h-3 w-3" : "ml-2 h-4 w-4")} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-72 max-h-[300px] overflow-y-auto" align="start">
+      <DropdownMenuContent className="w-[calc(100vw-2rem)] sm:w-72 max-h-[300px] overflow-y-auto" align="start">
         <div className="flex items-center justify-between px-2 py-1.5">
           <DropdownMenuLabel className="p-0 text-xs font-normal text-muted-foreground">
             {selectedCount} selected

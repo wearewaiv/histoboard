@@ -192,3 +192,40 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(280 40% 60%);
 }
+
+/* Table scroll indicator for mobile */
+.table-scroll-indicator {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .table-scroll-indicator {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 24px;
+    background: linear-gradient(to right, transparent, hsl(30 25% 97% / 0.9));
+    pointer-events: none;
+    z-index: 15;
+  }
+}
+
+/* Hide scrollbar for tabs on mobile but allow scroll */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: hsl(280 30% 80%);
+  border-radius: 2px;
+}
