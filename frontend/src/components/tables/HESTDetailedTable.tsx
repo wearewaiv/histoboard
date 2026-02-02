@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
-import { cn, formatNumber } from "@/lib/utils";
+import { cn, formatNumber, getValueColor } from "@/lib/utils";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSetToggle } from "@/hooks";
+import {
+  buildResultsMap,
+  computeTaskStats,
+  computeTaskRanks,
+  computeModelAverageRanks,
+  computeModelAverageValues,
+} from "@/types/results";
 
 interface HESTDetailedTableProps {
   models: Model[];
@@ -25,199 +33,107 @@ export function HESTDetailedTable({
   models,
   tasks,
   results,
-  modelRankings,
 }: HESTDetailedTableProps) {
-  // Get unique organs for filtering
-  const organs = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.organ))].sort();
-  }, [tasks]);
-
-  // Get unique task names for filtering
-  const taskNames = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.name))].sort();
-  }, [tasks]);
-
-  // Filter states
-  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
-    () => new Set(organs)
+  // Extract unique filter options
+  const organs = useMemo(
+    () => [...new Set(tasks.map((t) => t.organ))].sort(),
+    [tasks]
   );
-  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
-    () => new Set(taskNames)
+  const taskNames = useMemo(
+    () => [...new Set(tasks.map((t) => t.name))].sort(),
+    [tasks]
   );
 
-  // Toggle helpers
-  const toggleOrgan = (organ: string) => {
-    setSelectedOrgans((prev) => {
-      const next = new Set(prev);
-      if (next.has(organ)) {
-        next.delete(organ);
-      } else {
-        next.add(organ);
-      }
-      return next;
-    });
-  };
-
-  const toggleTask = (taskName: string) => {
-    setSelectedTasks((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskName)) {
-        next.delete(taskName);
-      } else {
-        next.add(taskName);
-      }
-      return next;
-    });
-  };
+  // Filter state using shared hook
+  const organFilter = useSetToggle(organs);
+  const taskFilter = useSetToggle(taskNames);
 
   // Filter tasks by selected organs AND selected task names
-  const filteredTasks = useMemo(() => {
-    return tasks.filter(
-      (t) => selectedOrgans.has(t.organ) && selectedTasks.has(t.name)
-    );
-  }, [tasks, selectedOrgans, selectedTasks]);
+  const filteredTasks = useMemo(
+    () =>
+      tasks.filter(
+        (t) => organFilter.selected.has(t.organ) && taskFilter.selected.has(t.name)
+      ),
+    [tasks, organFilter.selected, taskFilter.selected]
+  );
 
-  // Create a lookup map for results: modelId -> taskId -> value
-  const resultsMap = useMemo(() => {
-    const map = new Map<string, Map<string, number>>();
-    for (const result of results) {
-      if (!map.has(result.modelId)) {
-        map.set(result.modelId, new Map());
-      }
-      map.get(result.modelId)!.set(result.taskId, result.value);
-    }
-    return map;
-  }, [results]);
+  // Build lookup maps using shared utilities
+  const resultsMap = useMemo(() => buildResultsMap(results), [results]);
 
-  // Get min/max for each task for color scaling
-  const taskStats = useMemo(() => {
-    const stats = new Map<string, { min: number; max: number }>();
-    for (const task of filteredTasks) {
-      const values = results
-        .filter((r) => r.taskId === task.id)
-        .map((r) => r.value);
-      if (values.length > 0) {
-        stats.set(task.id, {
-          min: Math.min(...values),
-          max: Math.max(...values),
-        });
-      }
-    }
-    return stats;
-  }, [filteredTasks, results]);
+  const filteredTaskIds = useMemo(
+    () => filteredTasks.map((t) => t.id),
+    [filteredTasks]
+  );
 
-  // Compute average rank per model (across filtered tasks)
-  const modelAvgRanks = useMemo(() => {
-    const avgRanks = new Map<string, number>();
+  const taskStats = useMemo(
+    () => computeTaskStats(results, filteredTaskIds),
+    [results, filteredTaskIds]
+  );
 
-    // For each task, compute ranks
-    const taskRanks = new Map<string, Map<string, number>>();
-    for (const task of filteredTasks) {
-      const taskResults = results
-        .filter((r) => r.taskId === task.id)
-        .sort((a, b) => b.value - a.value); // Higher is better
+  // Compute rankings using shared utilities
+  const taskRanks = useMemo(
+    () => computeTaskRanks(results, true),
+    [results]
+  );
 
-      const ranks = new Map<string, number>();
-      taskResults.forEach((r, idx) => {
-        ranks.set(r.modelId, idx + 1);
-      });
-      taskRanks.set(task.id, ranks);
-    }
+  const modelIds = useMemo(() => models.map((m) => m.id), [models]);
 
-    // Compute average rank per model
-    for (const model of models) {
-      const ranks: number[] = [];
-      for (const task of filteredTasks) {
-        const rank = taskRanks.get(task.id)?.get(model.id);
-        if (rank !== undefined) {
-          ranks.push(rank);
-        }
-      }
-      if (ranks.length > 0) {
-        avgRanks.set(model.id, ranks.reduce((a, b) => a + b, 0) / ranks.length);
-      }
-    }
+  const modelAvgRanks = useMemo(
+    () => computeModelAverageRanks(taskRanks, modelIds, filteredTaskIds),
+    [taskRanks, modelIds, filteredTaskIds]
+  );
 
-    return avgRanks;
-  }, [models, filteredTasks, results]);
-
-  // Compute average metric value per model (across filtered tasks)
-  const modelAvgValues = useMemo(() => {
-    const avgValues = new Map<string, number>();
-
-    for (const model of models) {
-      const values: number[] = [];
-      for (const task of filteredTasks) {
-        const value = resultsMap.get(model.id)?.get(task.id);
-        if (value !== undefined) {
-          values.push(value);
-        }
-      }
-      if (values.length > 0) {
-        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
-      }
-    }
-
-    return avgValues;
-  }, [models, filteredTasks, resultsMap]);
+  const modelAvgValues = useMemo(
+    () => computeModelAverageValues(resultsMap, modelIds, filteredTaskIds),
+    [resultsMap, modelIds, filteredTaskIds]
+  );
 
   // Sort models by average rank
-  const sortedModels = useMemo(() => {
-    return [...models].sort((a, b) => {
-      const rankA = modelAvgRanks.get(a.id) ?? 999;
-      const rankB = modelAvgRanks.get(b.id) ?? 999;
-      return rankA - rankB;
-    });
-  }, [models, modelAvgRanks]);
+  const sortedModels = useMemo(
+    () =>
+      [...models].sort((a, b) => {
+        const rankA = modelAvgRanks.get(a.id) ?? 999;
+        const rankB = modelAvgRanks.get(b.id) ?? 999;
+        return rankA - rankB;
+      }),
+    [models, modelAvgRanks]
+  );
 
-  // Get value color based on relative performance
-  function getValueColor(value: number, taskId: string): string {
-    const stats = taskStats.get(taskId);
-    if (!stats || stats.max === stats.min) return "";
+  // Dropdown options for organs filter
+  const organOptions = useMemo(
+    () =>
+      organs
+        .map((organ) => ({
+          id: organ,
+          label: organ.charAt(0).toUpperCase() + organ.slice(1),
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    [organs]
+  );
 
-    const normalized = (value - stats.min) / (stats.max - stats.min);
-
-    if (normalized >= 0.9) return "bg-emerald-100 text-emerald-800";
-    if (normalized >= 0.7) return "bg-green-50 text-green-700";
-    if (normalized >= 0.3) return "bg-gray-50";
-    if (normalized >= 0.1) return "bg-orange-50 text-orange-700";
-    return "bg-red-50 text-red-700";
-  }
+  // Dropdown options for tasks filter
+  const taskOptions = useMemo(
+    () =>
+      taskNames
+        .map((taskName) => ({
+          id: taskName,
+          label: taskName,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label)),
+    [taskNames]
+  );
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>HEST-Benchmark</strong> (Nature Methods, 2024) is a spatial transcriptomics benchmark from the Mahmood Lab that evaluates
-          foundation models on gene expression prediction from H&E images. The benchmark assesses how well models
-          can predict spatially-resolved gene expression patterns directly from histology across 9 cancer types,
-          using Pearson correlation as the primary metric. Data sourced from the{" "}
-          <a
-            href="https://github.com/mahmoodlab/HEST/blob/main/README.md#hest-benchmark-results-011426"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official HEST GitHub README
-          </a>.
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
           label="Indications"
-          options={organs
-            .map((organ) => ({
-              id: organ,
-              label: organ.charAt(0).toUpperCase() + organ.slice(1),
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedOrgans}
-          onToggle={toggleOrgan}
-          onSelectAll={() => setSelectedOrgans(new Set(organs))}
-          onClearAll={() => setSelectedOrgans(new Set())}
+          options={organOptions}
+          selectedIds={organFilter.selected}
+          onToggle={organFilter.toggle}
+          onSelectAll={organFilter.selectAll}
+          onClearAll={organFilter.clearAll}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -247,23 +163,13 @@ export function HESTDetailedTable({
         </DropdownMenu>
         <MultiSelectDropdown
           label="All Tasks"
-          options={taskNames
-            .map((taskName) => ({
-              id: taskName,
-              label: taskName,
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedTasks}
-          onToggle={toggleTask}
-          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
-          onClearAll={() => setSelectedTasks(new Set())}
+          options={taskOptions}
+          selectedIds={taskFilter.selected}
+          onToggle={taskFilter.toggle}
+          onSelectAll={taskFilter.selectAll}
+          onClearAll={taskFilter.clearAll}
         />
       </div>
-
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-        Gene expression prediction performance (Pearson correlation).
-      </p>
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
@@ -326,7 +232,9 @@ export function HESTDetailedTable({
                     {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                    {modelAvgValues.get(model.id) !== undefined
+                      ? formatNumber(modelAvgValues.get(model.id)!, 3)
+                      : "-"}
                   </td>
                   {filteredTasks.map((task) => {
                     const value = modelResults?.get(task.id);
@@ -335,11 +243,14 @@ export function HESTDetailedTable({
                         key={task.id}
                         className={cn(
                           "px-2 py-2 text-center tabular-nums",
-                          value !== undefined && getValueColor(value, task.id)
+                          value !== undefined &&
+                            getValueColor(value, taskStats.get(task.id))
                         )}
                       >
                         {value !== undefined ? (
-                          <span className="font-medium">{formatNumber(value, 3)}</span>
+                          <span className="font-medium">
+                            {formatNumber(value, 3)}
+                          </span>
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}

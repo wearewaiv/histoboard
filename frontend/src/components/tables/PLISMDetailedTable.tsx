@@ -191,22 +191,6 @@ export function PLISMDetailedTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>Plismbench</strong> (MICCAI, 2025) evaluates embedding consistency across scanners and staining
-          variations using cosine similarity and top-10 retrieval accuracy. Data sourced from the{" "}
-          <a
-            href="https://github.com/owkin/plism-benchmark#benchmark"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official Plismbench benchmark
-          </a>.
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
@@ -240,13 +224,8 @@ export function PLISMDetailedTable({
         />
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-        Embedding consistency metrics across scanner and staining variations.
-        Higher values indicate better robustness to domain shifts.
-      </p>
 
-      <div className="overflow-x-auto border rounded-lg">
+      <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="sticky top-0 z-20">
             <tr className="border-b bg-muted">

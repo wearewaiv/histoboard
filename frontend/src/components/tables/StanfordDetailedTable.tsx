@@ -424,22 +424,6 @@ export function StanfordDetailedTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>Stanford PathBench</strong> (medRxiv, 2025) is a comprehensive benchmark evaluating 31 foundation models across
-          41 tasks from TCGA, CPTAC, and external datasets. Data sourced from the{" "}
-          <a
-            href="https://github.com/gevaertlab/benchmarking-path-models/blob/main/data/benchmarking_wci.csv"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official benchmark data
-          </a>.
-        </p>
-      </div>
-
       {/* Metric dropdown and Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <DropdownMenu>
@@ -533,11 +517,6 @@ export function StanfordDetailedTable({
         </div>
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-        Metric: {getMetricLabel(selectedMetric)}{selectedMetric === "auroc" ? " (default metric reported by authors)" : ""}.
-        Task names have been reformatted for clarity.
-      </p>
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">

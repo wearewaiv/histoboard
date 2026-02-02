@@ -216,6 +216,8 @@ export interface Benchmark {
   paperUrl?: string;
   /** URL to associated dataset */
   datasetUrl?: string;
+  /** URL to the source data (CSV, JSON, etc.) used for results */
+  resultsUrl?: string;
 }
 
 /**

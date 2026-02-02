@@ -189,23 +189,6 @@ export function THUNDERDetailedTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>THUNDER Benchmark</strong> (arXiv, 2025) comprehensively evaluates pathology foundation models across KNN classification,
-          linear probing, few-shot learning, segmentation, calibration, and adversarial robustness tasks.
-          Data sourced from the{" "}
-          <a
-            href="https://github.com/MICS-Lab/thunder/blob/main/docs/leaderboards.md#-up-to-date-rank-sum-leaderboard"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official THUNDER leaderboard
-          </a>.
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
@@ -226,12 +209,8 @@ export function THUNDERDetailedTable({
         />
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-        Rankings based on rank-sum across tasks. Lower calibration (ECE) and adversarial success rate (ASR) are better.
-      </p>
 
-      <div className="overflow-x-auto border rounded-lg">
+      <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="sticky top-0 z-20">
             <tr className="border-b bg-muted">

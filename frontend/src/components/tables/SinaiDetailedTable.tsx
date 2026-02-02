@@ -240,26 +240,6 @@ export function SinaiDetailedTable({
 
   return (
     <div>
-      {/* Benchmark description */}
-      <div className="mb-4 p-4 bg-muted/30 rounded-lg border">
-        <p className="text-sm text-muted-foreground">
-          <strong>Sinai SSL Benchmark</strong> (Nature Communications, 2025) is a comprehensive benchmark from Mount Sinai evaluating pathology
-          foundation models on cancer detection and biomarker prediction tasks across multiple organs and institutions.
-          Data sourced from the{" "}
-          <a
-            href="https://github.com/sinai-computational-pathology/SSL_tile_benchmarks#leaderboard"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            official Sinai leaderboard
-          </a>.
-        </p>
-        <p className="text-sm text-muted-foreground mt-2">
-          <strong>Institution abbreviations:</strong> MSHS = Mount Sinai Health System, SUH = Sahlgrenska University Hospital, MSKCC = Memorial Sloan Kettering Cancer Center.
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
@@ -334,10 +314,6 @@ export function SinaiDetailedTable({
         </div>
       </div>
 
-      <p className="mb-3 text-sm text-muted-foreground">
-        Showing {filteredTasks.length} tasks.
-        AUC values shown as mean ± std over 20 MCCV splits.
-      </p>
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">

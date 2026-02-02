@@ -18,7 +18,8 @@
     ],
     "taskCount": 13,
     "description": "Comprehensive evaluation framework for pathology foundation models covering patch-level classification, slide-level analysis, and segmentation tasks.",
-    "paperUrl": "https://openreview.net/forum?id=FNBQOPj18N&noteId=FNBQOPj18N"
+    "paperUrl": "https://openreview.net/forum?id=FNBQOPj18N&noteId=FNBQOPj18N",
+    "resultsUrl": "https://github.com/kaiko-ai/eva/blob/main/tools/data/leaderboards/pathology.csv"
   },
   {
     "id": "pathbench",
@@ -46,7 +47,8 @@
     ],
     "taskCount": 229,
     "description": "Large-scale benchmark for pathology foundation models across 229 tasks including classification, OS prediction, DFS prediction, and DSS prediction.",
-    "paperUrl": "https://arxiv.org/abs/2505.20202"
+    "paperUrl": "https://arxiv.org/abs/2505.20202",
+    "resultsUrl": "https://github.com/birkhoffkiki/PathBench/blob/master/src/data/performance.json"
   },
   {
     "id": "stanford",
@@ -58,7 +60,9 @@
     ],
     "description": "Comprehensive benchmark evaluating 31 foundation models across 41 tasks from TCGA, CPTAC, and external datasets.",
     "url": "https://pathbench.stanford.edu",
+    "githubUrl": "https://github.com/gevaertlab/benchmarking-path-models",
     "paperUrl": "https://www.medrxiv.org/content/10.1101/2025.05.08.25327250v1",
+    "resultsUrl": "https://github.com/gevaertlab/benchmarking-path-models/blob/main/data/benchmarking_wci.csv",
     "organs": [
       "lung",
       "brain",
@@ -79,7 +83,7 @@
     "name": "HEST-Benchmark",
     "shortName": "HEST",
     "category": ["spatial-transcriptomics", "H&E"],
-    "description": "HEST-Benchmark is a spatial transcriptomics benchmark from the Mahmood Lab evaluating foundation models on gene expression prediction from H&E images. The benchmark assesses how well models can predict spatially-resolved gene expression patterns directly from histology across 9 cancer types using Pearson correlation as the primary metric. Results are sourced from the official HEST GitHub README.",
+    "description": "HEST-Benchmark is a spatial transcriptomics benchmark from the Mahmood Lab evaluating foundation models on gene expression prediction from H&E images. The benchmark assesses how well models can predict spatially-resolved gene expression patterns directly from histology across 9 cancer types using Pearson correlation as the primary metric.",
     "url": "https://github.com/mahmoodlab/HEST",
     "githubUrl": "https://github.com/mahmoodlab/HEST",
         "paperUrl": "https://www.nature.com/articles/s41592-024-02461-y",
@@ -106,11 +110,12 @@
       "pathology",
       "H&E"
     ],
-    "description": "Comprehensive benchmark from Mahmood Lab with 95 tasks across 33 datasets covering mutation prediction, TME characterization, survival, grading, and treatment response. Note: Latest results sourced from the Atlas 2 preprint, not the official benchmark release.",
+    "description": "Comprehensive benchmark from Mahmood Lab with 95 tasks across 33 datasets covering mutation prediction, TME characterization, survival, grading, and treatment response.",
     "url": "https://github.com/mahmoodlab/Patho-Bench",
     "githubUrl": "https://github.com/mahmoodlab/Patho-Bench",
     "paperUrl": "https://arxiv.org/abs/2502.06750",
     "datasetUrl": "https://huggingface.co/datasets/MahmoodLab/Patho-Bench",
+    "resultsUrl": "https://arxiv.org/html/2601.05148",
     "organs": [
       "breast",
       "kidney",
@@ -136,6 +141,7 @@
     "url": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks",
     "githubUrl": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks",
     "paperUrl": "https://www.nature.com/articles/s41467-025-58796-1",
+    "resultsUrl": "https://github.com/sinai-computational-pathology/SSL_tile_benchmarks#leaderboard",
     "organs": [
       "breast",
       "oral",
@@ -161,6 +167,7 @@
     "url": "https://github.com/KatherLab/STAMP-Benchmark",
     "githubUrl": "https://github.com/KatherLab/STAMP-Benchmark",
     "paperUrl": "https://www.nature.com/articles/s41551-025-01516-3",
+    "resultsUrl": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41551-025-01516-3/MediaObjects/41551_2025_1516_MOESM5_ESM.xlsx",
     "organs": [
       "lung",
       "breast",
@@ -181,6 +188,7 @@
     "url": "https://mics-lab.github.io/thunder/",
     "githubUrl": "https://github.com/MICS-Lab/thunder",
     "paperUrl": "https://arxiv.org/abs/2507.07860",
+    "resultsUrl": "https://github.com/MICS-Lab/thunder/blob/main/docs/leaderboards.md",
     "organs": [
       "multi-organ"
     ],
@@ -200,6 +208,7 @@
     "githubUrl": "https://github.com/bifold-pathomics/PathoROB",
     "paperUrl": "https://arxiv.org/abs/2507.17845",
     "datasetUrl": "https://huggingface.co/collections/bifold-pathomics/pathorob",
+    "resultsUrl": "https://github.com/bifold-pathomics/PathoROB#leaderboard-robustness-index",
     "organs": [
       "multi-organ",
       "breast",
@@ -221,6 +230,7 @@
     "githubUrl": "https://github.com/owkin/plism-benchmark",
     "paperUrl": "https://papers.miccai.org/miccai-2025/paper/4289_paper.pdf",
     "datasetUrl": "https://huggingface.co/datasets/owkin/plism-dataset-tiles",
+    "resultsUrl": "https://github.com/owkin/plism-benchmark#benchmark",
     "organs": [
       "multi-organ"
     ],
