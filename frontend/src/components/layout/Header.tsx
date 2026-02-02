@@ -32,7 +32,7 @@ export function Header() {
   useEffect(() => {
     const fetchStars = async () => {
       const cacheKey = "github-stars-histoboard";
-      const cacheExpiry = 1000 * 60 * 60; // 1 hour
+      const cacheExpiry = 1000 * 60 * 5; // 5 minutes
 
       // Check localStorage cache first
       const cached = localStorage.getItem(cacheKey);
