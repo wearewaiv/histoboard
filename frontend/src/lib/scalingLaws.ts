@@ -116,6 +116,29 @@ export const ALL_PERFORMANCE_BENCHMARKS: BenchmarkOption[] = [
 ];
 
 /**
+ * All benchmarks combined (performance + robustness) for the size vs performance chart.
+ */
+export const ALL_BENCHMARKS: BenchmarkOption[] = [
+  // Performance benchmarks
+  { id: "eva", label: "EVA" },
+  { id: "pathbench", label: "PathBench" },
+  { id: "stanford", label: "Stanford" },
+  { id: "hest", label: "HEST" },
+  { id: "pathobench", label: "Patho-Bench" },
+  { id: "sinai", label: "Sinai" },
+  { id: "stamp", label: "STAMP" },
+  { id: "thunder", label: "THUNDER" },
+  // Robustness benchmarks
+  { id: "pathorob", label: "PathoROB" },
+  { id: "plism", label: "Plismbench" },
+];
+
+/**
+ * Default selection for the model size vs performance chart.
+ */
+export const DEFAULT_SIZE_PERF_BENCHMARKS = new Set(["eva"]);
+
+/**
  * Default selection for performance benchmarks.
  */
 export const DEFAULT_SELECTED_BENCHMARKS = new Set(["eva"]);
@@ -394,6 +417,185 @@ export function buildScalingLawsData(
       robustness,
       performance: mean(normalizedPerformances),
       params: parseModelParams(model.params),
+      benchmarkCount: normalizedPerformances.length,
+    });
+  }
+
+  return dataPoints;
+}
+
+// =============================================================================
+// Model Size vs Performance Chart
+// =============================================================================
+
+/**
+ * A data point for the model size vs performance scatter plot.
+ */
+export interface SizePerformanceDataPoint {
+  /** Model identifier */
+  modelId: string;
+  /** Model display name */
+  modelName: string;
+  /** Organization that developed the model */
+  organization: string;
+  /** Number of parameters in millions (x-axis) */
+  params: number;
+  /** Normalized performance score (0-1, higher is better) (y-axis) */
+  performance: number;
+  /** Number of benchmarks included in the performance average */
+  benchmarkCount: number;
+}
+
+/**
+ * Compute a model's average performance on a robustness benchmark.
+ * This handles the special task structure of robustness benchmarks.
+ */
+function getModelRobustnessPerformance(
+  modelId: string,
+  benchmarkId: string,
+  results: Result[]
+): number | null {
+  const taskIds = ROBUSTNESS_TASK_IDS[benchmarkId];
+  if (!taskIds) return null;
+
+  const modelResults = results.filter(
+    (r) => r.modelId === modelId && taskIds.includes(r.taskId)
+  );
+
+  if (modelResults.length === 0) return null;
+
+  return mean(modelResults.map((r) => r.value));
+}
+
+/**
+ * Compute min/max statistics for a robustness benchmark across all models.
+ */
+function getRobustnessBenchmarkStats(
+  benchmarkId: string,
+  results: Result[]
+): NormalizationStats | null {
+  const taskIds = ROBUSTNESS_TASK_IDS[benchmarkId];
+  if (!taskIds) return null;
+
+  const benchmarkResults = results.filter((r) => taskIds.includes(r.taskId));
+
+  // Group results by model and compute averages
+  const valuesByModel = new Map<string, number[]>();
+  for (const r of benchmarkResults) {
+    if (!valuesByModel.has(r.modelId)) {
+      valuesByModel.set(r.modelId, []);
+    }
+    valuesByModel.get(r.modelId)!.push(r.value);
+  }
+
+  // Compute each model's average
+  const modelAverages = Array.from(valuesByModel.values()).map((values) =>
+    mean(values)
+  );
+
+  if (modelAverages.length === 0) return null;
+
+  return {
+    min: Math.min(...modelAverages),
+    max: Math.max(...modelAverages),
+  };
+}
+
+/**
+ * Check if a benchmark ID is a robustness benchmark.
+ */
+function isRobustnessBenchmark(benchmarkId: string): boolean {
+  return benchmarkId in ROBUSTNESS_TASK_IDS;
+}
+
+/**
+ * Build scatter plot data points for the model size vs performance visualization.
+ *
+ * For each model, computes:
+ * 1. Model size in parameters (x-axis)
+ * 2. Normalized performance (average across selected benchmarks) (y-axis)
+ *
+ * Models are only included if they have data for ALL selected benchmarks.
+ *
+ * @param models - All models to consider
+ * @param tasks - Task definitions
+ * @param results - All evaluation results
+ * @param selectedBenchmarks - Set of benchmark IDs to include (can be performance or robustness)
+ * @returns Array of data points for the scatter plot
+ */
+export function buildSizePerformanceData(
+  models: Model[],
+  tasks: Task[],
+  results: Result[],
+  selectedBenchmarks: Set<string>
+): SizePerformanceDataPoint[] {
+  const benchmarkIds = Array.from(selectedBenchmarks);
+
+  // Early exit if no benchmarks selected
+  if (benchmarkIds.length === 0) {
+    return [];
+  }
+
+  // Pre-compute benchmark stats for normalization (both performance and robustness)
+  const benchmarkStats = new Map<string, NormalizationStats>();
+  for (const benchmarkId of benchmarkIds) {
+    let stats: NormalizationStats | null;
+    if (isRobustnessBenchmark(benchmarkId)) {
+      stats = getRobustnessBenchmarkStats(benchmarkId, results);
+    } else {
+      stats = getBenchmarkStats(benchmarkId, results, tasks);
+    }
+    if (stats) {
+      benchmarkStats.set(benchmarkId, stats);
+    }
+  }
+
+  // Process each model
+  const dataPoints: SizePerformanceDataPoint[] = [];
+
+  for (const model of models) {
+    // Skip models without params
+    if (!model.params) continue;
+
+    // Collect normalized performance across all selected benchmarks
+    const normalizedPerformances: number[] = [];
+
+    for (const benchmarkId of benchmarkIds) {
+      const stats = benchmarkStats.get(benchmarkId);
+      if (!stats) continue;
+
+      let rawPerformance: number | null;
+      if (isRobustnessBenchmark(benchmarkId)) {
+        rawPerformance = getModelRobustnessPerformance(model.id, benchmarkId, results);
+      } else {
+        rawPerformance = getModelBenchmarkPerformance(
+          model.id,
+          benchmarkId,
+          results,
+          tasks
+        );
+      }
+      if (rawPerformance === null) continue;
+
+      let normalizedPerformance = normalizeValue(rawPerformance, stats);
+
+      // Invert for benchmarks where lower is better
+      if (INVERTED_BENCHMARKS.has(benchmarkId)) {
+        normalizedPerformance = 1 - normalizedPerformance;
+      }
+
+      normalizedPerformances.push(normalizedPerformance);
+    }
+
+    // Only include models with data for ALL selected benchmarks
+    if (normalizedPerformances.length !== benchmarkIds.length) continue;
+
+    dataPoints.push({
+      modelId: model.id,
+      modelName: model.name,
+      organization: model.organization,
+      params: parseModelParams(model.params),
+      performance: mean(normalizedPerformances),
       benchmarkCount: normalizedPerformances.length,
     });
   }

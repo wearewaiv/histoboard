@@ -36,7 +36,7 @@ Histoboard provides a **unified view** of pathology foundation model performance
 - **Leaderboard** — Compare models across all benchmarks with detailed per-task rankings
 - **Arena** — Head-to-head comparison of 2-5 models with win/tie/loss statistics
 - **Model Profiles** — Detailed view of each model's performance, architecture, and metadata
-- **Scaling Laws** — Visualize the relationship between model size and performance
+- **Direct comparison** — Visualize the relationship between model size and performance
 - **Timeline** — Track model releases over time
 
 ## Supported Benchmarks
