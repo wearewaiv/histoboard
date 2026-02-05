@@ -31,10 +31,8 @@ function getOrganGroupLabel(organ: string): string {
   return organ.charAt(0).toUpperCase() + organ.slice(1);
 }
 
-// Compute unique grouped organs from tasks (excluding Multi-organ)
-const groupedOrgans = [...new Set(tasks.map((t) => getOrganGroupLabel(t.organ)))]
-  .filter((organ) => organ !== "Multi-organ")
-  .sort();
+// Compute unique grouped organs from tasks
+const groupedOrgans = [...new Set(tasks.map((t) => getOrganGroupLabel(t.organ)))].sort();
 
 const stats = {
   benchmarkCount: benchmarks.length,

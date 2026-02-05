@@ -5,19 +5,25 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, ChevronUp, TrendingUp } from "lucide-react";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
 import { LeaderboardTable } from "@/components/tables/LeaderboardTable";
+import { ScalingLawsChart } from "@/components/charts/ScalingLawsChart";
+import { ModelSizePerformanceChart } from "@/components/charts/ModelSizePerformanceChart";
 
 import modelsData from "@/data/models.json";
 import benchmarksData from "@/data/benchmarks.json";
 import rankingsData from "@/data/rankings.json";
+import tasksData from "@/data/tasks.json";
+import resultsData from "@/data/results.json";
 
-import type { Model, Benchmark } from "@/types";
+import type { Model, Benchmark, Task, Result } from "@/types";
 
 const models = modelsData as Model[];
 const benchmarks = benchmarksData as Benchmark[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
+const tasks = tasksData as Task[];
+const results = resultsData as Result[];
 
 // Helper to parse size strings like "632M", "1.3B", "307M" to numeric values (in millions)
 function parseParamSize(size: string): number {
@@ -533,7 +539,7 @@ export default function LeaderboardPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Leaderboard</h1>
         <p className="mt-2 text-muted-foreground">
-          Compare pathology foundation models across benchmarks
+          An overview of pathology foundation models performance across multiple benchmarks
         </p>
       </div>
 
@@ -709,6 +715,46 @@ export default function LeaderboardPage() {
               />
         </CardContent>
       </Card>
+
+      {/* Direct comparison */}
+      <section className="mt-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Direct comparison</h1>
+        <p className="mt-2 text-muted-foreground">
+          Compare pathology foundation models on a common set of benchmarks
+        </p>
+      </div>
+
+        <Card>
+          <CardContent className="pt-6">
+            <ScalingLawsChart
+              models={models}
+              tasks={tasks}
+              results={results}
+            />
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Model Size vs Performance */}
+      <section className="mt-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold">Scaling laws</h1>
+          <p className="mt-2 text-muted-foreground">
+            Explore how model size correlates with performance or robustness across benchmarks
+          </p>
+        </div>
+
+        <Card>
+          <CardContent className="pt-6">
+            <ModelSizePerformanceChart
+              models={models}
+              tasks={tasks}
+              results={results}
+            />
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }

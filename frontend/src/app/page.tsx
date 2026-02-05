@@ -4,29 +4,53 @@ import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trophy, Database, BarChart3, Award, TrendingUp, Globe } from "lucide-react";
-import { ScalingLawsChart } from "@/components/charts/ScalingLawsChart";
+import { Trophy, Database, BarChart3, Award, Globe } from "lucide-react";
 
 import modelsData from "@/data/models.json";
 import tasksData from "@/data/tasks.json";
 import benchmarksData from "@/data/benchmarks.json";
 import rankingsData from "@/data/rankings.json";
-import resultsData from "@/data/results.json";
 
-import type { Model, Task, Benchmark, Result } from "@/types";
+import type { Model, Task, Benchmark } from "@/types";
 
 const models = modelsData as Model[];
 const tasks = tasksData as Task[];
 const benchmarks = benchmarksData as Benchmark[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
-const results = resultsData as Result[];
+
+// Organ grouping configuration (same as Arena page)
+const ORGAN_GROUPS: Record<string, string[]> = {
+  "Cervix": ["cervical", "cervix"],
+  "Colorectal": ["colon", "colorectal", "rectum"],
+  "Gastric": ["gastric", "gi"],
+  "Multi-organ": ["multi-organ", "pan-cancer"],
+};
+
+// Get grouped organ label
+function getOrganGroupLabel(organ: string): string {
+  for (const [groupLabel, organs] of Object.entries(ORGAN_GROUPS)) {
+    if (organs.includes(organ.toLowerCase())) {
+      return groupLabel;
+    }
+  }
+  return organ.charAt(0).toUpperCase() + organ.slice(1);
+}
+
+// Count unique grouped organs
+function countUniqueOrgans(tasks: Task[]): number {
+  const groupedOrgans = new Set<string>();
+  for (const task of tasks) {
+    groupedOrgans.add(getOrganGroupLabel(task.organ));
+  }
+  return groupedOrgans.size;
+}
 
 export default function HomePage() {
   const stats = {
     models: models.length,
     tasks: tasks.length,
     benchmarks: benchmarks.length,
-    organs: [...new Set(tasks.map((t) => t.organ))].length,
+    organs: countUniqueOrgans(tasks),
   };
 
   // Models to exclude from rankings (e.g., benchmark-specific baselines)
@@ -94,7 +118,7 @@ export default function HomePage() {
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
           A centralized dashboard aggregating benchmark results to compare
-          pathology foundation models.
+          pathology foundation models
         </p>
         <div className="flex items-center justify-center gap-4">
           <Link href="/leaderboard">
@@ -191,23 +215,6 @@ export default function HomePage() {
             <PodiumCard key={benchmark.id} benchmark={benchmark} topModels={topModels} />
           ))}
         </div>
-      </section>
-
-      {/* Scaling Laws */}
-      <section className="mb-12">
-        <h2 className="mb-2 flex items-center gap-2 text-2xl font-bold">
-          <TrendingUp className="h-5 w-5" />
-          Scaling Laws
-        </h2>
-        <Card>
-          <CardContent className="pt-6">
-            <ScalingLawsChart
-              models={models}
-              tasks={tasks}
-              results={results}
-            />
-          </CardContent>
-        </Card>
       </section>
 
       {/* Visitor Map */}
