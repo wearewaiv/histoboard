@@ -49,19 +49,20 @@ export interface UseSetToggleReturn<T> {
  * @param initialValues - Array of values to initialize the set with (all selected by default)
  * @param options - Optional configuration
  * @param options.startEmpty - If true, start with empty selection instead of all selected
+ * @param options.initialSelection - If provided, use this subset as the initial selection
  * @returns Object containing selection state and manipulation functions
  */
 export function useSetToggle<T>(
   initialValues: T[],
-  options: { startEmpty?: boolean } = {}
+  options: { startEmpty?: boolean; initialSelection?: T[] } = {}
 ): UseSetToggleReturn<T> {
-  const { startEmpty = false } = options;
+  const { startEmpty = false, initialSelection } = options;
 
   // Memoize initial values array to prevent recreation
   const allValues = useMemo(() => initialValues, [initialValues]);
 
   const [selected, setSelected] = useState<Set<T>>(
-    () => new Set(startEmpty ? [] : allValues)
+    () => new Set(initialSelection ?? (startEmpty ? [] : allValues))
   );
 
   /**

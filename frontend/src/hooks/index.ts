@@ -9,6 +9,8 @@
 export { useSetToggle, useMultipleSetToggles } from "./useSetToggle";
 export type { UseSetToggleReturn } from "./useSetToggle";
 
+export { useBenchmarkAxisLabel } from "./useBenchmarkAxisLabel";
+
 export {
   useTaskFiltering,
   useSimpleTaskFiltering,
