@@ -229,3 +229,24 @@
   background: hsl(280 30% 80%);
   border-radius: 2px;
 }
+
+/* Vega tooltip styling */
+#vg-tooltip-element {
+  font-family: inherit;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background-color: white;
+  padding: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  font-size: 0.875rem;
+  max-width: 300px;
+}
+
+#vg-tooltip-element td.key {
+  color: hsl(280 15% 45%);
+  padding-right: 0.5rem;
+}
+
+#vg-tooltip-element td.value {
+  font-weight: 600;
+}
