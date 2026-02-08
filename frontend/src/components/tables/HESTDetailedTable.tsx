@@ -1,6 +1,15 @@
 "use client";
 
-import React, { useMemo } from "react";
+/**
+ * HEST Benchmark Detailed Table
+ *
+ * Renders per-task results for the HEST spatial transcriptomics benchmark.
+ * Simple filter setup: organs and task names only (no task categories).
+ *
+ * Used by: app/benchmarks/[id]/page.tsx (benchmark ID "hest")
+ */
+
+import React from "react";
 import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber, getValueColor } from "@/lib/utils";
@@ -13,14 +22,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSetToggle } from "@/hooks";
-import {
-  buildResultsMap,
-  computeTaskStats,
-  computeTaskRanks,
-  computeModelAverageRanks,
-  computeModelAverageValues,
-} from "@/types/results";
+import { useSimpleTaskFiltering } from "@/hooks";
+import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
 interface HESTDetailedTableProps {
   models: Model[];
@@ -34,94 +37,28 @@ export function HESTDetailedTable({
   tasks,
   results,
 }: HESTDetailedTableProps) {
-  // Extract unique filter options
-  const organs = useMemo(
-    () => [...new Set(tasks.map((t) => t.organ))].sort(),
-    [tasks]
-  );
-  const taskNames = useMemo(
-    () => [...new Set(tasks.map((t) => t.name))].sort(),
-    [tasks]
-  );
+  // Shared filter hook for organs + task names
+  const { filteredTasks, organs, taskNames, availableOrgans, availableTaskNames } =
+    useSimpleTaskFiltering(tasks);
 
-  // Filter state using shared hook
-  const organFilter = useSetToggle(organs);
-  const taskFilter = useSetToggle(taskNames);
+  // Shared data computation hook
+  const { resultsMap, taskStats, modelAvgRanks, modelAvgValues, sortedModels } =
+    useDetailedTableData({ models, filteredTasks, results });
 
-  // Filter tasks by selected organs AND selected task names
-  const filteredTasks = useMemo(
-    () =>
-      tasks.filter(
-        (t) => organFilter.selected.has(t.organ) && taskFilter.selected.has(t.name)
-      ),
-    [tasks, organFilter.selected, taskFilter.selected]
-  );
+  // Dropdown options
+  const organOptions = availableOrgans
+    .map((organ) => ({
+      id: organ,
+      label: organ.charAt(0).toUpperCase() + organ.slice(1),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
-  // Build lookup maps using shared utilities
-  const resultsMap = useMemo(() => buildResultsMap(results), [results]);
-
-  const filteredTaskIds = useMemo(
-    () => filteredTasks.map((t) => t.id),
-    [filteredTasks]
-  );
-
-  const taskStats = useMemo(
-    () => computeTaskStats(results, filteredTaskIds),
-    [results, filteredTaskIds]
-  );
-
-  // Compute rankings using shared utilities
-  const taskRanks = useMemo(
-    () => computeTaskRanks(results, true),
-    [results]
-  );
-
-  const modelIds = useMemo(() => models.map((m) => m.id), [models]);
-
-  const modelAvgRanks = useMemo(
-    () => computeModelAverageRanks(taskRanks, modelIds, filteredTaskIds),
-    [taskRanks, modelIds, filteredTaskIds]
-  );
-
-  const modelAvgValues = useMemo(
-    () => computeModelAverageValues(resultsMap, modelIds, filteredTaskIds),
-    [resultsMap, modelIds, filteredTaskIds]
-  );
-
-  // Sort models by average rank
-  const sortedModels = useMemo(
-    () =>
-      [...models].sort((a, b) => {
-        const rankA = modelAvgRanks.get(a.id) ?? 999;
-        const rankB = modelAvgRanks.get(b.id) ?? 999;
-        return rankA - rankB;
-      }),
-    [models, modelAvgRanks]
-  );
-
-  // Dropdown options for organs filter
-  const organOptions = useMemo(
-    () =>
-      organs
-        .map((organ) => ({
-          id: organ,
-          label: organ.charAt(0).toUpperCase() + organ.slice(1),
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label)),
-    [organs]
-  );
-
-  // Dropdown options for tasks filter
-  const taskOptions = useMemo(
-    () =>
-      taskNames
-        .map((taskName) => ({
-          id: taskName,
-          label: taskName,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label)),
-    [taskNames]
-  );
+  const taskOptions = availableTaskNames
+    .map((taskName) => ({
+      id: taskName,
+      label: taskName,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div>
@@ -130,10 +67,10 @@ export function HESTDetailedTable({
         <MultiSelectDropdown
           label="Indications"
           options={organOptions}
-          selectedIds={organFilter.selected}
-          onToggle={organFilter.toggle}
-          onSelectAll={organFilter.selectAll}
-          onClearAll={organFilter.clearAll}
+          selectedIds={organs.selected}
+          onToggle={organs.toggle}
+          onSelectAll={organs.selectAll}
+          onClearAll={organs.clearAll}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -164,10 +101,10 @@ export function HESTDetailedTable({
         <MultiSelectDropdown
           label="All Tasks"
           options={taskOptions}
-          selectedIds={taskFilter.selected}
-          onToggle={taskFilter.toggle}
-          onSelectAll={taskFilter.selectAll}
-          onClearAll={taskFilter.clearAll}
+          selectedIds={taskNames.selected}
+          onToggle={taskNames.toggle}
+          onSelectAll={taskNames.selectAll}
+          onClearAll={taskNames.clearAll}
         />
       </div>
 
@@ -204,7 +141,6 @@ export function HESTDetailedTable({
               const modelResults = resultsMap.get(model.id);
               const avgRank = modelAvgRanks.get(model.id);
 
-              // Check if model has any results for filtered tasks
               const hasResults = filteredTasks.some(
                 (task) => modelResults?.has(task.id)
               );
@@ -237,7 +173,7 @@ export function HESTDetailedTable({
                       : "-"}
                   </td>
                   {filteredTasks.map((task) => {
-                    const value = modelResults?.get(task.id);
+                    const value = modelResults?.get(task.id)?.value;
                     return (
                       <td
                         key={task.id}

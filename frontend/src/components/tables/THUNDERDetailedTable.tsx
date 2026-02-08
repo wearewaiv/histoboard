@@ -1,17 +1,22 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+/**
+ * THUNDER Benchmark Detailed Table
+ *
+ * Renders per-task results for the THUNDER benchmark (MICS Lab). Uses manual
+ * data computation instead of useDetailedTableData because:
+ * - Some metrics are lower-is-better (ECE for calibration, ASR for adversarial)
+ * - Models are sorted by official rank sum (not computed average rank)
+ *
+ * Used by: app/benchmarks/[id]/page.tsx (benchmark ID "thunder")
+ */
+
+import React, { useMemo } from "react";
 import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber } from "@/lib/utils";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
-
-interface THUNDERDetailedTableProps {
-  models: Model[];
-  tasks: Task[];
-  results: Result[];
-  modelRankings: { modelId: string; overallRank: number }[];
-}
+import { useSetToggle } from "@/hooks";
 
 // Define which metrics are lower-is-better
 const LOWER_IS_BETTER_TASKS = ["thunder_calibration", "thunder_adversarial"];
@@ -24,75 +29,51 @@ const TASK_TYPES = [
   "Segmentation",
 ] as const;
 
-type TaskType = typeof TASK_TYPES[number];
-
 // Get task type based on task ID
-function getTaskType(taskId: string): TaskType {
+function getTaskType(taskId: string): (typeof TASK_TYPES)[number] {
   if (taskId === "thunder_calibration") return "Calibration";
   if (taskId === "thunder_adversarial") return "Robustness";
   if (taskId === "thunder_segmentation") return "Segmentation";
   return "Patch-level classification";
 }
 
+interface THUNDERDetailedTableProps {
+  models: Model[];
+  tasks: Task[];
+  results: Result[];
+  modelRankings: { modelId: string; overallRank: number }[];
+}
+
 export function THUNDERDetailedTable({
   models,
   tasks,
   results,
-  modelRankings,
 }: THUNDERDetailedTableProps) {
-  // Get unique task types present in the data
-  const taskTypes = useMemo(() => {
+  // Available filter values
+  const availableTaskTypes = useMemo(() => {
     const types = new Set(tasks.map((t) => getTaskType(t.id)));
-    // Return in the order defined in TASK_TYPES
     return TASK_TYPES.filter((type) => types.has(type));
   }, [tasks]);
 
-  // Get unique task names for filtering
-  const taskNames = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.name))].sort();
-  }, [tasks]);
-
-  // Filter states - all selected by default
-  const [selectedTaskTypes, setSelectedTaskTypes] = useState<Set<string>>(
-    () => new Set(taskTypes)
-  );
-  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
-    () => new Set(taskNames)
+  const availableTaskNames = useMemo(
+    () => [...new Set(tasks.map((t) => t.name))].sort(),
+    [tasks]
   );
 
-  // Toggle helpers
-  const toggleTaskType = (taskType: string) => {
-    setSelectedTaskTypes((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskType)) {
-        next.delete(taskType);
-      } else {
-        next.add(taskType);
-      }
-      return next;
-    });
-  };
-
-  const toggleTask = (taskName: string) => {
-    setSelectedTasks((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskName)) {
-        next.delete(taskName);
-      } else {
-        next.add(taskName);
-      }
-      return next;
-    });
-  };
+  // Filter state via shared hook
+  const taskTypes = useSetToggle<string>([...availableTaskTypes]);
+  const taskNames = useSetToggle(availableTaskNames);
 
   // Filter tasks by selected task types AND selected task names
-  const filteredTasks = useMemo(() => {
-    return tasks.filter(
-      (t) =>
-        selectedTaskTypes.has(getTaskType(t.id)) &&
-        selectedTasks.has(t.name)
-    );
-  }, [tasks, selectedTaskTypes, selectedTasks]);
+  const filteredTasks = useMemo(
+    () =>
+      tasks.filter(
+        (t) =>
+          taskTypes.selected.has(getTaskType(t.id)) &&
+          taskNames.selected.has(t.name)
+      ),
+    [tasks, taskTypes.selected, taskNames.selected]
+  );
 
   // Create a lookup map for results: modelId -> taskId -> value
   const resultsMap = useMemo(() => {
@@ -126,13 +107,11 @@ export function THUNDERDetailedTable({
   // Get official rank sums from results data (thunder_ranksum task)
   const modelRankSums = useMemo(() => {
     const rankSums = new Map<string, number>();
-
     for (const result of results) {
       if (result.taskId === "thunder_ranksum") {
         rankSums.set(result.modelId, result.value);
       }
     }
-
     return rankSums;
   }, [results]);
 
@@ -166,13 +145,13 @@ export function THUNDERDetailedTable({
 
   // Format value with appropriate precision
   function formatValue(value: number, taskId: string): string {
-    if (taskId === "thunder_calibration") {
-      return formatNumber(value, 1) + "%"; // ECE as percentage
+    if (
+      taskId === "thunder_calibration" ||
+      taskId === "thunder_adversarial"
+    ) {
+      return formatNumber(value, 1) + "%";
     }
-    if (taskId === "thunder_adversarial") {
-      return formatNumber(value, 1) + "%"; // Success rate as percentage
-    }
-    return formatNumber(value, 3); // Accuracy/Dice as decimal
+    return formatNumber(value, 3);
   }
 
   // Get metric label for task
@@ -184,8 +163,13 @@ export function THUNDERDetailedTable({
   }
 
   // Build options for dropdowns
-  const taskTypeOptions = taskTypes.map((type) => ({ id: type, label: type })).sort((a, b) => a.label.localeCompare(b.label));
-  const taskOptions = taskNames.map((name) => ({ id: name, label: name })).sort((a, b) => a.label.localeCompare(b.label));
+  const taskTypeOptions = [...availableTaskTypes]
+    .map((type) => ({ id: type, label: type }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  const taskOptions = availableTaskNames
+    .map((name) => ({ id: name, label: name }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div>
@@ -194,21 +178,20 @@ export function THUNDERDetailedTable({
         <MultiSelectDropdown
           label="Task Type"
           options={taskTypeOptions}
-          selectedIds={selectedTaskTypes}
-          onToggle={toggleTaskType}
-          onSelectAll={() => setSelectedTaskTypes(new Set(taskTypes))}
-          onClearAll={() => setSelectedTaskTypes(new Set())}
+          selectedIds={taskTypes.selected}
+          onToggle={taskTypes.toggle}
+          onSelectAll={taskTypes.selectAll}
+          onClearAll={taskTypes.clearAll}
         />
         <MultiSelectDropdown
           label="All Tasks"
           options={taskOptions}
-          selectedIds={selectedTasks}
-          onToggle={toggleTask}
-          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
-          onClearAll={() => setSelectedTasks(new Set())}
+          selectedIds={taskNames.selected}
+          onToggle={taskNames.toggle}
+          onSelectAll={taskNames.selectAll}
+          onClearAll={taskNames.clearAll}
         />
       </div>
-
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
@@ -218,7 +201,11 @@ export function THUNDERDetailedTable({
                 Model
               </th>
               <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
-                <div className="text-xs leading-tight">Rank<br />sum</div>
+                <div className="text-xs leading-tight">
+                  Rank
+                  <br />
+                  sum
+                </div>
               </th>
               {filteredTasks.map((task) => (
                 <th
@@ -240,9 +227,8 @@ export function THUNDERDetailedTable({
               const modelResults = resultsMap.get(model.id);
               const rankSum = modelRankSums.get(model.id);
 
-              // Check if model has any results for filtered tasks
-              const hasResults = filteredTasks.some(
-                (task) => modelResults?.has(task.id)
+              const hasResults = filteredTasks.some((task) =>
+                modelResults?.has(task.id)
               );
               if (!hasResults) return null;
 
@@ -278,7 +264,9 @@ export function THUNDERDetailedTable({
                         )}
                       >
                         {value !== undefined ? (
-                          <span className="font-medium">{formatValue(value, task.id)}</span>
+                          <span className="font-medium">
+                            {formatValue(value, task.id)}
+                          </span>
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}

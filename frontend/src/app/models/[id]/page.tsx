@@ -1,3 +1,12 @@
+/**
+ * Model Detail Page (/models/[id])
+ *
+ * Profile page for a single foundation model. Shows metadata (architecture,
+ * params, license, training data), publication links, and per-benchmark
+ * ranking badges with medal icons for top-3 placements.
+ * Pre-rendered at build time via generateStaticParams.
+ */
+
 import React from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

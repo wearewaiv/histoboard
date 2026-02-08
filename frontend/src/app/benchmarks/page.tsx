@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Benchmarks Index Page (/benchmarks)
+ *
+ * Overview of all supported benchmarks. Displays cards with benchmark metadata,
+ * task counts, organ coverage, and links to the detailed results page. Supports
+ * filtering by organ and task type category.
+ */
+
 import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

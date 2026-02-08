@@ -1,10 +1,22 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef } from "react";
+/**
+ * Stanford PathBench Detailed Table
+ *
+ * Renders per-task results for the Stanford PathBench benchmark. Supports
+ * switching between 4 metrics (AUROC, Balanced Accuracy, Sensitivity, Specificity)
+ * and displays confidence intervals. Maintains a separate resultsMap alongside
+ * the shared hook to store all metric fields needed for CI rendering.
+ *
+ * Used by: app/benchmarks/[id]/page.tsx (benchmark ID "stanford")
+ */
+
+import React, { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task } from "@/types";
-import { cn, formatNumber } from "@/lib/utils";
+import type { StanfordResult } from "@/types/results";
+import { cn, formatNumber, getValueColor } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
@@ -15,6 +27,8 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSetToggle } from "@/hooks";
+import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
 // Format cryptic task names to be more readable
 function formatTaskName(name: string): string {
@@ -22,12 +36,12 @@ function formatTaskName(name: string): string {
     "lung exp subtype": "Lung Expression Subtype",
     "lusc vs luad": "LUSC vs LUAD",
     "CPTAC-MYC": "MYC Activation (CPTAC)",
-    "Chrom": "Chromatin Remodeling",
+    Chrom: "Chromatin Remodeling",
     "CPTAC-grade": "Tumor Grade (CPTAC)",
     "tumor label": "Tumor Label",
-    "MTOR": "mTOR Pathway",
-    "P53": "P53 Pathway",
-    "SWI": "SWI/SNF Pathway",
+    MTOR: "mTOR Pathway",
+    P53: "P53 Pathway",
+    SWI: "SWI/SNF Pathway",
     "gi subtype": "GI Subtype",
     "ERG status": "ERG Status",
     "prad mrna cluster": "Prostate mRNA Cluster",
@@ -40,11 +54,11 @@ function formatTaskName(name: string): string {
     "brain exp subtype": "Brain Expression Subtype",
     "brain hist subtype": "Brain Histology Subtype",
     "MGMT OOD": "MGMT Status (OOD)",
-    "MGMT": "MGMT Status",
-    "IDH": "IDH Status",
-    "Immunegroup": "Immune Group",
-    "MYC": "MYC Status",
-    "PI3K": "PI3K Pathway",
+    MGMT: "MGMT Status",
+    IDH: "IDH Status",
+    Immunegroup: "Immune Group",
+    MYC: "MYC Status",
+    PI3K: "PI3K Pathway",
     "TCGA-Grade": "Tumor Grade (TCGA)",
     "PAM50 status": "PAM50 Status",
     "ER status": "ER Status",
@@ -59,45 +73,32 @@ function formatTaskName(name: string): string {
 // Format organ names for display
 function formatOrgan(organ: string): string {
   const organMap: Record<string, string> = {
-    "lung": "Lung",
-    "breast": "Breast",
-    "brain": "Brain",
-    "prostate": "Prostate",
-    "colon": "Colon",
-    "bladder": "Bladder",
-    "kidney": "Kidney",
-    "GI": "Gastrointestinal",
+    lung: "Lung",
+    breast: "Breast",
+    brain: "Brain",
+    prostate: "Prostate",
+    colon: "Colon",
+    bladder: "Bladder",
+    kidney: "Kidney",
+    GI: "Gastrointestinal",
     "pan-cancer": "Pan-cancer",
   };
   return organMap[organ] || organ.charAt(0).toUpperCase() + organ.slice(1);
 }
 
 // Determine if a task is Slide-level or Patch-level classification
-// External benchmarking datasets are typically Patch-level
-function getClassificationLevel(taskName: string): "Slide" | "Patch" {
+function getClassificationLevel(taskName: string): string {
   const patchLevelTasks = new Set([
-    "BACH", "BRACS", "BreakHis", "LC25000", "MHIST",
-    "NCT-CRC-HE", "SICAPv2", "UniToPatho"
+    "BACH",
+    "BRACS",
+    "BreakHis",
+    "LC25000",
+    "MHIST",
+    "NCT-CRC-HE",
+    "SICAPv2",
+    "UniToPatho",
   ]);
   return patchLevelTasks.has(taskName) ? "Patch" : "Slide";
-}
-
-interface StanfordResult {
-  modelId: string;
-  taskId: string;
-  value: number;
-  balancedAccuracy?: number;
-  sensitivity?: number;
-  specificity?: number;
-  aurocLower?: number;
-  aurocUpper?: number;
-  balancedAccuracyLower?: number;
-  balancedAccuracyUpper?: number;
-  sensitivityLower?: number;
-  sensitivityUpper?: number;
-  specificityLower?: number;
-  specificityUpper?: number;
-  source: string;
 }
 
 interface StanfordDetailedTableProps {
@@ -107,8 +108,11 @@ interface StanfordDetailedTableProps {
   modelRankings: { modelId: string; overallRank: number }[];
 }
 
-type MetricType = "auroc" | "balanced_accuracy" | "sensitivity" | "specificity";
-type ClassificationLevel = "Slide" | "Patch";
+type MetricType =
+  | "auroc"
+  | "balanced_accuracy"
+  | "sensitivity"
+  | "specificity";
 
 const METRIC_OPTIONS: { value: MetricType; label: string }[] = [
   { value: "auroc", label: "AUROC" },
@@ -117,116 +121,59 @@ const METRIC_OPTIONS: { value: MetricType; label: string }[] = [
   { value: "specificity", label: "Specificity" },
 ];
 
+const CLASSIFICATION_LEVELS = ["Slide", "Patch"];
+
 export function StanfordDetailedTable({
   models,
   tasks,
   results,
-  modelRankings,
 }: StanfordDetailedTableProps) {
-  // Get unique organs for filtering
-  const organs = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.organ))].sort();
-  }, [tasks]);
-
-  // Get unique task categories for filtering
-  const categories = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.category as string))].sort();
-  }, [tasks]);
-
-  // Get unique task names for filtering
-  const taskNames = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.name))].sort();
-  }, [tasks]);
-
-  // Get unique classification levels
-  const classificationLevels: ClassificationLevel[] = ["Slide", "Patch"];
-
-  // Filter states
-  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
-    new Set<string>()
+  // Available filter values
+  const availableOrgans = useMemo(
+    () => [...new Set(tasks.map((t) => t.organ))].sort(),
+    [tasks]
   );
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    new Set<string>()
+  const availableCategories = useMemo(
+    () => [...new Set(tasks.map((t) => t.category as string))].sort(),
+    [tasks]
   );
-  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
-    new Set<string>()
+  const availableTaskNames = useMemo(
+    () => [...new Set(tasks.map((t) => t.name))].sort(),
+    [tasks]
   );
-  const [selectedLevels, setSelectedLevels] = useState<Set<ClassificationLevel>>(
-    new Set<ClassificationLevel>(classificationLevels)
-  );
+
+  // Filter state via shared hook
+  const organs = useSetToggle(availableOrgans);
+  const categories = useSetToggle(availableCategories);
+  const taskNamesFilter = useSetToggle(availableTaskNames);
+  const levels = useSetToggle<string>(CLASSIFICATION_LEVELS);
   const [selectedMetric, setSelectedMetric] = useState<MetricType>("auroc");
   const [searchQuery, setSearchQuery] = useState("");
-  const initializedRef = useRef(false);
 
-  // Initialize selected values when options become available (only once)
-  useEffect(() => {
-    if (!initializedRef.current && organs.length > 0 && categories.length > 0 && taskNames.length > 0) {
-      setSelectedOrgans(new Set(organs));
-      setSelectedCategories(new Set(categories));
-      setSelectedTasks(new Set(taskNames));
-      initializedRef.current = true;
-    }
-  }, [organs, categories, taskNames]);
-
-  // Toggle helpers
-  const toggleOrgan = (organ: string) => {
-    setSelectedOrgans((prev) => {
-      const next = new Set(prev);
-      if (next.has(organ)) {
-        next.delete(organ);
-      } else {
-        next.add(organ);
+  // Extract the selected metric value from a result
+  const getMetricValue = useCallback(
+    (result: StanfordResult): number | undefined => {
+      switch (selectedMetric) {
+        case "auroc":
+          return result.value;
+        case "balanced_accuracy":
+          return result.balancedAccuracy;
+        case "sensitivity":
+          return result.sensitivity;
+        case "specificity":
+          return result.specificity;
+        default:
+          return result.value;
       }
-      return next;
-    });
-  };
+    },
+    [selectedMetric]
+  );
 
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
-      return next;
-    });
-  };
-
-  const toggleTask = (taskName: string) => {
-    setSelectedTasks((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskName)) {
-        next.delete(taskName);
-      } else {
-        next.add(taskName);
-      }
-      return next;
-    });
-  };
-
-  const toggleLevel = (level: string) => {
-    const typedLevel = level as ClassificationLevel;
-    setSelectedLevels((prev) => {
-      const next = new Set(prev);
-      if (next.has(typedLevel)) {
-        next.delete(typedLevel);
-      } else {
-        next.add(typedLevel);
-      }
-      return next;
-    });
-  };
-
-  // Filter tasks by selected organs, categories, task names, classification levels, and search query
-  // When there's a search query, it searches across ALL tasks (ignoring filters)
-  // Sort alphabetically by formatted task name
+  // Filter tasks (search overrides filters when active)
   const filteredTasks = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
 
     let filtered: Task[];
-    // If there's a search query, search across all tasks
-    // All query words must be present in the searchable text
     if (query) {
       const queryWords = query.split(/\s+/);
       filtered = tasks.filter((t) => {
@@ -235,42 +182,66 @@ export function StanfordDetailedTable({
           formatTaskName(t.name),
           t.category as string,
           t.organ,
-        ].join(" ").toLowerCase();
+        ]
+          .join(" ")
+          .toLowerCase();
         return queryWords.every((word) => searchableText.includes(word));
       });
     } else {
-      // Otherwise, apply all filters
       filtered = tasks.filter(
         (t) =>
-          selectedOrgans.has(t.organ) &&
-          selectedCategories.has(t.category as string) &&
-          selectedTasks.has(t.name) &&
-          selectedLevels.has(getClassificationLevel(t.name))
+          organs.selected.has(t.organ) &&
+          categories.selected.has(t.category as string) &&
+          taskNamesFilter.selected.has(t.name) &&
+          levels.selected.has(getClassificationLevel(t.name))
       );
     }
 
-    // Sort alphabetically by formatted task name
     return filtered.sort((a, b) =>
       formatTaskName(a.name).localeCompare(formatTaskName(b.name))
     );
-  }, [tasks, selectedOrgans, selectedCategories, selectedTasks, selectedLevels, searchQuery]);
+  }, [
+    tasks,
+    organs.selected,
+    categories.selected,
+    taskNamesFilter.selected,
+    levels.selected,
+    searchQuery,
+  ]);
 
-  // Create a lookup map for results: modelId -> taskId -> all metrics
+  // Shared data computation hook (with custom metric extraction)
+  const { taskStats, modelAvgRanks, modelAvgValues, sortedModels } =
+    useDetailedTableData<StanfordResult>({
+      models,
+      filteredTasks,
+      results,
+      getMetricValue,
+    });
+
+  // Separate resultsMap from the hook's: useDetailedTableData only stores a single
+  // numeric value per (model, task), but Stanford cells need all metric fields
+  // (auroc, balancedAccuracy, etc.) plus their CI bounds for rendering.
   const resultsMap = useMemo(() => {
-    const map = new Map<string, Map<string, {
-      auroc: number;
-      balancedAccuracy?: number;
-      sensitivity?: number;
-      specificity?: number;
-      aurocLower?: number;
-      aurocUpper?: number;
-      balancedAccuracyLower?: number;
-      balancedAccuracyUpper?: number;
-      sensitivityLower?: number;
-      sensitivityUpper?: number;
-      specificityLower?: number;
-      specificityUpper?: number;
-    }>>();
+    const map = new Map<
+      string,
+      Map<
+        string,
+        {
+          auroc: number;
+          balancedAccuracy?: number;
+          sensitivity?: number;
+          specificity?: number;
+          aurocLower?: number;
+          aurocUpper?: number;
+          balancedAccuracyLower?: number;
+          balancedAccuracyUpper?: number;
+          sensitivityLower?: number;
+          sensitivityUpper?: number;
+          specificityLower?: number;
+          specificityUpper?: number;
+        }
+      >
+    >();
     for (const result of results) {
       if (!map.has(result.modelId)) {
         map.set(result.modelId, new Map());
@@ -293,133 +264,9 @@ export function StanfordDetailedTable({
     return map;
   }, [results]);
 
-  // Get the metric value for a result based on selected metric
-  const getMetricValue = (result: StanfordResult): number | undefined => {
-    switch (selectedMetric) {
-      case "auroc":
-        return result.value;
-      case "balanced_accuracy":
-        return result.balancedAccuracy;
-      case "sensitivity":
-        return result.sensitivity;
-      case "specificity":
-        return result.specificity;
-      default:
-        return result.value;
-    }
-  };
-
-  // Get min/max for each task for color scaling (based on selected metric)
-  const taskStats = useMemo(() => {
-    const stats = new Map<string, { min: number; max: number }>();
-    for (const task of filteredTasks) {
-      const values: number[] = [];
-      for (const result of results) {
-        if (result.taskId === task.id) {
-          const value = getMetricValue(result);
-          if (value !== undefined) {
-            values.push(value);
-          }
-        }
-      }
-      if (values.length > 0) {
-        stats.set(task.id, {
-          min: Math.min(...values),
-          max: Math.max(...values),
-        });
-      }
-    }
-    return stats;
-  }, [filteredTasks, results, selectedMetric]);
-
-  // Compute average rank per model (across filtered tasks, using selected metric)
-  const modelAvgRanks = useMemo(() => {
-    const avgRanks = new Map<string, number>();
-
-    // For each task, compute ranks
-    const taskRanks = new Map<string, Map<string, number>>();
-    for (const task of filteredTasks) {
-      const taskResults = results
-        .filter((r) => r.taskId === task.id)
-        .map((r) => ({
-          modelId: r.modelId,
-          value: getMetricValue(r) ?? 0,
-        }))
-        .sort((a, b) => b.value - a.value); // Higher is better
-
-      const ranks = new Map<string, number>();
-      taskResults.forEach((r, idx) => {
-        ranks.set(r.modelId, idx + 1);
-      });
-      taskRanks.set(task.id, ranks);
-    }
-
-    // Compute average rank per model
-    for (const model of models) {
-      const ranks: number[] = [];
-      for (const task of filteredTasks) {
-        const rank = taskRanks.get(task.id)?.get(model.id);
-        if (rank !== undefined) {
-          ranks.push(rank);
-        }
-      }
-      if (ranks.length > 0) {
-        avgRanks.set(model.id, ranks.reduce((a, b) => a + b, 0) / ranks.length);
-      }
-    }
-
-    return avgRanks;
-  }, [models, filteredTasks, results, selectedMetric]);
-
-  // Compute average metric value per model (across filtered tasks, using selected metric)
-  const modelAvgValues = useMemo(() => {
-    const avgValues = new Map<string, number>();
-
-    for (const model of models) {
-      const values: number[] = [];
-      for (const task of filteredTasks) {
-        const result = results.find(r => r.modelId === model.id && r.taskId === task.id);
-        if (result) {
-          const value = getMetricValue(result);
-          if (value !== undefined) {
-            values.push(value);
-          }
-        }
-      }
-      if (values.length > 0) {
-        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
-      }
-    }
-
-    return avgValues;
-  }, [models, filteredTasks, results, selectedMetric]);
-
-  // Sort models by average rank
-  const sortedModels = useMemo(() => {
-    return [...models].sort((a, b) => {
-      const rankA = modelAvgRanks.get(a.id) ?? 999;
-      const rankB = modelAvgRanks.get(b.id) ?? 999;
-      return rankA - rankB;
-    });
-  }, [models, modelAvgRanks]);
-
-  // Get value color based on relative performance
-  function getValueColor(value: number, taskId: string): string {
-    const stats = taskStats.get(taskId);
-    if (!stats || stats.max === stats.min) return "";
-
-    const normalized = (value - stats.min) / (stats.max - stats.min);
-
-    if (normalized >= 0.9) return "bg-emerald-100 text-emerald-800";
-    if (normalized >= 0.7) return "bg-green-50 text-green-700";
-    if (normalized >= 0.3) return "bg-gray-50";
-    if (normalized >= 0.1) return "bg-orange-50 text-orange-700";
-    return "bg-red-50 text-red-700";
-  }
-
-  // Get metric display info
+  // Get metric display label
   const getMetricLabel = (metric: MetricType): string => {
-    return METRIC_OPTIONS.find(m => m.value === metric)?.label || metric;
+    return METRIC_OPTIONS.find((m) => m.value === metric)?.label || metric;
   };
 
   return (
@@ -428,15 +275,22 @@ export function StanfordDetailedTable({
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="justify-between min-w-[140px]">
+            <Button
+              variant="outline"
+              className="justify-between min-w-[140px]"
+            >
               <span className="truncate">
-                {METRIC_OPTIONS.find(m => m.value === selectedMetric)?.label || selectedMetric}
+                {METRIC_OPTIONS.find((m) => m.value === selectedMetric)
+                  ?.label || selectedMetric}
               </span>
               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuRadioGroup value={selectedMetric} onValueChange={(value) => setSelectedMetric(value as MetricType)}>
+            <DropdownMenuRadioGroup
+              value={selectedMetric}
+              onValueChange={(value) => setSelectedMetric(value as MetricType)}
+            >
               {METRIC_OPTIONS.map((option) => (
                 <DropdownMenuRadioItem key={option.value} value={option.value}>
                   {option.label}
@@ -447,55 +301,50 @@ export function StanfordDetailedTable({
         </DropdownMenu>
         <MultiSelectDropdown
           label="Indications"
-          options={organs
-            .map((organ) => ({
-              id: organ,
-              label: formatOrgan(organ),
-            }))
+          options={availableOrgans
+            .map((organ) => ({ id: organ, label: formatOrgan(organ) }))
             .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedOrgans}
-          onToggle={toggleOrgan}
-          onSelectAll={() => setSelectedOrgans(new Set(organs))}
-          onClearAll={() => setSelectedOrgans(new Set())}
+          selectedIds={organs.selected}
+          onToggle={organs.toggle}
+          onSelectAll={organs.selectAll}
+          onClearAll={organs.clearAll}
         />
         <MultiSelectDropdown
           label="Task Type"
-          options={classificationLevels
-            .map((level) => ({
-              id: level,
-              label: level === "Slide" ? "Slide-level classification" : "Patch-level classification",
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedLevels}
-          onToggle={toggleLevel}
-          onSelectAll={() => setSelectedLevels(new Set(classificationLevels))}
-          onClearAll={() => setSelectedLevels(new Set())}
+          options={CLASSIFICATION_LEVELS.map((level) => ({
+            id: level,
+            label:
+              level === "Slide"
+                ? "Slide-level classification"
+                : "Patch-level classification",
+          })).sort((a, b) => a.label.localeCompare(b.label))}
+          selectedIds={levels.selected}
+          onToggle={levels.toggle}
+          onSelectAll={levels.selectAll}
+          onClearAll={levels.clearAll}
         />
         <MultiSelectDropdown
           label="Task Categories"
-          options={categories
-            .map((category) => ({
-              id: category,
-              label: category,
-            }))
+          options={availableCategories
+            .map((category) => ({ id: category, label: category }))
             .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedCategories}
-          onToggle={toggleCategory}
-          onSelectAll={() => setSelectedCategories(new Set(categories))}
-          onClearAll={() => setSelectedCategories(new Set())}
+          selectedIds={categories.selected}
+          onToggle={categories.toggle}
+          onSelectAll={categories.selectAll}
+          onClearAll={categories.clearAll}
         />
         <MultiSelectDropdown
           label="All Tasks"
-          options={taskNames
+          options={availableTaskNames
             .map((taskName) => ({
               id: taskName,
               label: formatTaskName(taskName),
             }))
             .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedTasks}
-          onToggle={toggleTask}
-          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
-          onClearAll={() => setSelectedTasks(new Set())}
+          selectedIds={taskNamesFilter.selected}
+          onToggle={taskNamesFilter.toggle}
+          onSelectAll={taskNamesFilter.selectAll}
+          onClearAll={taskNamesFilter.clearAll}
         />
         <div className="relative flex-1 min-w-[200px] max-w-[300px]">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -517,7 +366,6 @@ export function StanfordDetailedTable({
         </div>
       </div>
 
-
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="sticky top-0 z-20">
@@ -526,10 +374,18 @@ export function StanfordDetailedTable({
                 Model
               </th>
               <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
-                <div className="text-xs leading-tight">Average<br />rank</div>
+                <div className="text-xs leading-tight">
+                  Average
+                  <br />
+                  rank
+                </div>
               </th>
               <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
-                <div className="text-xs leading-tight">Average<br />metric</div>
+                <div className="text-xs leading-tight">
+                  Average
+                  <br />
+                  metric
+                </div>
               </th>
               {filteredTasks.map((task) => (
                 <th
@@ -551,9 +407,8 @@ export function StanfordDetailedTable({
               const modelResults = resultsMap.get(model.id);
               const avgRank = modelAvgRanks.get(model.id);
 
-              // Check if model has any results for filtered tasks
-              const hasResults = filteredTasks.some(
-                (task) => modelResults?.has(task.id)
+              const hasResults = filteredTasks.some((task) =>
+                modelResults?.has(task.id)
               );
               if (!hasResults) return null;
 
@@ -579,7 +434,9 @@ export function StanfordDetailedTable({
                     {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                    {modelAvgValues.get(model.id) !== undefined
+                      ? formatNumber(modelAvgValues.get(model.id)!, 3)
+                      : "-"}
                   </td>
                   {filteredTasks.map((task) => {
                     const result = modelResults?.get(task.id);
@@ -617,7 +474,8 @@ export function StanfordDetailedTable({
                         key={task.id}
                         className={cn(
                           "px-2 py-2 text-center tabular-nums",
-                          value !== undefined && getValueColor(value, task.id)
+                          value !== undefined &&
+                            getValueColor(value, taskStats.get(task.id))
                         )}
                       >
                         {value !== undefined ? (
@@ -627,7 +485,8 @@ export function StanfordDetailedTable({
                             </span>
                             {lower !== undefined && upper !== undefined && (
                               <div className="text-[10px] text-muted-foreground">
-                                [{formatNumber(lower, 2)}-{formatNumber(upper, 2)}]
+                                [{formatNumber(lower, 2)}-
+                                {formatNumber(upper, 2)}]
                               </div>
                             )}
                           </div>

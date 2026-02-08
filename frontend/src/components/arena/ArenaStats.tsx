@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Arena Statistics Panel
+ *
+ * Displays win/tie/loss counts and summary statistics (average rank, average value)
+ * for each model in the arena comparison. Shown above the comparison table.
+ *
+ * Used by: app/arena/page.tsx
+ */
+
 import React from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

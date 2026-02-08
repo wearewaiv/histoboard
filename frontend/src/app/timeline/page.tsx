@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * Timeline Page (/timeline)
+ *
+ * Chronological visualization of foundation model releases. Displays models
+ * on a vertical timeline grouped by year, with metadata badges and links.
+ */
+
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";

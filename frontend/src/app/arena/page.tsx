@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Arena Page (/arena)
+ *
+ * Head-to-head comparison of 2–5 selected models. Features model search/selection,
+ * task filtering by organ groups and category groups, win/tie/loss statistics,
+ * and a detailed task-by-task comparison table. Organ and category groups normalize
+ * inconsistent naming from different benchmarks into user-friendly labels.
+ */
+
 import React, { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,7 +32,10 @@ const benchmarks = benchmarksData as Benchmark[];
 
 const MAX_MODELS = 5;
 
-// Organ grouping configuration: display label -> array of underlying organ values
+// Organ and category grouping: different benchmarks use inconsistent naming for the
+// same concept (e.g., "cervical" vs "cervix", "colon" vs "colorectal"). These maps
+// normalize raw values into user-friendly display labels. The expansion functions
+// (expandOrganGroup, expandCategoryGroup) reverse the mapping for filtering.
 const ORGAN_GROUPS: Record<string, string[]> = {
   "Cervix": ["cervical", "cervix"],
   "Colorectal": ["colon", "colorectal", "rectum"],

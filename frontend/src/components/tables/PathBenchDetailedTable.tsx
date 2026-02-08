@@ -1,10 +1,20 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef } from "react";
+/**
+ * PathBench Detailed Table
+ *
+ * Renders per-task results for the PathBench benchmark. Features 4 filter
+ * dimensions: organs, grouped task categories (Survival → OS/DFS/DSS),
+ * subcategories, and individual task IDs. Includes std values (mean ± std).
+ *
+ * Used by: app/benchmarks/[id]/page.tsx (benchmark ID "pathbench")
+ */
+
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
-import type { Model, Task, Result } from "@/types";
-import { cn, formatNumber } from "@/lib/utils";
+import type { Model, Task } from "@/types";
+import { cn, formatNumber, getValueColor } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
@@ -14,118 +24,90 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-interface PathBenchResult extends Result {
-  std?: number;
-}
-
-interface PathBenchDetailedTableProps {
-  models: Model[];
-  tasks: Task[];
-  results: PathBenchResult[];
-  modelRankings: { modelId: string; overallRank: number }[];
-}
+import { useSetToggle } from "@/hooks";
+import {
+  useDetailedTableDataWithStd,
+  type ResultWithStd,
+} from "@/hooks/useDetailedTableData";
 
 // Extract detailed task type from task name and category
-// Returns: Classification, OS (Overall Survival), DFS (Disease-free Survival), or DSS (Disease-specific Survival)
 function getDetailedTaskType(task: Task): string {
   if ((task.category as string).toLowerCase() === "classification") {
     return "Classification";
   }
-  // For survival tasks, determine the specific type from the task name
   const name = task.name.toLowerCase();
-  if (name.includes("overall survival")) {
-    return "OS";
-  }
-  if (name.includes("disease-free survival")) {
-    return "DFS";
-  }
-  if (name.includes("disease-specific survival")) {
-    return "DSS";
-  }
-  // Default to the original category if we can't determine
+  if (name.includes("overall survival")) return "OS";
+  if (name.includes("disease-free survival")) return "DFS";
+  if (name.includes("disease-specific survival")) return "DSS";
   return task.category as string;
 }
 
 // Format metric names for display
 function formatPathBenchMetric(metric: string): string {
   const metricMap: Record<string, string> = {
-    "auc": "AUROC",
-    "auroc": "AUROC",
+    auc: "AUROC",
+    auroc: "AUROC",
     "c-index": "C-Index",
   };
   return metricMap[metric.toLowerCase()] || metric.toUpperCase();
 }
 
-// Map detailed task type to display label
-const TASK_TYPE_LABELS: Record<string, string> = {
-  "Classification": "Classification",
-  "OS": "OS (Overall Survival)",
-  "DFS": "DFS (Disease-free Survival)",
-  "DSS": "DSS (Disease-specific Survival)",
-};
-
 // Task category grouping: group DFS, DSS, OS into "Survival"
 const TASK_CATEGORY_GROUPS: Record<string, string[]> = {
-  "Survival": ["OS", "DFS", "DSS"],
+  Survival: ["OS", "DFS", "DSS"],
 };
 
 // Get grouped category label from detailed task type
 function getGroupedCategory(detailedType: string): string {
   for (const [groupLabel, types] of Object.entries(TASK_CATEGORY_GROUPS)) {
-    if (types.includes(detailedType)) {
-      return groupLabel;
-    }
+    if (types.includes(detailedType)) return groupLabel;
   }
   return detailedType;
 }
 
 // Expand a grouped category to its underlying task types
 function expandCategoryGroup(categoryLabel: string): string[] {
-  if (TASK_CATEGORY_GROUPS[categoryLabel]) {
-    return TASK_CATEGORY_GROUPS[categoryLabel];
-  }
-  return [categoryLabel];
+  return TASK_CATEGORY_GROUPS[categoryLabel] ?? [categoryLabel];
 }
 
 // Extract broader task category from full task name
-// e.g., "Histological Grading (Biopsy) (Internal)" → "Histological Grading"
-// e.g., "Regional Lymph Node Metastasis (External H9)" → "Regional Lymph Node Metastasis"
 function getTaskCategory(taskName: string): string {
-  // Remove data source suffix: (Internal), (External H...), (Prospective H...), (External H1 Biopsy)
   let category = taskName
-    .replace(/\s*\((Internal|External\s+H\d+|Prospective\s+H\d+|External\s+H\d+\s+Biopsy)\)$/i, "")
+    .replace(
+      /\s*\((Internal|External\s+H\d+|Prospective\s+H\d+|External\s+H\d+\s+Biopsy)\)$/i,
+      ""
+    )
     .trim();
-
-  // Remove (Biopsy) modifier to group with non-biopsy tasks
   category = category.replace(/\s*\(Biopsy\)$/i, "").trim();
-
-  // Remove class count variations: (2 classes), (3 classes), (4 classes)
   category = category.replace(/\s*\(\d+\s+classes\)$/i, "").trim();
 
-  // Normalize similar names
   const normalizations: Record<string, string> = {
     "Histological Grade": "Histological Grading",
-    "Regional Lymph Node Metastasis Prediction": "Regional Lymph Node Metastasis",
+    "Regional Lymph Node Metastasis Prediction":
+      "Regional Lymph Node Metastasis",
     "Tumor Invasion Depth Prediction": "Tumor Invasion Depth",
     "Lymph Node Metastasis Prediction": "Lymph Node Metastasis",
   };
-
   return normalizations[category] || category;
+}
+
+interface PathBenchDetailedTableProps {
+  models: Model[];
+  tasks: Task[];
+  results: ResultWithStd[];
+  modelRankings: { modelId: string; overallRank: number }[];
 }
 
 export function PathBenchDetailedTable({
   models,
   tasks,
   results,
-  modelRankings,
 }: PathBenchDetailedTableProps) {
-  // Get unique organs for filtering
-  const organs = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.organ))].sort();
-  }, [tasks]);
-
-  // Get unique grouped task categories for filtering (Classification, Survival)
+  // Available filter values
+  const availableOrgans = useMemo(
+    () => [...new Set(tasks.map((t) => t.organ))].sort(),
+    [tasks]
+  );
   const taskCategories_grouped = useMemo(() => {
     const groupedSet = new Set<string>();
     for (const task of tasks) {
@@ -133,122 +115,40 @@ export function PathBenchDetailedTable({
     }
     return [...groupedSet].sort();
   }, [tasks]);
-
-  // Get unique task categories for filtering (broader groupings from task names)
-  const taskCategories = useMemo(() => {
-    return [...new Set(tasks.map((t) => getTaskCategory(t.name)))].sort();
-  }, [tasks]);
-
-  // Get all task IDs for filtering (all 229 individual tasks)
-  const allTaskIds = useMemo(() => {
-    return tasks.map((t) => t.id).sort();
-  }, [tasks]);
-
-  // Create a map of task ID to task name for display
+  const taskCategories = useMemo(
+    () => [...new Set(tasks.map((t) => getTaskCategory(t.name)))].sort(),
+    [tasks]
+  );
+  const allTaskIds = useMemo(() => tasks.map((t) => t.id).sort(), [tasks]);
   const taskIdToName = useMemo(() => {
     const map = new Map<string, string>();
-    for (const task of tasks) {
-      map.set(task.id, task.name);
-    }
+    for (const task of tasks) map.set(task.id, task.name);
     return map;
   }, [tasks]);
 
-  // Filter states
-  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
-    new Set<string>()
-  );
-  const [selectedTypes, setSelectedTypes] = useState<Set<string>>(
-    new Set<string>()
-  );
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    new Set<string>()
-  );
-  const [selectedTaskIds, setSelectedTaskIds] = useState<Set<string>>(
-    new Set<string>()
-  );
+  // Filter state via shared hook
+  const organs = useSetToggle(availableOrgans);
+  const types = useSetToggle(taskCategories_grouped);
+  const subcategories = useSetToggle(taskCategories);
+  const taskIds = useSetToggle(allTaskIds);
   const [searchQuery, setSearchQuery] = useState("");
-  const initializedRef = useRef(false);
 
-  // Initialize selected values when options become available (only once)
-  useEffect(() => {
-    if (!initializedRef.current && organs.length > 0 && taskCategories_grouped.length > 0 && taskCategories.length > 0 && allTaskIds.length > 0) {
-      setSelectedOrgans(new Set(organs));
-      setSelectedTypes(new Set(taskCategories_grouped));
-      setSelectedCategories(new Set(taskCategories));
-      setSelectedTaskIds(new Set(allTaskIds));
-      initializedRef.current = true;
-    }
-  }, [organs, taskCategories_grouped, taskCategories, allTaskIds]);
-
-  // Toggle helpers
-  const toggleOrgan = (organ: string) => {
-    setSelectedOrgans((prev) => {
-      const next = new Set(prev);
-      if (next.has(organ)) {
-        next.delete(organ);
-      } else {
-        next.add(organ);
-      }
-      return next;
-    });
-  };
-
-  const toggleType = (type: string) => {
-    setSelectedTypes((prev) => {
-      const next = new Set(prev);
-      if (next.has(type)) {
-        next.delete(type);
-      } else {
-        next.add(type);
-      }
-      return next;
-    });
-  };
-
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
-      return next;
-    });
-  };
-
-  const toggleTaskId = (taskId: string) => {
-    setSelectedTaskIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskId)) {
-        next.delete(taskId);
-      } else {
-        next.add(taskId);
-      }
-      return next;
-    });
-  };
-
-  // Expand selected grouped categories to individual task types for filtering
+  // Expand selected grouped categories to individual task types
   const expandedSelectedTypes = useMemo(() => {
     const expanded = new Set<string>();
-    for (const categoryLabel of selectedTypes) {
+    for (const categoryLabel of types.selected) {
       for (const detailedType of expandCategoryGroup(categoryLabel)) {
         expanded.add(detailedType);
       }
     }
     return expanded;
-  }, [selectedTypes]);
+  }, [types.selected]);
 
-  // Filter tasks by selected organs, task types, task categories, tasks, and search query
-  // When there's a search query, it searches across ALL tasks (ignoring filters)
-  // Sort alphabetically by task name
+  // Filter tasks (search overrides filters when active)
   const filteredTasks = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
 
     let filtered: Task[];
-    // If there's a search query, search across all tasks
-    // All query words must be present in the searchable text
     if (query) {
       const queryWords = query.split(/\s+/);
       filtered = tasks.filter((t) => {
@@ -257,132 +157,34 @@ export function PathBenchDetailedTable({
           t.organ,
           getDetailedTaskType(t),
           getTaskCategory(t.name),
-        ].join(" ").toLowerCase();
+        ]
+          .join(" ")
+          .toLowerCase();
         return queryWords.every((word) => searchableText.includes(word));
       });
     } else {
-      // Otherwise, apply all filters (using expanded types for grouped categories)
-      filtered = tasks.filter((t) =>
-        selectedOrgans.has(t.organ) &&
-        expandedSelectedTypes.has(getDetailedTaskType(t)) &&
-        selectedCategories.has(getTaskCategory(t.name)) &&
-        selectedTaskIds.has(t.id)
+      filtered = tasks.filter(
+        (t) =>
+          organs.selected.has(t.organ) &&
+          expandedSelectedTypes.has(getDetailedTaskType(t)) &&
+          subcategories.selected.has(getTaskCategory(t.name)) &&
+          taskIds.selected.has(t.id)
       );
     }
 
-    // Sort alphabetically by task name
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }, [tasks, selectedOrgans, expandedSelectedTypes, selectedCategories, selectedTaskIds, searchQuery]);
+  }, [
+    tasks,
+    organs.selected,
+    expandedSelectedTypes,
+    subcategories.selected,
+    taskIds.selected,
+    searchQuery,
+  ]);
 
-  // Create a lookup map for results: modelId -> taskId -> { value, std }
-  const resultsMap = useMemo(() => {
-    const map = new Map<string, Map<string, { value: number; std?: number }>>();
-    for (const result of results) {
-      if (!map.has(result.modelId)) {
-        map.set(result.modelId, new Map());
-      }
-      map.get(result.modelId)!.set(result.taskId, {
-        value: result.value,
-        std: result.std,
-      });
-    }
-    return map;
-  }, [results]);
-
-  // Get min/max for each task for color scaling
-  const taskStats = useMemo(() => {
-    const stats = new Map<string, { min: number; max: number }>();
-    for (const task of filteredTasks) {
-      const values = results
-        .filter((r) => r.taskId === task.id)
-        .map((r) => r.value);
-      if (values.length > 0) {
-        stats.set(task.id, {
-          min: Math.min(...values),
-          max: Math.max(...values),
-        });
-      }
-    }
-    return stats;
-  }, [filteredTasks, results]);
-
-  // Compute average rank per model (across filtered tasks)
-  const modelAvgRanks = useMemo(() => {
-    const avgRanks = new Map<string, number>();
-
-    // For each task, compute ranks
-    const taskRanks = new Map<string, Map<string, number>>();
-    for (const task of filteredTasks) {
-      const taskResults = results
-        .filter((r) => r.taskId === task.id)
-        .sort((a, b) => b.value - a.value); // Higher is better
-
-      const ranks = new Map<string, number>();
-      taskResults.forEach((r, idx) => {
-        ranks.set(r.modelId, idx + 1);
-      });
-      taskRanks.set(task.id, ranks);
-    }
-
-    // Compute average rank per model
-    for (const model of models) {
-      const ranks: number[] = [];
-      for (const task of filteredTasks) {
-        const rank = taskRanks.get(task.id)?.get(model.id);
-        if (rank !== undefined) {
-          ranks.push(rank);
-        }
-      }
-      if (ranks.length > 0) {
-        avgRanks.set(model.id, ranks.reduce((a, b) => a + b, 0) / ranks.length);
-      }
-    }
-
-    return avgRanks;
-  }, [models, filteredTasks, results]);
-
-  // Compute average metric value per model (across filtered tasks)
-  const modelAvgValues = useMemo(() => {
-    const avgValues = new Map<string, number>();
-
-    for (const model of models) {
-      const values: number[] = [];
-      for (const task of filteredTasks) {
-        const result = resultsMap.get(model.id)?.get(task.id);
-        if (result !== undefined) {
-          values.push(result.value);
-        }
-      }
-      if (values.length > 0) {
-        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
-      }
-    }
-
-    return avgValues;
-  }, [models, filteredTasks, resultsMap]);
-
-  // Sort models by average rank
-  const sortedModels = useMemo(() => {
-    return [...models].sort((a, b) => {
-      const rankA = modelAvgRanks.get(a.id) ?? 999;
-      const rankB = modelAvgRanks.get(b.id) ?? 999;
-      return rankA - rankB;
-    });
-  }, [models, modelAvgRanks]);
-
-  // Get value color based on relative performance
-  function getValueColor(value: number, taskId: string): string {
-    const stats = taskStats.get(taskId);
-    if (!stats || stats.max === stats.min) return "";
-
-    const normalized = (value - stats.min) / (stats.max - stats.min);
-
-    if (normalized >= 0.9) return "bg-emerald-100 text-emerald-800";
-    if (normalized >= 0.7) return "bg-green-50 text-green-700";
-    if (normalized >= 0.3) return "bg-gray-50";
-    if (normalized >= 0.1) return "bg-orange-50 text-orange-700";
-    return "bg-red-50 text-red-700";
-  }
+  // Shared data computation hook (with std support)
+  const { resultsMap, taskStats, modelAvgRanks, modelAvgValues, sortedModels } =
+    useDetailedTableDataWithStd({ models, filteredTasks, results });
 
   return (
     <div>
@@ -390,55 +192,50 @@ export function PathBenchDetailedTable({
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
           label="Indications"
-          options={organs
+          options={availableOrgans
             .map((organ) => ({
               id: organ,
               label: organ.charAt(0).toUpperCase() + organ.slice(1),
             }))
             .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedOrgans}
-          onToggle={toggleOrgan}
-          onSelectAll={() => setSelectedOrgans(new Set(organs))}
-          onClearAll={() => setSelectedOrgans(new Set())}
+          selectedIds={organs.selected}
+          onToggle={organs.toggle}
+          onSelectAll={organs.selectAll}
+          onClearAll={organs.clearAll}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="justify-between min-w-[140px]">
+            <Button
+              variant="outline"
+              className="justify-between min-w-[140px]"
+            >
               <span className="truncate">Task Type (1/1)</span>
               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>
-              Slide-level Classification
-            </DropdownMenuItem>
+            <DropdownMenuItem>Slide-level Classification</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <MultiSelectDropdown
           label="Task Categories"
           options={taskCategories_grouped
-            .map((category) => ({
-              id: category,
-              label: category,
-            }))
+            .map((category) => ({ id: category, label: category }))
             .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedTypes}
-          onToggle={toggleType}
-          onSelectAll={() => setSelectedTypes(new Set(taskCategories_grouped))}
-          onClearAll={() => setSelectedTypes(new Set())}
+          selectedIds={types.selected}
+          onToggle={types.toggle}
+          onSelectAll={types.selectAll}
+          onClearAll={types.clearAll}
         />
         <MultiSelectDropdown
           label="Task Subcategories"
           options={taskCategories
-            .map((category) => ({
-              id: category,
-              label: category,
-            }))
+            .map((category) => ({ id: category, label: category }))
             .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedCategories}
-          onToggle={toggleCategory}
-          onSelectAll={() => setSelectedCategories(new Set(taskCategories))}
-          onClearAll={() => setSelectedCategories(new Set())}
+          selectedIds={subcategories.selected}
+          onToggle={subcategories.toggle}
+          onSelectAll={subcategories.selectAll}
+          onClearAll={subcategories.clearAll}
         />
         <MultiSelectDropdown
           label="All Tasks"
@@ -448,10 +245,10 @@ export function PathBenchDetailedTable({
               label: taskIdToName.get(id) || id,
             }))
             .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedTaskIds}
-          onToggle={toggleTaskId}
-          onSelectAll={() => setSelectedTaskIds(new Set(allTaskIds))}
-          onClearAll={() => setSelectedTaskIds(new Set())}
+          selectedIds={taskIds.selected}
+          onToggle={taskIds.toggle}
+          onSelectAll={taskIds.selectAll}
+          onClearAll={taskIds.clearAll}
         />
         <div className="relative flex-1 min-w-[200px] max-w-[300px]">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -473,7 +270,6 @@ export function PathBenchDetailedTable({
         </div>
       </div>
 
-
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="sticky top-0 z-20">
@@ -482,10 +278,18 @@ export function PathBenchDetailedTable({
                 Model
               </th>
               <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
-                <div className="text-xs leading-tight">Average<br />rank</div>
+                <div className="text-xs leading-tight">
+                  Average
+                  <br />
+                  rank
+                </div>
               </th>
               <th className="px-2 py-2 text-center font-semibold min-w-[70px] bg-muted/80">
-                <div className="text-xs leading-tight">Average<br />metric</div>
+                <div className="text-xs leading-tight">
+                  Average
+                  <br />
+                  metric
+                </div>
               </th>
               {filteredTasks.map((task) => (
                 <th
@@ -507,9 +311,8 @@ export function PathBenchDetailedTable({
               const modelResults = resultsMap.get(model.id);
               const avgRank = modelAvgRanks.get(model.id);
 
-              // Check if model has any results for filtered tasks
-              const hasResults = filteredTasks.some(
-                (task) => modelResults?.has(task.id)
+              const hasResults = filteredTasks.some((task) =>
+                modelResults?.has(task.id)
               );
               if (!hasResults) return null;
 
@@ -535,7 +338,9 @@ export function PathBenchDetailedTable({
                     {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                    {modelAvgValues.get(model.id) !== undefined
+                      ? formatNumber(modelAvgValues.get(model.id)!, 3)
+                      : "-"}
                   </td>
                   {filteredTasks.map((task) => {
                     const result = modelResults?.get(task.id);
@@ -544,7 +349,8 @@ export function PathBenchDetailedTable({
                         key={task.id}
                         className={cn(
                           "px-2 py-2 text-center",
-                          result !== undefined && getValueColor(result.value, task.id)
+                          result !== undefined &&
+                            getValueColor(result.value, taskStats.get(task.id))
                         )}
                       >
                         {result !== undefined ? (

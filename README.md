@@ -62,7 +62,7 @@ Results are checked every Sunday at midnight UTC.
 |-----------|------------|
 | Frontend | Next.js 15, React 19, TypeScript |
 | Styling | Tailwind CSS, shadcn/ui, Radix UI |
-| Charts | Recharts |
+| Charts | Vega-Lite v5 (via vega-embed) |
 | Data | Static JSON (pre-processed) |
 | Hosting | Cloudflare Pages |
 
@@ -107,17 +107,21 @@ histoboard/
 │   │   ├── app/                # Pages (home, leaderboard, arena, models, benchmarks)
 │   │   ├── components/         # React components
 │   │   │   ├── arena/          # Arena comparison components
-│   │   │   ├── charts/         # Visualization components
-│   │   │   ├── tables/         # Detailed benchmark tables
-│   │   │   └── ui/             # shadcn/ui components
+│   │   │   ├── charts/         # Vega-Lite chart wrappers
+│   │   │   ├── filters/        # Shared filter UI (ModelAttributeFilterBar)
+│   │   │   ├── layout/         # Header, Footer
+│   │   │   ├── leaderboard/    # Leaderboard-specific filters
+│   │   │   ├── tables/         # Benchmark result tables (10 benchmarks)
+│   │   │   └── ui/             # shadcn/ui primitives
 │   │   ├── data/               # Static JSON data
 │   │   │   ├── models.json     # Model definitions
 │   │   │   ├── tasks.json      # Task definitions
 │   │   │   ├── results.json    # Performance results
 │   │   │   ├── benchmarks.json # Benchmark metadata
 │   │   │   └── rankings.json   # Pre-computed rankings
-│   │   ├── types/              # TypeScript definitions
-│   │   └── lib/                # Utilities
+│   │   ├── hooks/              # Custom React hooks (filtering, ranking, state)
+│   │   ├── lib/                # Pure utility functions (charts, filters, formatting)
+│   │   └── types/              # TypeScript definitions
 │   └── package.json
 │
 ├── scraper/                    # Python data collection (optional)
@@ -136,6 +140,12 @@ To add a new benchmark:
 4. Compute and add rankings to `frontend/src/data/rankings.json`
 5. Create a detailed table component in `frontend/src/components/tables/`
 6. Update the leaderboard page to include the new tab
+
+## Documentation
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — System overview, data model, component layers, design decisions
+- **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** — How to add benchmarks, models, pages, hooks, and charts
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — Contribution guidelines and data source conventions
 
 ## Contributing
 

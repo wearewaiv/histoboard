@@ -1,3 +1,11 @@
+/**
+ * Benchmark Detail Page (/benchmarks/[id])
+ *
+ * Renders a per-benchmark results page with metadata card and a custom table
+ * component. Uses benchmarkTableMap to dispatch to the correct table component
+ * for each benchmark ID. Pre-rendered at build time via generateStaticParams.
+ */
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";

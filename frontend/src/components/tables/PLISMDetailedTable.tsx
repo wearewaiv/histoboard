@@ -1,9 +1,19 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+/**
+ * PLISM Benchmark Detailed Table
+ *
+ * Renders per-task results for the Plismbench robustness benchmark (Owkin).
+ * No organ filter dimension — only task categories and names.
+ * Sorted by average value (descending) rather than average rank.
+ *
+ * Used by: app/benchmarks/[id]/page.tsx (benchmark ID "plism")
+ */
+
+import React, { useMemo } from "react";
 import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
-import { cn, formatNumber } from "@/lib/utils";
+import { cn, formatNumber, getValueColor } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
@@ -13,6 +23,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSetToggle } from "@/hooks";
+import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
 interface PLISMDetailedTableProps {
   models: Model[];
@@ -25,169 +37,53 @@ export function PLISMDetailedTable({
   models,
   tasks,
   results,
-  modelRankings,
 }: PLISMDetailedTableProps) {
-  // Get unique categories for filtering
-  const categories = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.category as string))].sort();
-  }, [tasks]);
-
-  // Get unique task names for filtering
-  const taskNames = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.name))].sort();
-  }, [tasks]);
-
-  // Filter states - all selected by default
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    () => new Set(categories)
+  // Available filter values
+  const availableCategories = useMemo(
+    () => [...new Set(tasks.map((t) => t.category as string))].sort(),
+    [tasks]
   );
-  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
-    () => new Set(taskNames)
+  const availableTaskNames = useMemo(
+    () => [...new Set(tasks.map((t) => t.name))].sort(),
+    [tasks]
   );
 
-  // Toggle helpers
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
-      return next;
-    });
-  };
-
-  const toggleTask = (taskName: string) => {
-    setSelectedTasks((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskName)) {
-        next.delete(taskName);
-      } else {
-        next.add(taskName);
-      }
-      return next;
-    });
-  };
+  // Filter state via shared hook
+  const categories = useSetToggle(availableCategories);
+  const taskNames = useSetToggle(availableTaskNames);
 
   // Filter tasks by selected categories AND selected task names
-  const filteredTasks = useMemo(() => {
-    return tasks.filter(
-      (t) => selectedCategories.has(t.category as string) && selectedTasks.has(t.name)
-    );
-  }, [tasks, selectedCategories, selectedTasks]);
+  const filteredTasks = useMemo(
+    () =>
+      tasks.filter(
+        (t) =>
+          categories.selected.has(t.category as string) &&
+          taskNames.selected.has(t.name)
+      ),
+    [tasks, categories.selected, taskNames.selected]
+  );
 
-  // Create a lookup map for results: modelId -> taskId -> value
-  const resultsMap = useMemo(() => {
-    const map = new Map<string, Map<string, number>>();
-    for (const result of results) {
-      if (!map.has(result.modelId)) {
-        map.set(result.modelId, new Map());
-      }
-      map.get(result.modelId)!.set(result.taskId, result.value);
-    }
-    return map;
-  }, [results]);
+  // Shared data computation hook
+  const { resultsMap, taskStats, modelAvgRanks, modelAvgValues } =
+    useDetailedTableData({ models, filteredTasks, results });
 
-  // Get min/max for each task for color scaling
-  const taskStats = useMemo(() => {
-    const stats = new Map<string, { min: number; max: number }>();
-    for (const task of filteredTasks) {
-      const values = results
-        .filter((r) => r.taskId === task.id)
-        .map((r) => r.value);
-      if (values.length > 0) {
-        stats.set(task.id, {
-          min: Math.min(...values),
-          max: Math.max(...values),
-        });
-      }
-    }
-    return stats;
-  }, [filteredTasks, results]);
-
-  // Compute leaderboard score per model (average of filtered tasks)
-  const modelLeaderboardScore = useMemo(() => {
-    const scores = new Map<string, number>();
-    for (const model of models) {
-      const modelResults = resultsMap.get(model.id);
-      if (modelResults) {
-        const values: number[] = [];
-        for (const task of filteredTasks) {
-          const value = modelResults.get(task.id);
-          if (value !== undefined) {
-            values.push(value);
-          }
-        }
-        if (values.length > 0) {
-          scores.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
-        }
-      }
-    }
-    return scores;
-  }, [models, resultsMap, filteredTasks]);
-
-  // Compute average rank per model (across filtered tasks)
-  const modelAvgRanks = useMemo(() => {
-    const avgRanks = new Map<string, number>();
-
-    // For each task, compute ranks
-    const taskRanks = new Map<string, Map<string, number>>();
-    for (const task of filteredTasks) {
-      const taskResults = results
-        .filter((r) => r.taskId === task.id)
-        .sort((a, b) => b.value - a.value); // Higher is better
-
-      const ranks = new Map<string, number>();
-      taskResults.forEach((r, idx) => {
-        ranks.set(r.modelId, idx + 1);
-      });
-      taskRanks.set(task.id, ranks);
-    }
-
-    // Compute average rank per model
-    for (const model of models) {
-      const ranks: number[] = [];
-      for (const task of filteredTasks) {
-        const rank = taskRanks.get(task.id)?.get(model.id);
-        if (rank !== undefined) {
-          ranks.push(rank);
-        }
-      }
-      if (ranks.length > 0) {
-        avgRanks.set(model.id, ranks.reduce((a, b) => a + b, 0) / ranks.length);
-      }
-    }
-
-    return avgRanks;
-  }, [models, filteredTasks, results]);
-
-  // Sort models by leaderboard score (higher is better)
+  // Custom sort: by leaderboard score (avgValue, higher is better)
   const sortedModels = useMemo(() => {
     return [...models].sort((a, b) => {
-      const scoreA = modelLeaderboardScore.get(a.id) ?? 0;
-      const scoreB = modelLeaderboardScore.get(b.id) ?? 0;
+      const scoreA = modelAvgValues.get(a.id) ?? 0;
+      const scoreB = modelAvgValues.get(b.id) ?? 0;
       return scoreB - scoreA;
     });
-  }, [models, modelLeaderboardScore]);
+  }, [models, modelAvgValues]);
 
-  // Get value color based on relative performance (higher is better)
-  function getValueColor(value: number, taskId: string): string {
-    const stats = taskStats.get(taskId);
-    if (!stats || stats.max === stats.min) return "";
+  // Build dropdown options
+  const categoryOptions = availableCategories
+    .map((cat) => ({ id: cat, label: cat }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
-    const normalized = (value - stats.min) / (stats.max - stats.min);
-
-    if (normalized >= 0.9) return "bg-emerald-100 text-emerald-800";
-    if (normalized >= 0.7) return "bg-green-50 text-green-700";
-    if (normalized >= 0.3) return "bg-gray-50";
-    if (normalized >= 0.1) return "bg-orange-50 text-orange-700";
-    return "bg-red-50 text-red-700";
-  }
-
-  // Build options for dropdowns
-  const categoryOptions = categories.map((cat) => ({ id: cat, label: cat })).sort((a, b) => a.label.localeCompare(b.label));
-  const taskOptions = taskNames.map((name) => ({ id: name, label: name })).sort((a, b) => a.label.localeCompare(b.label));
+  const taskOptions = availableTaskNames
+    .map((name) => ({ id: name, label: name }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div>
@@ -196,10 +92,10 @@ export function PLISMDetailedTable({
         <MultiSelectDropdown
           label="Indications"
           options={categoryOptions}
-          selectedIds={selectedCategories}
-          onToggle={toggleCategory}
-          onSelectAll={() => setSelectedCategories(new Set(categories))}
-          onClearAll={() => setSelectedCategories(new Set())}
+          selectedIds={categories.selected}
+          onToggle={categories.toggle}
+          onSelectAll={categories.selectAll}
+          onClearAll={categories.clearAll}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -217,13 +113,12 @@ export function PLISMDetailedTable({
         <MultiSelectDropdown
           label="All Tasks"
           options={taskOptions}
-          selectedIds={selectedTasks}
-          onToggle={toggleTask}
-          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
-          onClearAll={() => setSelectedTasks(new Set())}
+          selectedIds={taskNames.selected}
+          onToggle={taskNames.toggle}
+          onSelectAll={taskNames.selectAll}
+          onClearAll={taskNames.clearAll}
         />
       </div>
-
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
@@ -256,9 +151,8 @@ export function PLISMDetailedTable({
           <tbody>
             {sortedModels.map((model, sortIdx) => {
               const modelResults = resultsMap.get(model.id);
-              const leaderboardScore = modelLeaderboardScore.get(model.id);
+              const leaderboardScore = modelAvgValues.get(model.id);
 
-              // Check if model has any results for filtered tasks
               const hasResults = filteredTasks.some(
                 (task) => modelResults?.has(task.id)
               );
@@ -283,23 +177,30 @@ export function PLISMDetailedTable({
                     </div>
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgRanks.get(model.id) !== undefined ? formatNumber(modelAvgRanks.get(model.id)!, 2) : "-"}
+                    {modelAvgRanks.get(model.id) !== undefined
+                      ? formatNumber(modelAvgRanks.get(model.id)!, 2)
+                      : "-"}
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {leaderboardScore !== undefined ? formatNumber(leaderboardScore, 3) : "-"}
+                    {leaderboardScore !== undefined
+                      ? formatNumber(leaderboardScore, 3)
+                      : "-"}
                   </td>
                   {filteredTasks.map((task) => {
-                    const value = modelResults?.get(task.id);
+                    const value = modelResults?.get(task.id)?.value;
                     return (
                       <td
                         key={task.id}
                         className={cn(
                           "px-2 py-2 text-center tabular-nums",
-                          value !== undefined && getValueColor(value, task.id)
+                          value !== undefined &&
+                            getValueColor(value, taskStats.get(task.id))
                         )}
                       >
                         {value !== undefined ? (
-                          <span className="font-medium">{formatNumber(value, 3)}</span>
+                          <span className="font-medium">
+                            {formatNumber(value, 3)}
+                          </span>
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}

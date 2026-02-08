@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * Home Page (/)
+ *
+ * Dashboard landing page showing summary statistics (model/benchmark/task counts),
+ * champion podiums (top 3 models per benchmark), and an animated stat counter.
+ */
+
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
