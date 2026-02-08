@@ -4,43 +4,9 @@
  * STAMP Detailed Table Component
  *
  * Displays a detailed performance table for the STAMP benchmark.
- * This component demonstrates how to use the shared `useDetailedTableData` hook
- * to build benchmark-specific tables without duplicating computation logic.
- *
- * ## What This Component Does
- *
- * 1. Shows filter dropdowns (Indications, Task Categories, etc.)
- * 2. Renders a table with:
- *    - Rows: One per model, sorted by average rank
- *    - Columns: One per task, plus "Average Rank" and "Average Metric"
- *    - Cells: Colored based on relative performance (green=good, red=bad)
- *
- * ## How Filtering Works
- *
- * Users can filter tasks by:
- * - **Indication (organ)**: e.g., breast, colon, lung
- * - **Category**: Biomarker, Morphology, Prognosis
- * - **Task name**: Specific task selection
- * - **Search**: Text search across all task attributes
- *
- * When the user types in the search box, all filter dropdowns are bypassed
- * and we search across all tasks. When the search box is empty, the dropdown
- * filters are applied.
- *
- * ## Key Data Flow
- *
- * ```
- * Props (models, tasks, results)
- *     ↓
- * [Filter tasks by user selections] → filteredTasks
- *     ↓
- * [useDetailedTableData hook] → resultsMap, taskStats, modelAvgRanks, sortedModels
- *     ↓
- * [Render table] → Display sorted models with colored cells
- * ```
  */
 
-import React, { useState, useMemo } from "react";
+import React from "react";
 import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
@@ -54,6 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTaskFiltering } from "@/hooks";
 import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
 interface STAMPDetailedTableProps {
@@ -63,121 +30,52 @@ interface STAMPDetailedTableProps {
   modelRankings: { modelId: string; overallRank: number }[];
 }
 
+// Category label mapping for STAMP
+const STAMP_CATEGORY_LABELS: Record<string, string> = {
+  Biomarker: "Biomarker prediction",
+  Morphology: "Morphology prediction",
+};
+
 export function STAMPDetailedTable({
   models,
   tasks,
   results,
 }: STAMPDetailedTableProps) {
-  // Get unique filter options
-  const organs = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.organ))].sort();
-  }, [tasks]);
-
-  const categories = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.category as string))].sort();
-  }, [tasks]);
-
-  const taskNames = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.name))].sort();
-  }, [tasks]);
-
-  // Filter states - all selected by default
-  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
-    () => new Set(organs)
-  );
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    () => new Set(categories)
-  );
-  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
-    () => new Set(taskNames)
-  );
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // Toggle helpers
-  const toggleOrgan = (organ: string) => {
-    setSelectedOrgans((prev) => {
-      const next = new Set(prev);
-      if (next.has(organ)) next.delete(organ);
-      else next.add(organ);
-      return next;
-    });
-  };
-
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(category)) next.delete(category);
-      else next.add(category);
-      return next;
-    });
-  };
-
-  const toggleTask = (taskName: string) => {
-    setSelectedTasks((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskName)) next.delete(taskName);
-      else next.add(taskName);
-      return next;
-    });
-  };
-
-  // Filter tasks by selected filters and search query
-  const filteredTasks = useMemo(() => {
-    const query = searchQuery.toLowerCase().trim();
-
-    let filtered: Task[];
-    if (query) {
-      // Search across all tasks when query is present
-      const queryWords = query.split(/\s+/);
-      filtered = tasks.filter((t) => {
-        const searchableText = [t.name, t.category as string, t.organ]
-          .join(" ")
-          .toLowerCase();
-        return queryWords.every((word) => searchableText.includes(word));
-      });
-    } else {
-      // Apply filters
-      filtered = tasks.filter(
-        (t) =>
-          selectedOrgans.has(t.organ) &&
-          selectedCategories.has(t.category as string) &&
-          selectedTasks.has(t.name)
-      );
-    }
-
-    return filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }, [tasks, selectedOrgans, selectedCategories, selectedTasks, searchQuery]);
-
-  // Use shared hook for common computations
+  // Shared filter hook with search
   const {
-    resultsMap,
-    taskStats,
-    modelAvgRanks,
-    modelAvgValues,
-    sortedModels,
-  } = useDetailedTableData({ models, filteredTasks, results });
+    filteredTasks,
+    organs,
+    categories,
+    taskNames,
+    search,
+    availableOrgans,
+    availableCategories,
+    availableTaskNames,
+  } = useTaskFiltering(tasks, {
+    enableSearch: true,
+    searchOverridesFilters: true,
+  });
+
+  // Shared data computation hook
+  const { resultsMap, taskStats, modelAvgRanks, modelAvgValues, sortedModels } =
+    useDetailedTableData({ models, filteredTasks, results });
 
   // Build dropdown options
-  const organOptions = organs
+  const organOptions = availableOrgans
     .map((organ) => ({
       id: organ,
       label: organ.charAt(0).toUpperCase() + organ.slice(1),
     }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
-  const categoryOptions = categories
+  const categoryOptions = availableCategories
     .map((cat) => ({
       id: cat,
-      label:
-        cat === "Biomarker"
-          ? "Biomarker prediction"
-          : cat === "Morphology"
-          ? "Morphology prediction"
-          : cat,
+      label: STAMP_CATEGORY_LABELS[cat] || cat,
     }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
-  const taskOptions = taskNames
+  const taskOptions = availableTaskNames
     .map((name) => ({ id: name, label: name }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -188,10 +86,10 @@ export function STAMPDetailedTable({
         <MultiSelectDropdown
           label="Indications"
           options={organOptions}
-          selectedIds={selectedOrgans}
-          onToggle={toggleOrgan}
-          onSelectAll={() => setSelectedOrgans(new Set(organs))}
-          onClearAll={() => setSelectedOrgans(new Set())}
+          selectedIds={organs.selected}
+          onToggle={organs.toggle}
+          onSelectAll={organs.selectAll}
+          onClearAll={organs.clearAll}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -209,31 +107,31 @@ export function STAMPDetailedTable({
         <MultiSelectDropdown
           label="Task Categories"
           options={categoryOptions}
-          selectedIds={selectedCategories}
-          onToggle={toggleCategory}
-          onSelectAll={() => setSelectedCategories(new Set(categories))}
-          onClearAll={() => setSelectedCategories(new Set())}
+          selectedIds={categories.selected}
+          onToggle={categories.toggle}
+          onSelectAll={categories.selectAll}
+          onClearAll={categories.clearAll}
         />
         <MultiSelectDropdown
           label="All Tasks"
           options={taskOptions}
-          selectedIds={selectedTasks}
-          onToggle={toggleTask}
-          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
-          onClearAll={() => setSelectedTasks(new Set())}
+          selectedIds={taskNames.selected}
+          onToggle={taskNames.toggle}
+          onSelectAll={taskNames.selectAll}
+          onClearAll={taskNames.clearAll}
         />
         <div className="relative flex-1 min-w-[200px] max-w-[300px]">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
             placeholder="Search tasks..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={search.query}
+            onChange={(e) => search.setQuery(e.target.value)}
             className="pl-8 pr-8 h-9"
           />
-          {searchQuery && (
+          {search.query && (
             <button
-              onClick={() => setSearchQuery("")}
+              onClick={search.clearQuery}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -241,7 +139,6 @@ export function STAMPDetailedTable({
           )}
         </div>
       </div>
-
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
@@ -276,7 +173,6 @@ export function STAMPDetailedTable({
               const modelResults = resultsMap.get(model.id);
               const avgRank = modelAvgRanks.get(model.id);
 
-              // Check if model has any results for filtered tasks
               const hasResults = filteredTasks.some(
                 (task) => modelResults?.has(task.id)
               );

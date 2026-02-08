@@ -1,5 +1,16 @@
 "use client";
 
+/**
+ * Arena Comparison Table
+ *
+ * Displays a task-by-task comparison of 2–5 selected models. Each row is a task,
+ * each column is a model, and cells show performance values with color-coded
+ * highlighting (best value per row in green). Only shows tasks where all
+ * selected models have results.
+ *
+ * Used by: app/arena/page.tsx
+ */
+
 import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn, formatNumber, formatMetricLabel, formatOrganLabel } from "@/lib/utils";

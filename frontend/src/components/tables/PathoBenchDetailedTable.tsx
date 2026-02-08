@@ -1,10 +1,19 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+/**
+ * Patho-Bench Detailed Table
+ *
+ * Renders per-task results for the Patho-Bench benchmark (Mahmood Lab).
+ * Standard filter setup with organs, categories, task names, and text search.
+ *
+ * Used by: app/benchmarks/[id]/page.tsx (benchmark ID "pathobench")
+ */
+
+import React from "react";
 import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
-import { cn, formatNumber } from "@/lib/utils";
+import { cn, formatNumber, getValueColor } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
@@ -14,17 +23,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTaskFiltering } from "@/hooks";
+import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
 // Format metric names for display
 function formatMetricName(metric: string): string {
   const metricMap: Record<string, string> = {
-    "auc": "AUROC",
-    "auroc": "AUROC",
-    "balanced_accuracy": "Balanced Accuracy",
-    "balanced_acc": "Balanced Accuracy",
+    auc: "AUROC",
+    auroc: "AUROC",
+    balanced_accuracy: "Balanced Accuracy",
+    balanced_acc: "Balanced Accuracy",
     "c-index": "C-Index",
-    "c_index": "C-Index",
-    "kappa": "Kappa",
+    c_index: "C-Index",
+    kappa: "Kappa",
   };
   return metricMap[metric.toLowerCase()] || metric;
 }
@@ -40,211 +51,42 @@ export function PathoBenchDetailedTable({
   models,
   tasks,
   results,
-  modelRankings,
 }: PathoBenchDetailedTableProps) {
-  // Get unique organs for filtering
-  const organs = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.organ))].sort();
-  }, [tasks]);
+  // Shared filter hook with search
+  const {
+    filteredTasks,
+    organs,
+    categories,
+    taskNames,
+    search,
+    availableOrgans,
+    availableCategories,
+    availableTaskNames,
+  } = useTaskFiltering(tasks, {
+    enableSearch: true,
+    searchOverridesFilters: true,
+    searchFields: ["name", "category", "organ", "metric"],
+  });
 
-  // Get unique categories for filtering
-  const categories = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.category as string))].sort();
-  }, [tasks]);
+  // Shared data computation hook
+  const { resultsMap, taskStats, modelAvgRanks, modelAvgValues, sortedModels } =
+    useDetailedTableData({ models, filteredTasks, results });
 
-  // Get unique task names for filtering
-  const taskNames = useMemo(() => {
-    return [...new Set(tasks.map((t) => t.name))].sort();
-  }, [tasks]);
+  // Build dropdown options
+  const organOptions = availableOrgans
+    .map((organ) => ({
+      id: organ,
+      label: organ.charAt(0).toUpperCase() + organ.slice(1),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
-  // Filter states
-  const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(
-    () => new Set(organs)
-  );
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    () => new Set(categories)
-  );
-  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(
-    () => new Set(taskNames)
-  );
-  const [searchQuery, setSearchQuery] = useState("");
+  const categoryOptions = availableCategories
+    .map((cat) => ({ id: cat, label: cat }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
-  // Toggle helpers
-  const toggleOrgan = (organ: string) => {
-    setSelectedOrgans((prev) => {
-      const next = new Set(prev);
-      if (next.has(organ)) {
-        next.delete(organ);
-      } else {
-        next.add(organ);
-      }
-      return next;
-    });
-  };
-
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
-      return next;
-    });
-  };
-
-  const toggleTask = (taskName: string) => {
-    setSelectedTasks((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskName)) {
-        next.delete(taskName);
-      } else {
-        next.add(taskName);
-      }
-      return next;
-    });
-  };
-
-  // Filter tasks by selected organs, categories, task names, and search query
-  // When there's a search query, it searches across ALL tasks (ignoring filters)
-  const filteredTasks = useMemo(() => {
-    const query = searchQuery.toLowerCase().trim();
-
-    let filtered: Task[];
-    // If there's a search query, search across all tasks
-    // All query words must be present in the searchable text
-    if (query) {
-      const queryWords = query.split(/\s+/);
-      filtered = tasks.filter((t) => {
-        const searchableText = [
-          t.name,
-          t.category as string,
-          t.organ,
-          t.metric,
-        ].join(" ").toLowerCase();
-        return queryWords.every((word) => searchableText.includes(word));
-      });
-    } else {
-      // Otherwise, apply all filters
-      filtered = tasks.filter(
-        (t) =>
-          selectedOrgans.has(t.organ) &&
-          selectedCategories.has(t.category as string) &&
-          selectedTasks.has(t.name)
-      );
-    }
-
-    // Sort alphabetically by task name
-    return filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }, [tasks, selectedOrgans, selectedCategories, selectedTasks, searchQuery]);
-
-  // Create a lookup map for results: modelId -> taskId -> value
-  const resultsMap = useMemo(() => {
-    const map = new Map<string, Map<string, number>>();
-    for (const result of results) {
-      if (!map.has(result.modelId)) {
-        map.set(result.modelId, new Map());
-      }
-      map.get(result.modelId)!.set(result.taskId, result.value);
-    }
-    return map;
-  }, [results]);
-
-  // Get min/max for each task for color scaling
-  const taskStats = useMemo(() => {
-    const stats = new Map<string, { min: number; max: number }>();
-    for (const task of filteredTasks) {
-      const values = results
-        .filter((r) => r.taskId === task.id)
-        .map((r) => r.value);
-      if (values.length > 0) {
-        stats.set(task.id, {
-          min: Math.min(...values),
-          max: Math.max(...values),
-        });
-      }
-    }
-    return stats;
-  }, [filteredTasks, results]);
-
-  // Compute average rank per model (across filtered tasks)
-  const modelAvgRanks = useMemo(() => {
-    const avgRanks = new Map<string, number>();
-
-    // For each task, compute ranks
-    const taskRanks = new Map<string, Map<string, number>>();
-    for (const task of filteredTasks) {
-      const taskResults = results
-        .filter((r) => r.taskId === task.id)
-        .sort((a, b) => b.value - a.value); // Higher is better
-
-      const ranks = new Map<string, number>();
-      taskResults.forEach((r, idx) => {
-        ranks.set(r.modelId, idx + 1);
-      });
-      taskRanks.set(task.id, ranks);
-    }
-
-    // Compute average rank per model
-    for (const model of models) {
-      const ranks: number[] = [];
-      for (const task of filteredTasks) {
-        const rank = taskRanks.get(task.id)?.get(model.id);
-        if (rank !== undefined) {
-          ranks.push(rank);
-        }
-      }
-      if (ranks.length > 0) {
-        avgRanks.set(model.id, ranks.reduce((a, b) => a + b, 0) / ranks.length);
-      }
-    }
-
-    return avgRanks;
-  }, [models, filteredTasks, results]);
-
-  // Compute average metric value per model (across filtered tasks)
-  const modelAvgValues = useMemo(() => {
-    const avgValues = new Map<string, number>();
-
-    for (const model of models) {
-      const values: number[] = [];
-      for (const task of filteredTasks) {
-        const value = resultsMap.get(model.id)?.get(task.id);
-        if (value !== undefined) {
-          values.push(value);
-        }
-      }
-      if (values.length > 0) {
-        avgValues.set(model.id, values.reduce((a, b) => a + b, 0) / values.length);
-      }
-    }
-
-    return avgValues;
-  }, [models, filteredTasks, resultsMap]);
-
-  // Sort models by average rank
-  const sortedModels = useMemo(() => {
-    return [...models].sort((a, b) => {
-      const rankA = modelAvgRanks.get(a.id) ?? 999;
-      const rankB = modelAvgRanks.get(b.id) ?? 999;
-      return rankA - rankB;
-    });
-  }, [models, modelAvgRanks]);
-
-  // Get value color based on relative performance
-  function getValueColor(value: number, taskId: string): string {
-    const stats = taskStats.get(taskId);
-    if (!stats || stats.max === stats.min) return "";
-
-    const normalized = (value - stats.min) / (stats.max - stats.min);
-
-    if (normalized >= 0.9) return "bg-emerald-100 text-emerald-800";
-    if (normalized >= 0.7) return "bg-green-50 text-green-700";
-    if (normalized >= 0.3) return "bg-gray-50";
-    if (normalized >= 0.1) return "bg-orange-50 text-orange-700";
-    return "bg-red-50 text-red-700";
-  }
+  const taskOptions = availableTaskNames
+    .map((name) => ({ id: name, label: name }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div>
@@ -252,16 +94,11 @@ export function PathoBenchDetailedTable({
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
           label="Indications"
-          options={organs
-            .map((organ) => ({
-              id: organ,
-              label: organ.charAt(0).toUpperCase() + organ.slice(1),
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedOrgans}
-          onToggle={toggleOrgan}
-          onSelectAll={() => setSelectedOrgans(new Set(organs))}
-          onClearAll={() => setSelectedOrgans(new Set())}
+          options={organOptions}
+          selectedIds={organs.selected}
+          onToggle={organs.toggle}
+          onSelectAll={organs.selectAll}
+          onClearAll={organs.clearAll}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -278,42 +115,32 @@ export function PathoBenchDetailedTable({
         </DropdownMenu>
         <MultiSelectDropdown
           label="Task Categories"
-          options={categories
-            .map((category) => ({
-              id: category,
-              label: category,
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedCategories}
-          onToggle={toggleCategory}
-          onSelectAll={() => setSelectedCategories(new Set(categories))}
-          onClearAll={() => setSelectedCategories(new Set())}
+          options={categoryOptions}
+          selectedIds={categories.selected}
+          onToggle={categories.toggle}
+          onSelectAll={categories.selectAll}
+          onClearAll={categories.clearAll}
         />
         <MultiSelectDropdown
           label="All Tasks"
-          options={taskNames
-            .map((taskName) => ({
-              id: taskName,
-              label: taskName,
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
-          selectedIds={selectedTasks}
-          onToggle={toggleTask}
-          onSelectAll={() => setSelectedTasks(new Set(taskNames))}
-          onClearAll={() => setSelectedTasks(new Set())}
+          options={taskOptions}
+          selectedIds={taskNames.selected}
+          onToggle={taskNames.toggle}
+          onSelectAll={taskNames.selectAll}
+          onClearAll={taskNames.clearAll}
         />
         <div className="relative flex-1 min-w-[200px] max-w-[300px]">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
             placeholder="Search tasks..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={search.query}
+            onChange={(e) => search.setQuery(e.target.value)}
             className="pl-8 pr-8 h-9"
           />
-          {searchQuery && (
+          {search.query && (
             <button
-              onClick={() => setSearchQuery("")}
+              onClick={search.clearQuery}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -321,7 +148,6 @@ export function PathoBenchDetailedTable({
           )}
         </div>
       </div>
-
 
       <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
@@ -356,7 +182,6 @@ export function PathoBenchDetailedTable({
               const modelResults = resultsMap.get(model.id);
               const avgRank = modelAvgRanks.get(model.id);
 
-              // Check if model has any results for filtered tasks
               const hasResults = filteredTasks.some(
                 (task) => modelResults?.has(task.id)
               );
@@ -384,20 +209,25 @@ export function PathoBenchDetailedTable({
                     {avgRank !== undefined ? formatNumber(avgRank, 2) : "-"}
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
-                    {modelAvgValues.get(model.id) !== undefined ? formatNumber(modelAvgValues.get(model.id)!, 3) : "-"}
+                    {modelAvgValues.get(model.id) !== undefined
+                      ? formatNumber(modelAvgValues.get(model.id)!, 3)
+                      : "-"}
                   </td>
                   {filteredTasks.map((task) => {
-                    const value = modelResults?.get(task.id);
+                    const value = modelResults?.get(task.id)?.value;
                     return (
                       <td
                         key={task.id}
                         className={cn(
                           "px-2 py-2 text-center tabular-nums",
-                          value !== undefined && getValueColor(value, task.id)
+                          value !== undefined &&
+                            getValueColor(value, taskStats.get(task.id))
                         )}
                       >
                         {value !== undefined ? (
-                          <span className="font-medium">{formatNumber(value, 3)}</span>
+                          <span className="font-medium">
+                            {formatNumber(value, 3)}
+                          </span>
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}

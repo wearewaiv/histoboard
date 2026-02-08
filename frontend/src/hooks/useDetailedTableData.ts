@@ -1,60 +1,17 @@
 /**
  * Detailed Table Data Hook
  *
- * This hook provides shared data computations for all benchmark detail tables.
- * Instead of duplicating the same calculation logic in every table component,
- * this hook centralizes it in one place.
+ * Shared data computations for all benchmark detail tables. Given models,
+ * filtered tasks, and results, computes:
  *
- * ## What is a React Hook?
+ * - **resultsMap** — O(1) lookup: `resultsMap.get(modelId)?.get(taskId)`
+ * - **taskStats** — Min/max per task for cell color scaling
+ * - **modelAvgRanks** — Average rank across filtered tasks
+ * - **modelAvgValues** — Average metric value across filtered tasks
+ * - **sortedModels** — Models sorted by average rank (ascending)
  *
- * A "hook" is a special function in React that lets you use React features
- * (like state and memoization) inside a component. Hooks always start with "use".
- * Custom hooks like this one combine multiple React hooks to provide reusable logic.
- *
- * ## What This Hook Computes
- *
- * Given a list of models, tasks, and benchmark results, this hook computes:
- *
- * 1. **resultsMap** - A fast lookup table to find a specific result by model+task ID.
- *    Instead of searching through all results every time, you can do:
- *    `resultsMap.get(modelId)?.get(taskId)` → instant access!
- *
- * 2. **taskStats** - For each task, the minimum and maximum score across all models.
- *    Used to color table cells: green for high scores, red for low scores.
- *
- * 3. **modelAvgRanks** - Each model's average ranking across all tasks.
- *    If Model A ranks #1 on Task 1 and #3 on Task 2, its average rank is 2.0.
- *
- * 4. **modelAvgValues** - Each model's average metric score across all tasks.
- *    If Model A scores 0.85 on Task 1 and 0.90 on Task 2, its average is 0.875.
- *
- * 5. **sortedModels** - Models ordered by their average rank (best first).
- *
- * ## Why Use useMemo?
- *
- * The `useMemo` function caches expensive calculations. Without it, React would
- * recalculate everything on every render (e.g., when you move your mouse).
- * With `useMemo`, calculations only re-run when the input data actually changes.
- *
- * ## Usage Example
- *
- * ```typescript
- * // In your table component:
- * const {
- *   resultsMap,
- *   taskStats,
- *   modelAvgRanks,
- *   modelAvgValues,
- *   sortedModels,
- * } = useDetailedTableData({
- *   models,          // Array of model objects
- *   filteredTasks,   // Array of task objects (after user applies filters)
- *   results,         // Array of benchmark results
- * });
- *
- * // Then render the table using sortedModels for rows
- * // and use resultsMap to look up individual cell values
- * ```
+ * Supports generic result types via `<R extends Result>` and custom metric
+ * extraction via `getMetricValue` (e.g., Stanford's multi-metric selector).
  *
  * @module hooks/useDetailedTableData
  */

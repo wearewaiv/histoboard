@@ -11,9 +11,12 @@ Note: This scraper is currently a placeholder. The actual benchmark data is
 maintained in static JSON files from the EVA GitHub repository CSV exports.
 """
 
-from bs4 import BeautifulSoup
+import httpx
+from rich.console import Console
 
 from .base import BaseScraper, ScrapedResult
+
+console = Console()
 
 
 # =============================================================================
@@ -82,20 +85,14 @@ class EVAScraper(BaseScraper):
             List of scraped results (currently empty)
         """
         try:
-            html = await self.fetch_html(self.url)
-            soup = BeautifulSoup(html, "lxml")
-
             # TODO: Implement actual HTML parsing when live scraping is needed
             # The EVA benchmark page structure would need to be analyzed and
             # appropriate selectors defined for extracting model performance data
-            _ = soup  # Suppress unused variable warning
-
             results: list[ScrapedResult] = []
             return results
 
-        except Exception as e:
-            # Log error but don't crash - allows fallback to static data
-            print(f"Error scraping EVA: {e}")
+        except (httpx.HTTPError, OSError) as e:
+            console.print(f"[red]Error scraping EVA: {e}[/red]")
             return []
 
     def map_model_name(self, raw_name: str) -> str | None:

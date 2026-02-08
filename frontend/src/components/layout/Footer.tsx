@@ -1,3 +1,12 @@
+/**
+ * Site Footer
+ *
+ * Footer with project links (GitHub, documentation, license) and a build-time
+ * "last updated" timestamp. Rendered at the bottom of every page.
+ *
+ * Used by: app/layout.tsx
+ */
+
 // Build-time date for "Last updated" footer text
 const BUILD_DATE = new Date().toLocaleDateString("en-US", {
   month: "long",

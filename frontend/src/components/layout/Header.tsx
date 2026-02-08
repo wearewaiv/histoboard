@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Site Header
+ *
+ * Navigation header with logo, page links, GitHub star count, and responsive
+ * mobile menu (hamburger toggle). Highlights the active page based on pathname.
+ *
+ * Used by: app/layout.tsx
+ */
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

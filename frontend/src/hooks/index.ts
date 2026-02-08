@@ -11,6 +11,12 @@ export type { UseSetToggleReturn } from "./useSetToggle";
 
 export { useBenchmarkAxisLabel } from "./useBenchmarkAxisLabel";
 
+export { useModelAttributeFilters } from "./useModelAttributeFilters";
+export type {
+  UseModelAttributeFiltersReturn,
+  ModelAttributeFilterOptions,
+} from "./useModelAttributeFilters";
+
 export {
   useTaskFiltering,
   useSimpleTaskFiltering,

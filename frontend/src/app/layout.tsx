@@ -1,3 +1,11 @@
+/**
+ * Root Layout
+ *
+ * Wraps all pages with the site Header, Footer, global styles (Inter font,
+ * Tailwind CSS), and decorative CellBackground. Defines site-wide metadata
+ * (title, description, OpenGraph).
+ */
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";

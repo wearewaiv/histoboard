@@ -1,5 +1,16 @@
 "use client";
 
+/**
+ * Leaderboard Table
+ *
+ * Main ranking table on the /leaderboard page. Shows models as rows and
+ * benchmarks as columns, with each cell displaying the model's average rank
+ * for that benchmark. Supports sorting by any column and medal badges (gold,
+ * silver, bronze) for top-3 models per benchmark.
+ *
+ * Used by: app/leaderboard/page.tsx
+ */
+
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import type { Model, Benchmark } from "@/types";
