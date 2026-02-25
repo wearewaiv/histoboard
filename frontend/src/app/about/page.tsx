@@ -51,7 +51,7 @@ const stats = {
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">About Histoboard</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">About Histoboard</h1>
 
       {/* Motivation Section */}
       <Card className="mb-8">
@@ -59,34 +59,34 @@ export default function AboutPage() {
           <CardTitle>Why Histoboard?</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-muted-foreground">
-            The rapid proliferation of pathology foundation models has created a{" "}
+          <p className="text-muted-foreground text-justify">
+            Foundation models have transformed computational pathology. Trained on large-scale histopathology datasets
+            through self-supervised learning, these models learn general-purpose visual representations from digitized
+            tissue slides. Once trained, they can be adapted to a wide range of downstream tasks&mdash;cancer detection
+            and grading, biomarker prediction, survival analysis, tissue segmentation&mdash;often matching or exceeding
+            task-specific approaches. Beyond purely visual encoders, multi-modal models that integrate additional
+            data sources—pathology reports, genomic profiles, clinical metadata—are expanding the scope of what
+            foundation models can achieve in this domain.
+          </p>
+          <p className="text-muted-foreground text-justify">
+            As the number of pathology foundation models grows, so does the need for rigorous evaluation. Yet the field
+            currently faces a{" "}
             <a
               href="https://www.nature.com/articles/s41591-025-03637-3"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline font-medium"
             >
-              &ldquo;benchmarking crisis&rdquo;
+              benchmarking crisis
             </a>{" "}
-            (Mahmood, 2025) in biomedical machine learning. The lack of standardized evaluation makes it increasingly
-            difficult to assess model strengths, limitations, and potential for clinical deployment.
+            (Mahmood, 2025): the lack of standardized evaluation protocols makes it difficult to reliably assess model
+            strengths, robustness, limitations, and readiness for clinical deployment.
           </p>
-          <p className="text-muted-foreground">
-            Ideally, the computational pathology community would
-            have a single, comprehensive, publicly available benchmark that all models could be evaluated against. But
-            we&apos;re not there yet. Many benchmarks rely on proprietary or restricted-access data, making it difficult
-            to establish a truly standardized evaluation framework. Each lab often builds their own internal benchmark,
-            further fragmenting the landscape. Recent initiatives ({""}
-            <a
-              href="https://birkhoffkiki.github.io/PathBench/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              PathBench
-            </a>
-            ,{" "}
+          <p className="text-muted-foreground text-justify">
+            Ideally, the community would converge on a single, comprehensive, publicly available benchmark against which
+            all models could be evaluated. We are not there yet. Many benchmarks rely on proprietary or
+            restricted-access data, and individual labs often develop their own internal evaluation suites, further
+            fragmenting the landscape. Recent community-driven initiatives such as{" "}
             <a
               href="https://huggingface.co/datasets/MahmoodLab/Patho-Bench"
               target="_blank"
@@ -95,35 +95,18 @@ export default function AboutPage() {
             >
               Patho-Bench
             </a>
-            ,{" "}
-            <a
-              href="https://kaiko-ai.github.io/eva/main/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              eva
-            </a>
-            ,{" "}
-            <a
-              href="https://mics-lab.github.io/thunder/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              THUNDER
-            </a>
-            ) propose clinically relevant tasks based on public datasets, and represent promising steps toward
-            promoting more transparency, reproducibility, and continued progress in the field (Zhang, 2025).
+             {" "}propose clinically relevant tasks built on public datasets and represent important steps toward greater
+            transparency, reproducibility, and continued progress (Zhang, 2025).
           </p>
-          <p className="text-muted-foreground">
-            Until we have that unified benchmark, <strong>Histoboard</strong> tries to bridge the gap by aggregating
-            results from published benchmarks into a single interface. Our goal is to make it easier to compare models
-            across the benchmarks that do exist, while advocating for more publicly available evaluation datasets.
+          <p className="text-muted-foreground text-justify">
+            Until a unified benchmark emerges, <strong>Histoboard</strong> aims to bridge the gap by aggregating
+            results from published benchmarks into a single, accessible interface. Our goal is to provide the community
+            with a clear comparative view of existing models and to advocate for more publicly available evaluation
+            datasets.
           </p>
-          <p className="text-muted-foreground">
-            If you know of public benchmarks that should be added, or have suggestions for improving pathology model
-            evaluation, we&apos;d love to hear from you.
+          <p className="text-muted-foreground text-justify">
+            If you are aware of public benchmarks that should be included, or have suggestions for improving pathology
+            model evaluation, we welcome your contributions.
           </p>
         </CardContent>
       </Card>
@@ -134,7 +117,7 @@ export default function AboutPage() {
           <CardTitle>What We Aggregate</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-justify">
             Histoboard currently aggregates results from <strong>{stats.benchmarkCount} published benchmarks</strong> covering:
           </p>
           <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
@@ -152,7 +135,7 @@ export default function AboutPage() {
               <strong>Robustness evaluation</strong> across domain shifts, scanners, and staining variations
             </li>
           </ul>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-justify">
             All data comes directly from official benchmark publications and repositories. See each{" "}
             <Link href="/benchmarks" className="text-primary hover:underline font-medium">
               benchmark card
@@ -168,21 +151,23 @@ export default function AboutPage() {
           <CardTitle>How Rankings Work</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-justify">
             The{" "}
             <Link href="/leaderboard" className="text-primary hover:underline font-medium">
               main leaderboard
             </Link>{" "}
-            displays the rankings of each foundation model based on the official benchmarks. 
-            <p className="text-muted-foreground">
+            displays the rankings of each foundation model based on the official benchmarks.
+          </p>
+          <p className="text-muted-foreground text-justify">
             For detailed per-task results, visit the individual{" "}
             <Link href="/benchmarks" className="text-primary hover:underline font-medium">
               benchmark pages
             </Link>
-            . Inside the <Link href="/arena" className="text-primary hover:underline font-medium">
+            . Inside the{" "}
+            <Link href="/arena" className="text-primary hover:underline font-medium">
               arena
-            </Link>, we implement a metric-agnostic ranking system that enables you to compare models based on specific organs and tasks.
-          </p>
+            </Link>
+            , we implement a metric-agnostic ranking system that enables you to compare models based on specific organs and tasks.
           </p>
         </CardContent>
       </Card>
@@ -193,7 +178,7 @@ export default function AboutPage() {
           <CardTitle>Contributing</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-justify">
             Histoboard is open source and welcomes contributions. If you notice missing models, incorrect data, or want
             to add a new benchmark, please:
           </p>
@@ -228,7 +213,7 @@ export default function AboutPage() {
           <CardTitle>Personal Note</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-justify">
             My name is Alexandre Filiot and I am the original developer of Histoboard. I am working at{" "}
             <a
               href="https://owkin.com"
@@ -274,8 +259,7 @@ export default function AboutPage() {
             >
               plismbench
             </a>
-            . As a disclaimer, this project is developed independently and does not represent the views or interests of
-            my employer. The goal is to provide an unbiased, community-driven resource for comparing pathology
+            . This project had received funding from Owkin. The goal is to provide an unbiased, community-driven resource for comparing pathology
             foundation models.
           </p>
         </CardContent>

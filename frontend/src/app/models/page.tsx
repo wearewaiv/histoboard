@@ -97,8 +97,8 @@ export default function ModelsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Models</h1>
-        <p className="mt-2 text-muted-foreground">
+        <h1 className="text-3xl font-bold text-center">Models</h1>
+        <p className="mt-2 text-muted-foreground text-center">
           Browse {models.length} pathology foundation models and their benchmark
           performance
         </p>

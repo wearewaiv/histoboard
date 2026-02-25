@@ -94,7 +94,7 @@ export function Header() {
                   isActive ? "text-hematoxylin-600" : "text-muted-foreground"
                 )}
               >
-                <item.icon className={cn("h-4 w-4", isActive && "text-eosin-500")} />
+                <item.icon className={cn("h-4 w-4", isActive && "text-[#FF5A60]")} />
                 <span>{item.name}</span>
               </Link>
             );
@@ -153,7 +153,7 @@ export function Header() {
                       : "text-muted-foreground hover:bg-hematoxylin-50 hover:text-hematoxylin-500"
                   )}
                 >
-                  <item.icon className={cn("h-5 w-5", isActive && "text-eosin-500")} />
+                  <item.icon className={cn("h-5 w-5", isActive && "text-[#FF5A60]")} />
                   <span>{item.name}</span>
                 </Link>
               );

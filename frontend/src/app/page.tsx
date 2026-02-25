@@ -205,17 +205,11 @@ export default function HomePage() {
 
       {/* Champion Board */}
       <section className="mb-12">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="flex items-center gap-2 text-2xl font-bold">
+        <div className="mb-6 text-center">
+          <h2 className="inline-flex items-center gap-2 text-2xl font-bold">
             <Award className="h-5 w-5 text-yellow-500" />
             Champion Board
           </h2>
-          <Link
-            href="/benchmarks"
-            className="text-sm text-muted-foreground hover:text-primary hover:underline"
-          >
-            View all benchmarks &rarr;
-          </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {podiums.map(({ benchmark, topModels }) => (
@@ -243,7 +237,7 @@ function VisitorMap() {
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.id = "mapmyvisitors";
-    script.src = "https://mapmyvisitors.com/map.js?cl=915793&w=300&t=tt&d=dJDHJ3-hyo0XeVx6oc7STY3ihPbjvz2CHCOP4-j6XOo&co=ffffff&cmo=ff53f0&cmn=5e3acc&ct=808080";
+    script.src = "https://mapmyvisitors.com/map.js?cl=7477b8&w=300&t=m&d=cZMPh5C2z0doVp3dEYW1RXz2F3F7iHVL3Q88MhOdQM0&co=ffffff&cmo=e9ac37&cmn=1b96a3&ct=222222";
     script.async = true;
 
     containerRef.current.appendChild(script);
@@ -259,7 +253,7 @@ function VisitorMap() {
 
   return (
     <section className="mb-8">
-      <h2 className="mb-4 flex items-center justify-center gap-2 text-xl font-bold text-muted-foreground">
+      <h2 className="mb-6 flex items-center justify-center gap-2 text-2xl font-bold">
         <Globe className="h-5 w-5" />
         Visitors from around the world
       </h2>

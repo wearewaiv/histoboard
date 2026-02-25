@@ -98,7 +98,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold">Leaderboard</h1>
         <p className="mt-2 text-muted-foreground">
           An overview of pathology foundation models performance across multiple benchmarks
@@ -156,7 +156,7 @@ export default function LeaderboardPage() {
 
       {/* Direct comparison */}
       <section className="mt-8">
-      <div className="mb-8">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold">Direct comparison</h1>
         <p className="mt-2 text-muted-foreground">
           Compare pathology foundation models on a common set of benchmarks
@@ -176,7 +176,7 @@ export default function LeaderboardPage() {
 
       {/* Model Size vs Performance */}
       <section className="mt-8">
-        <div className="mb-8">
+        <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold">Scaling laws</h1>
           <p className="mt-2 text-muted-foreground">
             Explore how model size correlates with performance or robustness across benchmarks

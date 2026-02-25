@@ -395,7 +395,7 @@ export default function ArenaPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold">Arena</h1>
         <p className="mt-2 text-muted-foreground">
           Compare 2-5 models head-to-head across all benchmarks
