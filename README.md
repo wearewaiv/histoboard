@@ -13,9 +13,18 @@
 </p>
 
 <p align="center">
-  <a href="https://afiliot.github.io/histoboard"><img src="https://img.shields.io/badge/Live%20Demo-histoboard-blueviolet?style=for-the-badge" alt="Live Demo"></a>
-  <a href="https://github.com/afiliot/histoboard/stargazers"><img src="https://img.shields.io/github/stars/afiliot/histoboard?branch=master?style=for-the-badge&color=yellow" alt="Stars"></a>
-  <a href="https://github.com/afiliot/histoboard/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green?style=for-the-badge" alt="License"></a>
+  <a href="https://afiliot.github.io/histoboard">
+    <img src="https://img.shields.io/badge/Live%20Demo-histoboard-blueviolet?style=for-the-badge" alt="Live Demo">
+  </a>
+  <a href="https://github.com/afiliot/histoboard/stargazers">
+    <img src="https://img.shields.io/github/stars/afiliot/histoboard?style=for-the-badge&color=yellow" alt="Stars">
+  </a>
+  <a href="https://github.com/afiliot/histoboard/network/members">
+    <img src="https://img.shields.io/github/forks/afiliot/histoboard?style=for-the-badge&color=lightblue" alt="Forks">
+  </a>
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+    <img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green?style=for-the-badge" alt="License">
+  </a>
 </p>
 
 ---
