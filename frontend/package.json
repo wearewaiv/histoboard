@@ -18,7 +18,7 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.563.0",
+    "lucide-react": "^0.575.0",
     "next": "^16.1.5",
     "pixi.js": "^8.16.0",
     "react": "^19.2.4",
