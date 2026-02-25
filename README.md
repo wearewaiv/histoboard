@@ -180,7 +180,3 @@ If you use Histoboard in your research, please cite:
 ## Acknowledgments
 
 This project aggregates data from multiple benchmark sources. Please cite the original benchmark papers when using their data.
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
