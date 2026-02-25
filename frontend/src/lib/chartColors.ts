@@ -4,13 +4,19 @@
 
 /** Color palette for model scatter plots (35 distinct colors). */
 export const MODEL_COLORS = [
-  "#3b82f6", "#ef4444", "#22c55e", "#f59e0b", "#8b5cf6",
-  "#ec4899", "#14b8a6", "#f97316", "#6366f1", "#84cc16",
-  "#06b6d4", "#a855f7", "#10b981", "#eab308", "#0ea5e9",
-  "#d946ef", "#64748b", "#78716c", "#fb7185", "#4ade80",
-  "#60a5fa", "#c084fc", "#facc15", "#2dd4bf", "#fb923c",
-  "#a78bfa", "#38bdf8", "#34d399", "#fbbf24", "#f472b6",
-  "#818cf8", "#4f46e5", "#dc2626", "#16a34a", "#ca8a04",
+  // Teal family (anchor: #1B96A3)
+  "#1B96A3", "#15788A", "#22B4C3", "#0E5F6D", "#2DD4BF",
+  // Coral family (anchor: #FF5A60)
+  "#FF5A60", "#E0444A", "#FF7E83", "#C0333A", "#FF9B9E",
+  // Mustard family (anchor: #E9AC37)
+  "#E9AC37", "#D49420", "#F0C35E", "#B07A15", "#F5D78A",
+  // Purple family (from brand palette)
+  "#1A094E", "#7477B8", "#3D3C84", "#535AA0", "#9496C7",
+  // Extended complementary hues
+  "#2563EB", "#16A34A", "#9333EA", "#EA580C", "#0284C7",
+  "#059669", "#7C3AED", "#DC2626", "#CA8A04", "#0891B2",
+  // High-contrast fills
+  "#6D28D9", "#4F46E5", "#B91C1C", "#15803D", "#A16207",
 ];
 
 /** Get color for a model at a given index, cycling through the palette. */

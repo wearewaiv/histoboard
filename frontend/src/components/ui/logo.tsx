@@ -41,37 +41,37 @@ export function Logo({ className, size = "md", showText = true }: LogoProps) {
         />
 
         {/* Stylized tissue pattern - cells */}
-        <circle cx="10" cy="10" r="3" fill="hsl(280 55% 45%)" opacity="0.8" />
-        <circle cx="20" cy="8" r="2.5" fill="hsl(350 60% 55%)" opacity="0.7" />
-        <circle cx="30" cy="11" r="3" fill="hsl(280 55% 45%)" opacity="0.6" />
-        <circle cx="8" cy="18" r="2" fill="hsl(350 60% 55%)" opacity="0.6" />
-        <circle cx="16" cy="16" r="2.5" fill="hsl(280 50% 50%)" opacity="0.7" />
-        <circle cx="24" cy="19" r="2" fill="hsl(350 55% 60%)" opacity="0.8" />
-        <circle cx="32" cy="20" r="2.5" fill="hsl(280 55% 45%)" opacity="0.7" />
-        <circle cx="12" cy="24" r="2" fill="hsl(280 55% 45%)" opacity="0.5" />
-        <circle cx="20" cy="25" r="2.5" fill="hsl(350 60% 55%)" opacity="0.6" />
-        <circle cx="28" cy="24" r="2" fill="hsl(280 50% 50%)" opacity="0.7" />
+        <circle cx="10" cy="10" r="3" fill="hsl(237 32% 59%)" opacity="0.8" />
+        <circle cx="20" cy="8" r="2.5" fill="#FF5A60" opacity="0.7" />
+        <circle cx="30" cy="11" r="3" fill="hsl(237 32% 59%)" opacity="0.6" />
+        <circle cx="8" cy="18" r="2" fill="#FF5A60" opacity="0.6" />
+        <circle cx="16" cy="16" r="2.5" fill="hsl(237 32% 55%)" opacity="0.7" />
+        <circle cx="24" cy="19" r="2" fill="hsl(358 100% 72%)" opacity="0.8" />
+        <circle cx="32" cy="20" r="2.5" fill="hsl(237 32% 59%)" opacity="0.7" />
+        <circle cx="12" cy="24" r="2" fill="hsl(237 32% 59%)" opacity="0.5" />
+        <circle cx="20" cy="25" r="2.5" fill="#FF5A60" opacity="0.6" />
+        <circle cx="28" cy="24" r="2" fill="hsl(237 32% 55%)" opacity="0.7" />
 
         {/* Bar chart at bottom */}
-        <rect x="8" y="36" width="4" height="2" rx="0.5" fill="hsl(280 55% 45%)" />
-        <rect x="14" y="34" width="4" height="4" rx="0.5" fill="hsl(280 55% 50%)" />
-        <rect x="20" y="32" width="4" height="6" rx="0.5" fill="hsl(320 55% 50%)" />
-        <rect x="26" y="33" width="4" height="5" rx="0.5" fill="hsl(350 60% 55%)" />
+        <rect x="8" y="36" width="4" height="2" rx="0.5" fill="hsl(237 32% 59%)" />
+        <rect x="14" y="34" width="4" height="4" rx="0.5" fill="hsl(237 32% 55%)" />
+        <rect x="20" y="32" width="4" height="6" rx="0.5" fill="hsl(358 70% 55%)" />
+        <rect x="26" y="33" width="4" height="5" rx="0.5" fill="#FF5A60" />
 
         {/* Gradients - light theme */}
         <defs>
           <linearGradient id="tissueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(350 70% 97%)" />
-            <stop offset="100%" stopColor="hsl(280 50% 96%)" />
+            <stop offset="0%" stopColor="hsl(358 80% 97%)" />
+            <stop offset="100%" stopColor="hsl(237 30% 96%)" />
           </linearGradient>
           <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(280 55% 45%)" />
-            <stop offset="100%" stopColor="hsl(350 60% 55%)" />
+            <stop offset="0%" stopColor="hsl(237 32% 59%)" />
+            <stop offset="100%" stopColor="#FF5A60" />
           </linearGradient>
         </defs>
       </svg>
       {showText && (
-        <span className={cn("font-bold bg-gradient-to-r from-hematoxylin-600 to-eosin-500 bg-clip-text text-transparent", textSizeClasses[size])}>
+        <span className={cn("font-bold bg-gradient-to-r from-hematoxylin-600 to-[#FF5A60] bg-clip-text text-transparent", textSizeClasses[size])}>
           Histoboard
         </span>
       )}
@@ -99,30 +99,30 @@ export function LogoIcon({ className }: { className?: string }) {
         strokeWidth="1.5"
       />
 
-      <circle cx="10" cy="10" r="3" fill="hsl(280 55% 45%)" opacity="0.8" />
-      <circle cx="20" cy="8" r="2.5" fill="hsl(350 60% 55%)" opacity="0.7" />
-      <circle cx="30" cy="11" r="3" fill="hsl(280 55% 45%)" opacity="0.6" />
-      <circle cx="8" cy="18" r="2" fill="hsl(350 60% 55%)" opacity="0.6" />
-      <circle cx="16" cy="16" r="2.5" fill="hsl(280 50% 50%)" opacity="0.7" />
-      <circle cx="24" cy="19" r="2" fill="hsl(350 55% 60%)" opacity="0.8" />
-      <circle cx="32" cy="20" r="2.5" fill="hsl(280 55% 45%)" opacity="0.7" />
-      <circle cx="12" cy="24" r="2" fill="hsl(280 55% 45%)" opacity="0.5" />
-      <circle cx="20" cy="25" r="2.5" fill="hsl(350 60% 55%)" opacity="0.6" />
-      <circle cx="28" cy="24" r="2" fill="hsl(280 50% 50%)" opacity="0.7" />
+      <circle cx="10" cy="10" r="3" fill="hsl(237 32% 59%)" opacity="0.8" />
+      <circle cx="20" cy="8" r="2.5" fill="#FF5A60" opacity="0.7" />
+      <circle cx="30" cy="11" r="3" fill="hsl(237 32% 59%)" opacity="0.6" />
+      <circle cx="8" cy="18" r="2" fill="#FF5A60" opacity="0.6" />
+      <circle cx="16" cy="16" r="2.5" fill="hsl(237 32% 55%)" opacity="0.7" />
+      <circle cx="24" cy="19" r="2" fill="hsl(358 100% 72%)" opacity="0.8" />
+      <circle cx="32" cy="20" r="2.5" fill="hsl(237 32% 59%)" opacity="0.7" />
+      <circle cx="12" cy="24" r="2" fill="hsl(237 32% 59%)" opacity="0.5" />
+      <circle cx="20" cy="25" r="2.5" fill="#FF5A60" opacity="0.6" />
+      <circle cx="28" cy="24" r="2" fill="hsl(237 32% 55%)" opacity="0.7" />
 
-      <rect x="8" y="36" width="4" height="2" rx="0.5" fill="hsl(280 55% 45%)" />
-      <rect x="14" y="34" width="4" height="4" rx="0.5" fill="hsl(280 55% 50%)" />
-      <rect x="20" y="32" width="4" height="6" rx="0.5" fill="hsl(320 55% 50%)" />
-      <rect x="26" y="33" width="4" height="5" rx="0.5" fill="hsl(350 60% 55%)" />
+      <rect x="8" y="36" width="4" height="2" rx="0.5" fill="hsl(237 32% 59%)" />
+      <rect x="14" y="34" width="4" height="4" rx="0.5" fill="hsl(237 32% 55%)" />
+      <rect x="20" y="32" width="4" height="6" rx="0.5" fill="hsl(358 70% 55%)" />
+      <rect x="26" y="33" width="4" height="5" rx="0.5" fill="#FF5A60" />
 
       <defs>
         <linearGradient id="tissueGradientIcon" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="hsl(350 70% 97%)" />
-          <stop offset="100%" stopColor="hsl(280 50% 96%)" />
+          <stop offset="0%" stopColor="hsl(358 80% 97%)" />
+          <stop offset="100%" stopColor="hsl(237 30% 96%)" />
         </linearGradient>
         <linearGradient id="borderGradientIcon" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="hsl(280 55% 45%)" />
-          <stop offset="100%" stopColor="hsl(350 60% 55%)" />
+          <stop offset="0%" stopColor="hsl(237 32% 59%)" />
+          <stop offset="100%" stopColor="#FF5A60" />
         </linearGradient>
       </defs>
     </svg>

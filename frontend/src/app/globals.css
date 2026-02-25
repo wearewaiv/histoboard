@@ -1,43 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-border: hsl(280 20% 88%);
-  --color-input: hsl(280 20% 88%);
-  --color-ring: hsl(280 40% 60%);
+  --color-border: hsl(237 20% 88%);
+  --color-input: hsl(237 20% 88%);
+  --color-ring: hsl(237 32% 60%);
   --color-background: hsl(30 25% 97%);
-  --color-foreground: hsl(280 30% 15%);
+  --color-foreground: #222222;
 
-  --color-primary: hsl(280 55% 45%);
+  --color-primary: hsl(237 32% 59%);
   --color-primary-foreground: hsl(0 0% 100%);
 
   --color-secondary: hsl(350 50% 95%);
-  --color-secondary-foreground: hsl(280 30% 20%);
+  --color-secondary-foreground: #222222;
 
   --color-muted: hsl(30 20% 94%);
-  --color-muted-foreground: hsl(280 15% 45%);
+  --color-muted-foreground: hsl(237 15% 45%);
 
   --color-accent: hsl(350 60% 92%);
-  --color-accent-foreground: hsl(280 30% 20%);
+  --color-accent-foreground: #222222;
 
   --color-destructive: hsl(0 72% 51%);
   --color-destructive-foreground: hsl(0 0% 100%);
 
   --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(280 30% 15%);
+  --color-card-foreground: #222222;
 
   --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(280 30% 15%);
+  --color-popover-foreground: #222222;
 
-  --color-hematoxylin-50: hsl(280 60% 97%);
-  --color-hematoxylin-100: hsl(280 55% 92%);
-  --color-hematoxylin-200: hsl(280 50% 85%);
-  --color-hematoxylin-300: hsl(280 50% 70%);
-  --color-hematoxylin-400: hsl(280 55% 55%);
-  --color-hematoxylin-500: hsl(280 55% 45%);
-  --color-hematoxylin-600: hsl(280 55% 38%);
-  --color-hematoxylin-700: hsl(280 50% 30%);
-  --color-hematoxylin-800: hsl(280 45% 22%);
-  --color-hematoxylin-900: hsl(280 40% 15%);
+  --color-hematoxylin-50: hsl(237 40% 97%);
+  --color-hematoxylin-100: hsl(237 35% 93%);
+  --color-hematoxylin-200: hsl(237 30% 86%);
+  --color-hematoxylin-300: hsl(237 32% 74%);
+  --color-hematoxylin-400: hsl(237 32% 66%);
+  --color-hematoxylin-500: hsl(237 32% 59%);
+  --color-hematoxylin-600: hsl(237 35% 48%);
+  --color-hematoxylin-700: hsl(237 32% 38%);
+  --color-hematoxylin-800: hsl(237 28% 28%);
+  --color-hematoxylin-900: hsl(237 24% 18%);
 
   --color-eosin-50: hsl(350 80% 98%);
   --color-eosin-100: hsl(350 70% 95%);
@@ -58,8 +58,8 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
   --animate-cell-pulse: cell-pulse 3s ease-in-out infinite;
 
-  --background-image-gradient-histology: linear-gradient(135deg, hsl(280 55% 45%) 0%, hsl(350 60% 55%) 100%);
-  --background-image-gradient-histology-soft: linear-gradient(135deg, hsl(280 40% 95%) 0%, hsl(350 50% 95%) 100%);
+  --background-image-gradient-histology: linear-gradient(135deg, hsl(237 32% 59%) 0%, hsl(350 60% 55%) 100%);
+  --background-image-gradient-histology-soft: linear-gradient(135deg, hsl(237 30% 95%) 0%, hsl(350 50% 95%) 100%);
 }
 
 @keyframes accordion-down {
@@ -111,7 +111,7 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: hsl(280 40% 20%);
+  background: hsl(237 30% 20%);
   color: white;
   padding: 8px 12px;
   border-radius: 6px;
@@ -126,7 +126,7 @@
   min-width: 150px;
   max-width: 300px;
   text-align: center;
-  box-shadow: 0 4px 12px -2px hsl(280 40% 20% / 0.3);
+  box-shadow: 0 4px 12px -2px hsl(237 30% 20% / 0.3);
   margin-top: 4px;
 }
 
@@ -142,12 +142,12 @@
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px hsl(280 50% 40% / 0.15);
+  box-shadow: 0 8px 25px -5px hsl(237 32% 50% / 0.15);
 }
 
 /* Gradient text utility */
 .gradient-text {
-  background: linear-gradient(135deg, hsl(280 55% 45%) 0%, hsl(350 60% 55%) 100%);
+  background: linear-gradient(135deg, hsl(237 32% 59%) 0%, hsl(350 60% 55%) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -164,7 +164,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, hsl(280 55% 45% / 0.2) 0%, hsl(350 60% 55% / 0.2) 100%);
+  background: linear-gradient(135deg, hsl(237 32% 59% / 0.2) 0%, hsl(350 60% 55% / 0.2) 100%);
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -185,12 +185,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(280 30% 75%);
+  background: hsl(237 25% 75%);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(280 40% 60%);
+  background: hsl(237 32% 60%);
 }
 
 /* Table scroll indicator for mobile */
@@ -226,8 +226,21 @@
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: hsl(280 30% 80%);
+  background: hsl(237 25% 80%);
   border-radius: 2px;
+}
+
+/* Narrower container to reveal more of the cell background on the sides */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1280px;
+  }
 }
 
 /* Vega tooltip styling */
@@ -243,7 +256,7 @@
 }
 
 #vg-tooltip-element td.key {
-  color: hsl(280 15% 45%);
+  color: hsl(237 15% 45%);
   padding-right: 0.5rem;
 }
 

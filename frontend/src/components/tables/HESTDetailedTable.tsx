@@ -22,6 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { buildOrganOptions, buildTaskNameOptions } from "@/lib/tableUtils";
 import { useSimpleTaskFiltering } from "@/hooks";
 import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
@@ -46,19 +47,8 @@ export function HESTDetailedTable({
     useDetailedTableData({ models, filteredTasks, results });
 
   // Dropdown options
-  const organOptions = availableOrgans
-    .map((organ) => ({
-      id: organ,
-      label: organ.charAt(0).toUpperCase() + organ.slice(1),
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const taskOptions = availableTaskNames
-    .map((taskName) => ({
-      id: taskName,
-      label: taskName,
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+  const organOptions = buildOrganOptions(availableOrgans);
+  const taskOptions = buildTaskNameOptions(availableTaskNames);
 
   return (
     <div>

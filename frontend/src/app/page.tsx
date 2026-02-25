@@ -7,7 +7,6 @@
  * champion podiums (top 3 models per benchmark), and an animated stat counter.
  */
 
-import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,38 +18,13 @@ import benchmarksData from "@/data/benchmarks.json";
 import rankingsData from "@/data/rankings.json";
 
 import type { Model, Task, Benchmark } from "@/types";
+import { countUniqueOrgans } from "@/lib/organGroups";
+import { useEffect, useRef } from "react";
 
 const models = modelsData as Model[];
 const tasks = tasksData as Task[];
 const benchmarks = benchmarksData as Benchmark[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
-
-// Organ grouping configuration (same as Arena page)
-const ORGAN_GROUPS: Record<string, string[]> = {
-  "Cervix": ["cervical", "cervix"],
-  "Colorectal": ["colon", "colorectal", "rectum"],
-  "Gastric": ["gastric", "gi"],
-  "Multi-organ": ["multi-organ", "pan-cancer"],
-};
-
-// Get grouped organ label
-function getOrganGroupLabel(organ: string): string {
-  for (const [groupLabel, organs] of Object.entries(ORGAN_GROUPS)) {
-    if (organs.includes(organ.toLowerCase())) {
-      return groupLabel;
-    }
-  }
-  return organ.charAt(0).toUpperCase() + organ.slice(1);
-}
-
-// Count unique grouped organs
-function countUniqueOrgans(tasks: Task[]): number {
-  const groupedOrgans = new Set<string>();
-  for (const task of tasks) {
-    groupedOrgans.add(getOrganGroupLabel(task.organ));
-  }
-  return groupedOrgans.size;
-}
 
 export default function HomePage() {
   const stats = {
@@ -120,14 +94,14 @@ export default function HomePage() {
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section */}
       <section className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
           Pathology Foundation Model Leaderboard
         </h1>
-        <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
+        <p className="mx-auto mb-8 max-w-2xl text-base sm:text-lg text-muted-foreground">
           A centralized dashboard aggregating benchmark results to compare
           pathology foundation models
         </p>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-4">
           <Link href="/leaderboard">
             <Button size="lg">
               <Trophy className="mr-2 h-5 w-5" />
@@ -144,7 +118,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="mb-12 grid gap-4 md:grid-cols-4">
+      <section className="mb-12 grid gap-4 grid-cols-2 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Models</CardTitle>
@@ -205,17 +179,11 @@ export default function HomePage() {
 
       {/* Champion Board */}
       <section className="mb-12">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="flex items-center gap-2 text-2xl font-bold">
+        <div className="mb-6 text-center">
+          <h2 className="inline-flex items-center gap-2 text-2xl font-bold">
             <Award className="h-5 w-5 text-yellow-500" />
             Champion Board
           </h2>
-          <Link
-            href="/benchmarks"
-            className="text-sm text-muted-foreground hover:text-primary hover:underline"
-          >
-            View all benchmarks &rarr;
-          </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {podiums.map(({ benchmark, topModels }) => (
@@ -230,42 +198,41 @@ export default function HomePage() {
   );
 }
 
+// The mapmyvisitors script uses document.write(), which only works during
+// initial HTML parsing. An <iframe srcDoc> gives the script a fresh document
+// that is being parsed, so document.write() works correctly.
+// No sandbox attribute — sandbox was blocking script execution and navigation.
+
 function VisitorMap() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Check if script already loaded
-    const existingScript = document.getElementById("mapmyvisitors");
-    if (existingScript) return;
-
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.id = "mapmyvisitors";
-    script.src = "https://mapmyvisitors.com/map.js?cl=915793&w=300&t=tt&d=dJDHJ3-hyo0XeVx6oc7STY3ihPbjvz2CHCOP4-j6XOo&co=ffffff&cmo=ff53f0&cmn=5e3acc&ct=808080";
+    script.src =
+      "https://mapmyvisitors.com/map.js?cl=7678b9&w=410&t=tt&d=dJDHJ3-hyo0XeVx6oc7STY3ihPbjvz2CHCOP4-j6XOo&co=ffffff&cmo=fa5b63&cmn=fa5b63&ct=0a0000";
     script.async = true;
 
     containerRef.current.appendChild(script);
 
     return () => {
-      // Cleanup on unmount
-      const scriptToRemove = document.getElementById("mapmyvisitors");
-      if (scriptToRemove) {
-        scriptToRemove.remove();
-      }
+      containerRef.current.innerHTML = "";
     };
   }, []);
 
   return (
     <section className="mb-8">
-      <h2 className="mb-4 flex items-center justify-center gap-2 text-xl font-bold text-muted-foreground">
-        <Globe className="h-5 w-5" />
+      <h2 className="mb-6 text-center text-xl font-bold">
         Visitors from around the world
       </h2>
-      <div className="flex justify-center">
-        <div ref={containerRef} />
-      </div>
+
+      <div
+        ref={containerRef}
+        className="flex justify-center"
+      />
     </section>
   );
 }

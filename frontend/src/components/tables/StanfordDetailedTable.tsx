@@ -27,6 +27,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { buildDropdownOptions, buildTaskNameOptions } from "@/lib/tableUtils";
 import { useSetToggle } from "@/hooks";
 import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
@@ -301,9 +302,7 @@ export function StanfordDetailedTable({
         </DropdownMenu>
         <MultiSelectDropdown
           label="Indications"
-          options={availableOrgans
-            .map((organ) => ({ id: organ, label: formatOrgan(organ) }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
+          options={buildDropdownOptions(availableOrgans, formatOrgan)}
           selectedIds={organs.selected}
           onToggle={organs.toggle}
           onSelectAll={organs.selectAll}
@@ -325,9 +324,7 @@ export function StanfordDetailedTable({
         />
         <MultiSelectDropdown
           label="Task Categories"
-          options={availableCategories
-            .map((category) => ({ id: category, label: category }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
+          options={buildTaskNameOptions(availableCategories)}
           selectedIds={categories.selected}
           onToggle={categories.toggle}
           onSelectAll={categories.selectAll}
@@ -335,12 +332,7 @@ export function StanfordDetailedTable({
         />
         <MultiSelectDropdown
           label="All Tasks"
-          options={availableTaskNames
-            .map((taskName) => ({
-              id: taskName,
-              label: formatTaskName(taskName),
-            }))
-            .sort((a, b) => a.label.localeCompare(b.label))}
+          options={buildDropdownOptions(availableTaskNames, formatTaskName)}
           selectedIds={taskNamesFilter.selected}
           onToggle={taskNamesFilter.toggle}
           onSelectAll={taskNamesFilter.selectAll}

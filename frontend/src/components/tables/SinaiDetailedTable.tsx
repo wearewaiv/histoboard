@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { buildOrganOptions, buildDropdownOptions, buildTaskNameOptions } from "@/lib/tableUtils";
 import { useTaskFiltering } from "@/hooks";
 import {
   useDetailedTableDataWithStd,
@@ -68,23 +69,12 @@ export function SinaiDetailedTable({
     useDetailedTableDataWithStd({ models, filteredTasks, results });
 
   // Build dropdown options
-  const organOptions = availableOrgans
-    .map((organ) => ({
-      id: organ,
-      label: organ.charAt(0).toUpperCase() + organ.slice(1),
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const categoryOptions = availableCategories
-    .map((cat) => ({
-      id: cat,
-      label: SINAI_CATEGORY_LABELS[cat] || cat,
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const taskOptions = availableTaskNames
-    .map((name) => ({ id: name, label: name }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+  const organOptions = buildOrganOptions(availableOrgans);
+  const categoryOptions = buildDropdownOptions(
+    availableCategories,
+    (cat) => SINAI_CATEGORY_LABELS[cat] || cat
+  );
+  const taskOptions = buildTaskNameOptions(availableTaskNames);
 
   return (
     <div>

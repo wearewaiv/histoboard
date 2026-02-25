@@ -19,55 +19,10 @@ import modelsData from "@/data/models.json";
 import rankingsData from "@/data/rankings.json";
 
 import type { Model } from "@/types";
+import { BENCHMARK_REFS, getMedal, computeBenchmarkRanks } from "@/lib/benchmarkConfig";
 
 const models = modelsData as Model[];
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
-
-const BENCHMARKS = [
-  { id: "eva", name: "EVA" },
-  { id: "pathbench", name: "PathBench" },
-  { id: "stanford", name: "Stanford" },
-  { id: "hest", name: "HEST" },
-  { id: "pathobench", name: "Patho-Bench" },
-  { id: "sinai", name: "Sinai" },
-  { id: "stamp", name: "STAMP" },
-  { id: "thunder", name: "THUNDER" },
-  { id: "pathorob", name: "PathoROB" },
-  { id: "plism", name: "Plismbench" },
-];
-
-function getMedal(rank: number): string | null {
-  if (rank === 1) return "🥇";
-  if (rank === 2) return "🥈";
-  if (rank === 3) return "🥉";
-  return null;
-}
-
-// Compute integer ranks per benchmark
-function getBenchmarkRanks() {
-  const result: Record<string, { ranks: Map<string, number>; total: number }> = {};
-
-  for (const benchmark of BENCHMARKS) {
-    const benchmarkData = rankings[benchmark.id];
-    if (!benchmarkData) continue;
-
-    const modelsWithRank = Object.entries(benchmarkData)
-      .map(([modelId, data]) => ({ modelId, avgRank: data.avgRank }))
-      .sort((a, b) => a.avgRank - b.avgRank);
-
-    const rankMap = new Map<string, number>();
-    modelsWithRank.forEach((item, index) => {
-      rankMap.set(item.modelId, index + 1);
-    });
-
-    result[benchmark.id] = {
-      ranks: rankMap,
-      total: modelsWithRank.length,
-    };
-  }
-
-  return result;
-}
 
 export function generateStaticParams() {
   return models.map((model) => ({
@@ -83,7 +38,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
   const { id: modelId } = await params;
 
   const model = models.find((m) => m.id === modelId);
-  const benchmarkRanks = getBenchmarkRanks();
+  const benchmarkRanks = computeBenchmarkRanks(rankings);
 
   if (!model) {
     return (
@@ -104,7 +59,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
   }
 
   // Check if model has any benchmark rankings
-  const hasRankings = BENCHMARKS.some(
+  const hasRankings = BENCHMARK_REFS.some(
     (b) => benchmarkRanks[b.id]?.ranks.has(model.id)
   );
 
@@ -120,7 +75,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
       <div className="mb-8">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-3xl font-bold">{model.name}</h1>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{model.name}</h1>
             <p className="mt-1 text-lg text-muted-foreground">{model.organization}</p>
           </div>
           <div className="flex flex-col gap-2 items-end">
@@ -242,7 +197,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {BENCHMARKS.map((benchmark) => {
+              {BENCHMARK_REFS.map((benchmark) => {
                 const data = benchmarkRanks[benchmark.id];
                 if (!data) return null;
 

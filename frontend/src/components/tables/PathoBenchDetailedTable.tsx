@@ -13,7 +13,7 @@ import React from "react";
 import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task, Result } from "@/types";
-import { cn, formatNumber, getValueColor } from "@/lib/utils";
+import { cn, formatNumber, formatMetricLabel, getValueColor } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
@@ -23,22 +23,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { buildOrganOptions, buildTaskNameOptions } from "@/lib/tableUtils";
 import { useTaskFiltering } from "@/hooks";
 import { useDetailedTableData } from "@/hooks/useDetailedTableData";
-
-// Format metric names for display
-function formatMetricName(metric: string): string {
-  const metricMap: Record<string, string> = {
-    auc: "AUROC",
-    auroc: "AUROC",
-    balanced_accuracy: "Balanced Accuracy",
-    balanced_acc: "Balanced Accuracy",
-    "c-index": "C-Index",
-    c_index: "C-Index",
-    kappa: "Kappa",
-  };
-  return metricMap[metric.toLowerCase()] || metric;
-}
 
 interface PathoBenchDetailedTableProps {
   models: Model[];
@@ -73,20 +60,9 @@ export function PathoBenchDetailedTable({
     useDetailedTableData({ models, filteredTasks, results });
 
   // Build dropdown options
-  const organOptions = availableOrgans
-    .map((organ) => ({
-      id: organ,
-      label: organ.charAt(0).toUpperCase() + organ.slice(1),
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const categoryOptions = availableCategories
-    .map((cat) => ({ id: cat, label: cat }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const taskOptions = availableTaskNames
-    .map((name) => ({ id: name, label: name }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+  const organOptions = buildOrganOptions(availableOrgans);
+  const categoryOptions = buildTaskNameOptions(availableCategories);
+  const taskOptions = buildTaskNameOptions(availableTaskNames);
 
   return (
     <div>
@@ -171,7 +147,7 @@ export function PathoBenchDetailedTable({
                     {task.name}
                   </div>
                   <div className="text-[10px] text-muted-foreground font-normal whitespace-nowrap mt-0.5">
-                    {formatMetricName(task.metric)}
+                    {formatMetricLabel(task.metric)}
                   </div>
                 </th>
               ))}

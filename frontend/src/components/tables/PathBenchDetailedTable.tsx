@@ -14,7 +14,7 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search, X, ChevronDown } from "lucide-react";
 import type { Model, Task } from "@/types";
-import { cn, formatNumber, getValueColor } from "@/lib/utils";
+import { cn, formatNumber, formatMetricLabel, getValueColor } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
@@ -40,16 +40,6 @@ function getDetailedTaskType(task: Task): string {
   if (name.includes("disease-free survival")) return "DFS";
   if (name.includes("disease-specific survival")) return "DSS";
   return task.category as string;
-}
-
-// Format metric names for display
-function formatPathBenchMetric(metric: string): string {
-  const metricMap: Record<string, string> = {
-    auc: "AUROC",
-    auroc: "AUROC",
-    "c-index": "C-Index",
-  };
-  return metricMap[metric.toLowerCase()] || metric.toUpperCase();
 }
 
 // Task category grouping: group DFS, DSS, OS into "Survival"
@@ -300,7 +290,7 @@ export function PathBenchDetailedTable({
                     {task.name}
                   </div>
                   <div className="text-[10px] text-muted-foreground font-normal whitespace-nowrap mt-0.5">
-                    {formatPathBenchMetric(task.metric)}
+                    {formatMetricLabel(task.metric)}
                   </div>
                 </th>
               ))}

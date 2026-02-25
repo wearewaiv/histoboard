@@ -15,6 +15,7 @@ import Link from "next/link";
 import type { Model, Task, Result } from "@/types";
 import { cn, formatNumber, getValueColor } from "@/lib/utils";
 import { MultiSelectDropdown } from "@/components/ui/multi-select-dropdown";
+import { buildOrganOptions, buildDropdownOptions, buildTaskNameOptions } from "@/lib/tableUtils";
 import { useTaskFiltering } from "@/hooks";
 import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
@@ -92,23 +93,9 @@ export function DetailedResultsTable({
   }, [models, filteredTasks, resultsMap]);
 
   // Build dropdown options
-  const organOptions = availableOrgans
-    .map((organ) => ({
-      id: organ,
-      label: organ.charAt(0).toUpperCase() + organ.slice(1),
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const categoryOptions = availableCategories
-    .map((category) => ({
-      id: category,
-      label: getTaskTypeLabel(category),
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const taskOptions = availableTaskNames
-    .map((taskName) => ({ id: taskName, label: taskName }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+  const organOptions = buildOrganOptions(availableOrgans);
+  const categoryOptions = buildDropdownOptions(availableCategories, getTaskTypeLabel);
+  const taskOptions = buildTaskNameOptions(availableTaskNames);
 
   return (
     <div>
