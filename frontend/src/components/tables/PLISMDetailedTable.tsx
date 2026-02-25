@@ -23,6 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { buildTaskNameOptions } from "@/lib/tableUtils";
 import { useSetToggle } from "@/hooks";
 import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
@@ -77,13 +78,8 @@ export function PLISMDetailedTable({
   }, [models, modelAvgValues]);
 
   // Build dropdown options
-  const categoryOptions = availableCategories
-    .map((cat) => ({ id: cat, label: cat }))
-    .sort((a, b) => a.label.localeCompare(b.label));
-
-  const taskOptions = availableTaskNames
-    .map((name) => ({ id: name, label: name }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+  const categoryOptions = buildTaskNameOptions(availableCategories);
+  const taskOptions = buildTaskNameOptions(availableTaskNames);
 
   return (
     <div>

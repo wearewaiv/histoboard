@@ -319,6 +319,10 @@ export async function initCellBackground(
   const clusterOrigins: { x: number; y: number }[] = [];
   // Per-cell mapping to cluster + local offset (for dynamic line drawing)
   const cellClusterMap: { clusterIdx: number; lx: number; ly: number }[] = [];
+  // Per-cluster effective radii (for repulsion)
+  const clusterRadii: number[] = [];
+  // Persistent repulsion offsets (smoothly accumulated across frames)
+  const repulsionOffsets: { dx: number; dy: number }[] = [];
 
   // Layers (bottom → top: stroma ECM, cells, content backdrop)
   const stromaContainer = new Container();
@@ -342,6 +346,8 @@ export async function initCellBackground(
     clusterContainers.length = 0;
     clusterOrigins.length = 0;
     cellClusterMap.length = 0;
+    clusterRadii.length = 0;
+    repulsionOffsets.length = 0;
 
     // Content backdrop (opaque vertical band dims cells behind text)
     const backdrop = new Graphics();
@@ -457,6 +463,8 @@ export async function initCellBackground(
       // Track cluster for animation
       clusterContainers.push(group);
       clusterOrigins.push({ x: cluster.cx, y: cluster.cy });
+      clusterRadii.push(blobR);
+      repulsionOffsets.push({ dx: 0, dy: 0 });
       cellsContainer.addChild(group);
     }
 
@@ -485,30 +493,78 @@ export async function initCellBackground(
   const driftNoise = createNoise2D();
   const DRIFT_SPEED = 0.00003; // very slow, glacial movement
   const DRIFT_RANGE = 200; // pixels — large wander across the whole page
-  const CONNECTION_DIST = 250;
+  const CONNECTION_DIST = 120;
+
+  const REPULSION_STRENGTH = 0.05; // how fast clusters push apart per frame
+  const REPULSION_PADDING = 20; // extra gap beyond blob radii
+  const REPULSION_DECAY = 0.97; // slow decay so offsets don't accumulate forever
 
   const tickFn = () => {
     const now = performance.now();
     const t = now * DRIFT_SPEED;
 
-    // Compute cluster offsets
+    // 1. Compute noise-based drift offsets
     const driftOffsets: { dx: number; dy: number }[] = [];
     for (let i = 0; i < clusterContainers.length; i++) {
-      const o = clusterOrigins[i];
-      // Use well-separated seeds for X and Y so movement is erratic, not diagonal
       const dx = driftNoise(t, i * 100) * DRIFT_RANGE;
       const dy = driftNoise(t + 999, i * 100 + 50) * DRIFT_RANGE;
       driftOffsets.push({ dx, dy });
-      clusterContainers[i].position.set(o.x + dx, o.y + dy);
     }
 
-    // Precompute world positions of all cells
+    // 2. Pairwise repulsion — push overlapping clusters apart
+    for (let i = 0; i < clusterContainers.length; i++) {
+      const oi = clusterOrigins[i];
+      const xi = oi.x + driftOffsets[i].dx + repulsionOffsets[i].dx;
+      const yi = oi.y + driftOffsets[i].dy + repulsionOffsets[i].dy;
+      for (let j = i + 1; j < clusterContainers.length; j++) {
+        const oj = clusterOrigins[j];
+        const xj = oj.x + driftOffsets[j].dx + repulsionOffsets[j].dx;
+        const yj = oj.y + driftOffsets[j].dy + repulsionOffsets[j].dy;
+
+        const dx = xi - xj;
+        const dy = yi - yj;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const minDist = clusterRadii[i] + clusterRadii[j] + REPULSION_PADDING;
+
+        if (dist < minDist && dist > 1) {
+          const overlap = minDist - dist;
+          const nx = dx / dist;
+          const ny = dy / dist;
+          const push = overlap * REPULSION_STRENGTH;
+          repulsionOffsets[i].dx += nx * push;
+          repulsionOffsets[i].dy += ny * push;
+          repulsionOffsets[j].dx -= nx * push;
+          repulsionOffsets[j].dy -= ny * push;
+        }
+      }
+    }
+
+    // Decay repulsion so offsets release when clusters drift apart
+    for (const ro of repulsionOffsets) {
+      ro.dx *= REPULSION_DECAY;
+      ro.dy *= REPULSION_DECAY;
+    }
+
+    // 3. Set final cluster positions (noise + repulsion)
+    for (let i = 0; i < clusterContainers.length; i++) {
+      const o = clusterOrigins[i];
+      clusterContainers[i].position.set(
+        o.x + driftOffsets[i].dx + repulsionOffsets[i].dx,
+        o.y + driftOffsets[i].dy + repulsionOffsets[i].dy,
+      );
+    }
+
+    // 4. Precompute world positions of all cells
     const worldPos: { x: number; y: number }[] = [];
     for (let i = 0; i < cellClusterMap.length; i++) {
       const ci = cellClusterMap[i];
       const co = clusterOrigins[ci.clusterIdx];
       const d = driftOffsets[ci.clusterIdx];
-      worldPos.push({ x: co.x + d.dx + ci.lx, y: co.y + d.dy + ci.ly });
+      const r = repulsionOffsets[ci.clusterIdx];
+      worldPos.push({
+        x: co.x + d.dx + r.dx + ci.lx,
+        y: co.y + d.dy + r.dy + ci.ly,
+      });
     }
 
     // Redraw connecting lines with hover highlight
@@ -518,8 +574,6 @@ export async function initCellBackground(
       for (let i = 0; i < worldPos.length; i++) {
         const a = worldPos[i];
         for (let j = i + 1; j < worldPos.length; j++) {
-          // Skip intra-cluster pairs
-          if (cellClusterMap[j].clusterIdx === cellClusterMap[i].clusterIdx) continue;
           const b = worldPos[j];
           const ddx = a.x - b.x;
           const ddy = a.y - b.y;

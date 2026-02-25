@@ -24,6 +24,12 @@ import resultsData from "@/data/results.json";
 import benchmarksData from "@/data/benchmarks.json";
 
 import type { Model, Task, Result, Benchmark } from "@/types";
+import {
+  getUniqueGroupedOrgans,
+  expandOrganGroup,
+  getUniqueGroupedCategories,
+  expandCategoryGroup,
+} from "@/lib/organGroups";
 
 const models = modelsData as Model[];
 const tasks = tasksData as Task[];
@@ -31,99 +37,6 @@ const results = resultsData as Result[];
 const benchmarks = benchmarksData as Benchmark[];
 
 const MAX_MODELS = 5;
-
-// Organ and category grouping: different benchmarks use inconsistent naming for the
-// same concept (e.g., "cervical" vs "cervix", "colon" vs "colorectal"). These maps
-// normalize raw values into user-friendly display labels. The expansion functions
-// (expandOrganGroup, expandCategoryGroup) reverse the mapping for filtering.
-const ORGAN_GROUPS: Record<string, string[]> = {
-  "Cervix": ["cervical", "cervix"],
-  "Colorectal": ["colon", "colorectal", "rectum"],
-  "Gastric": ["gastric", "gi"],
-  "Multi-organ": ["multi-organ", "pan-cancer"],
-};
-
-// Task category grouping configuration: display label -> array of underlying raw category values
-const TASK_CATEGORY_GROUPS: Record<string, string[]> = {
-  "Biomarker prediction": ["Biomarker", "Biomarker Status Prediction", "Molecular Prediction"],
-  "Cancer detection": ["Detection"],
-  "Classification NOS": ["Classification", "classification", "slide-level", "patch-level"],
-  "Gene expression prediction": ["Gene Expression Prediction"],
-  "Histological subtype prediction": ["Diagnostic: Primary Diagnosis and Histologic Subtyping", "Diagnostic: Histologic Subtyping"],
-  "Molecular subtype prediction": ["Gene Expression Subtype Prediction"],
-  "Morphology prediction": ["Morphology"],
-  "Other": ["Diagnostic: Other"],
-  "Pathway activation status prediction": ["Pathway Activation Status Prediction"],
-  "Primary diagnosis prediction": ["Diagnostic: Primary Diagnosis"],
-  "Robustness": ["Robustness", "Combined Robustness", "Stain Robustness", "Scanner Robustness", "Domain Shift", "Embedding Consistency"],
-  "Segmentation": ["Segmentation", "segmentation"],
-  "Survival prediction": ["survival", "Survival Prediction", "Prognosis"],
-  "Tissue type classification": ["Diagnostic: Tissue type classification"],
-  "TME characterization": ["TME Characterization"],
-  "Treatment response": ["Treatment Response"],
-  "Tumor grading": ["Tumor Grading", "Diagnostic: Tumor Grading", "Diagnostic: Primary Diagnosis and Tumor Grading"],
-  "Tumor staging": ["Diagnostic: Tumor Staging"],
-};
-
-// Build reverse mapping: raw organ -> group label (or formatted organ if not grouped)
-function getOrganGroupLabel(organ: string): string {
-  for (const [groupLabel, organs] of Object.entries(ORGAN_GROUPS)) {
-    if (organs.includes(organ.toLowerCase())) {
-      return groupLabel;
-    }
-  }
-  // Not in a group - return formatted label
-  return organ.charAt(0).toUpperCase() + organ.slice(1);
-}
-
-// Get unique grouped organs from tasks
-function getUniqueOrgans(tasks: Task[]): string[] {
-  const groupedOrgans = new Set<string>();
-  for (const task of tasks) {
-    groupedOrgans.add(getOrganGroupLabel(task.organ));
-  }
-  return [...groupedOrgans].sort();
-}
-
-// Expand a grouped organ label back to its underlying values
-function expandOrganGroup(organLabel: string): string[] {
-  if (ORGAN_GROUPS[organLabel]) {
-    return ORGAN_GROUPS[organLabel];
-  }
-  // Not a group - return lowercase version for matching
-  return [organLabel.toLowerCase()];
-}
-
-// Get the grouped category label for a raw category value
-function getCategoryGroupLabel(category: string): string {
-  for (const [groupLabel, categories] of Object.entries(TASK_CATEGORY_GROUPS)) {
-    if (categories.includes(category)) {
-      return groupLabel;
-    }
-  }
-  // Not in a group - return as-is
-  return category;
-}
-
-// Get unique grouped task categories from tasks
-function getUniqueCategories(tasks: Task[]): string[] {
-  const groupedCategories = new Set<string>();
-  for (const task of tasks) {
-    if (task.category) {
-      groupedCategories.add(getCategoryGroupLabel(task.category as string));
-    }
-  }
-  return [...groupedCategories].sort();
-}
-
-// Expand a grouped category label back to its underlying raw values
-function expandCategoryGroup(categoryLabel: string): string[] {
-  if (TASK_CATEGORY_GROUPS[categoryLabel]) {
-    return TASK_CATEGORY_GROUPS[categoryLabel];
-  }
-  // Not a group - return as-is
-  return [categoryLabel];
-}
 
 // Get unique task types (based on benchmark category)
 function getTaskTypes(): string[] {
@@ -153,8 +66,8 @@ export default function ArenaPage() {
   }, []);
 
   // Extract filter options
-  const organs = useMemo(() => getUniqueOrgans(tasks), []);
-  const categories = useMemo(() => getUniqueCategories(tasks), []);
+  const organs = useMemo(() => getUniqueGroupedOrgans(tasks), []);
+  const categories = useMemo(() => getUniqueGroupedCategories(tasks), []);
   const taskTypes = useMemo(() => getTaskTypes(), []);
 
   // Model selection state
@@ -396,8 +309,8 @@ export default function ArenaPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold">Arena</h1>
-        <p className="mt-2 text-muted-foreground">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Arena</h1>
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Compare 2-5 models head-to-head across all benchmarks
         </p>
       </div>

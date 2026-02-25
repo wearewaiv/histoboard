@@ -23,29 +23,10 @@ import modelsData from "@/data/models.json";
 import rankingsData from "@/data/rankings.json";
 
 import type { Model } from "@/types";
+import { BENCHMARK_REFS, getMedal, computeBenchmarkRanks } from "@/lib/benchmarkConfig";
 
 const models = (modelsData as Model[]).sort((a, b) => a.name.localeCompare(b.name));
 const rankings = rankingsData as Record<string, Record<string, { avgRank: number; taskCount: number }>>;
-
-const BENCHMARKS = [
-  { id: "eva", name: "EVA" },
-  { id: "pathbench", name: "PathBench" },
-  { id: "stanford", name: "Stanford" },
-  { id: "hest", name: "HEST" },
-  { id: "pathobench", name: "Patho-Bench" },
-  { id: "sinai", name: "Sinai" },
-  { id: "stamp", name: "STAMP" },
-  { id: "thunder", name: "THUNDER" },
-  { id: "pathorob", name: "PathoROB" },
-  { id: "plism", name: "Plismbench" },
-];
-
-function getMedal(rank: number): string | null {
-  if (rank === 1) return "\u{1F947}";
-  if (rank === 2) return "\u{1F948}";
-  if (rank === 3) return "\u{1F949}";
-  return null;
-}
 
 export default function ModelsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,36 +50,13 @@ export default function ModelsPage() {
   }, [attributeFilters.filteredByAttributes, searchQuery]);
 
   // Compute integer ranks per benchmark
-  const benchmarkRanks = useMemo(() => {
-    const result: Record<string, { ranks: Map<string, number>; total: number }> = {};
-
-    for (const benchmark of BENCHMARKS) {
-      const benchmarkData = rankings[benchmark.id];
-      if (!benchmarkData) continue;
-
-      const modelsWithRank = Object.entries(benchmarkData)
-        .map(([modelId, data]) => ({ modelId, avgRank: data.avgRank }))
-        .sort((a, b) => a.avgRank - b.avgRank);
-
-      const rankMap = new Map<string, number>();
-      modelsWithRank.forEach((item, index) => {
-        rankMap.set(item.modelId, index + 1);
-      });
-
-      result[benchmark.id] = {
-        ranks: rankMap,
-        total: modelsWithRank.length,
-      };
-    }
-
-    return result;
-  }, []);
+  const benchmarkRanks = useMemo(() => computeBenchmarkRanks(rankings), []);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-center">Models</h1>
-        <p className="mt-2 text-muted-foreground text-center">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center">Models</h1>
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground text-center">
           Browse {models.length} pathology foundation models and their benchmark
           performance
         </p>
@@ -125,7 +83,7 @@ export default function ModelsPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredModels.map((model) => {
-          const hasRankings = BENCHMARKS.some(
+          const hasRankings = BENCHMARK_REFS.some(
             (b) => benchmarkRanks[b.id]?.ranks.has(model.id)
           );
 
@@ -202,7 +160,7 @@ export default function ModelsPage() {
                   <div className="mt-4 pt-4 border-t space-y-2">
                     <p className="text-xs text-muted-foreground font-medium">Benchmark Rankings</p>
                     <div className="flex flex-wrap gap-2">
-                      {BENCHMARKS.map((benchmark) => {
+                      {BENCHMARK_REFS.map((benchmark) => {
                         const data = benchmarkRanks[benchmark.id];
                         if (!data) return null;
 

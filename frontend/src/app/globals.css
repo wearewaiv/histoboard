@@ -230,6 +230,19 @@
   border-radius: 2px;
 }
 
+/* Narrower container to reveal more of the cell background on the sides */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1100px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
 /* Vega tooltip styling */
 #vg-tooltip-element {
   font-family: inherit;

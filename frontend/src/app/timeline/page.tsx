@@ -117,8 +117,8 @@ export default function TimelinePage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold">Timeline</h1>
-        <p className="mt-2 text-muted-foreground">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Timeline</h1>
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Chronological view of {models.length} pathology foundation models
         </p>
       </div>

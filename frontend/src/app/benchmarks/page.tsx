@@ -166,7 +166,7 @@ export default function BenchmarksPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold">Benchmark Sources</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Benchmark Sources</h1>
         <p className="mt-2 text-muted-foreground">
           Data is aggregated from {benchmarks.length} benchmark sources covering
           multiple evaluation categories

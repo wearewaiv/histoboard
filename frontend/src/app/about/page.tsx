@@ -15,31 +15,13 @@ import modelsData from "@/data/models.json";
 import tasksData from "@/data/tasks.json";
 
 import type { Benchmark, Model, Task } from "@/types";
+import { getUniqueGroupedOrgans } from "@/lib/organGroups";
 
 const benchmarks = benchmarksData as Benchmark[];
 const models = modelsData as Model[];
 const tasks = tasksData as Task[];
 
-// Organ grouping configuration (same as Arena page)
-const ORGAN_GROUPS: Record<string, string[]> = {
-  Cervix: ["cervical", "cervix"],
-  Colorectal: ["colon", "colorectal", "rectum"],
-  Gastric: ["gastric", "gi"],
-  "Multi-organ": ["multi-organ", "pan-cancer"],
-};
-
-// Get the grouped organ label for a raw organ value
-function getOrganGroupLabel(organ: string): string {
-  for (const [groupLabel, organs] of Object.entries(ORGAN_GROUPS)) {
-    if (organs.includes(organ.toLowerCase())) {
-      return groupLabel;
-    }
-  }
-  return organ.charAt(0).toUpperCase() + organ.slice(1);
-}
-
-// Compute unique grouped organs from tasks
-const groupedOrgans = [...new Set(tasks.map((t) => getOrganGroupLabel(t.organ)))].sort();
+const groupedOrgans = getUniqueGroupedOrgans(tasks);
 
 const stats = {
   benchmarkCount: benchmarks.length,
@@ -51,7 +33,7 @@ const stats = {
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6 text-center">About Histoboard</h1>
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-center">About Histoboard</h1>
 
       {/* Motivation Section */}
       <Card className="mb-8">
