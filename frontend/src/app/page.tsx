@@ -219,7 +219,7 @@ function VisitorMap() {
     containerRef.current.appendChild(script);
 
     return () => {
-      containerRef.current.innerHTML = "";
+      if (containerRef.current) containerRef.current.innerHTML = "";
     };
   }, []);
 
