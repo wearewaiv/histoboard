@@ -15,7 +15,7 @@
 <p align="center">
   <a href="https://afiliot.github.io/histoboard"><img src="https://img.shields.io/badge/Live%20Demo-histoboard-blueviolet?style=for-the-badge" alt="Live Demo"></a>
   <a href="https://github.com/afiliot/histoboard/stargazers"><img src="https://img.shields.io/github/stars/afiliot/histoboard?style=for-the-badge&color=yellow" alt="Stars"></a>
-  <a href="https://github.com/afiliot/histoboard/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"></a>
+  <a href="https://github.com/afiliot/histoboard/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green?style=for-the-badge" alt="License"></a>
 </p>
 
 ---
