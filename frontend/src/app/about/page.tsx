@@ -189,64 +189,6 @@ export default function AboutPage() {
         </CardContent>
       </Card>
 
-      {/* Conflict of Interest Section */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Personal Note</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-justify">
-            My name is Alexandre Filiot and I am the original developer of Histoboard. I am working at{" "}
-            <a
-              href="https://owkin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Owkin
-            </a>
-            {" "}and deeply involved in the field of pathology foundation models. I have been involved in the release of{" "}
-            <a
-              href="https://huggingface.co/owkin/phikon"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Phikon
-            </a>
-            ,{" "}
-            <a
-              href="https://huggingface.co/owkin/phikon-v2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Phikon-v2
-            </a>
-            , lately{" "}
-            <a
-              href="https://huggingface.co/bioptimus/H0-mini"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              H0-mini
-            </a>
-            {" "}and{" "}
-            <a
-              href="https://github.com/owkin/plism-benchmark"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              plismbench
-            </a>
-            . This project had received funding from Owkin. The goal is to provide an unbiased, community-driven resource for comparing pathology
-            foundation models.
-          </p>
-        </CardContent>
-      </Card>
-
       {/* Key References Section */}
       <Card className="mb-8">
         <CardHeader>

@@ -24,6 +24,25 @@ export function Footer() {
               <p className="text-sm text-muted-foreground">
                 Histoboard aggregates results from official benchmarks and papers (see benchmark cards for exact data sources). If you believe any data is incorrect or missing, please open an issue on our GitHub repository.
               </p>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5 justify-center md:justify-start">
+                Initiative sponsored by{" "}
+                <a href="https://www.wearewaiv.com" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src="/waiv_logo.png"
+                    alt="Waiv"
+                    className="inline-block h-5 w-auto relative -top-px"
+                  />
+                </a> with participation of the Jaume Lab
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5 justify-center md:justify-start">
+                <a href="https://guillaumejaume.github.io/" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src="/jaumelab_logo.png"
+                    alt="Jaume Lab"
+                    className="inline-block h-8 w-auto relative -top-px"
+                  />
+                </a> 
+              </p>
+              </p>
               <p className="text-xs text-muted-foreground">
                 Last updated: {BUILD_DATE}
               </p>
