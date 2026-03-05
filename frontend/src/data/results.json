@@ -62141,762 +62141,6 @@
     "specificityUpper": 0.43
   },
   {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_idc",
-    "value": 0.4741,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_prad",
-    "value": 0.3075,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_paad",
-    "value": 0.3889,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_skcm",
-    "value": 0.4822,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_coad",
-    "value": 0.2528,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_read",
-    "value": 0.0812,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_ccrcc",
-    "value": 0.2231,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_luad",
-    "value": 0.4917,
-    "source": "hest"
-  },
-  {
-    "modelId": "resnet50_imagenet",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2322,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_idc",
-    "value": 0.511,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_prad",
-    "value": 0.3427,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_paad",
-    "value": 0.4378,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_skcm",
-    "value": 0.5106,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_coad",
-    "value": 0.2285,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_read",
-    "value": 0.11,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_ccrcc",
-    "value": 0.2279,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_luad",
-    "value": 0.4985,
-    "source": "hest"
-  },
-  {
-    "modelId": "ctranspath",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2353,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_idc",
-    "value": 0.5327,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_prad",
-    "value": 0.342,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_paad",
-    "value": 0.4432,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_skcm",
-    "value": 0.5355,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_coad",
-    "value": 0.2585,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_read",
-    "value": 0.1517,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_ccrcc",
-    "value": 0.2423,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_luad",
-    "value": 0.5468,
-    "source": "hest"
-  },
-  {
-    "modelId": "owkin_phikon",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2373,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_idc",
-    "value": 0.5363,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_prad",
-    "value": 0.3548,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_paad",
-    "value": 0.4475,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_skcm",
-    "value": 0.5791,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_coad",
-    "value": 0.2533,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_read",
-    "value": 0.1674,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_ccrcc",
-    "value": 0.2179,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_luad",
-    "value": 0.5312,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2507,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_idc",
-    "value": 0.529,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_prad",
-    "value": 0.3471,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_paad",
-    "value": 0.4644,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_skcm",
-    "value": 0.5818,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_coad",
-    "value": 0.2856,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_read",
-    "value": 0.1145,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_ccrcc",
-    "value": 0.2647,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_luad",
-    "value": 0.5336,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_remedis",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2473,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_idc",
-    "value": 0.544,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_prad",
-    "value": 0.3808,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_paad",
-    "value": 0.457,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_skcm",
-    "value": 0.5518,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_coad",
-    "value": 0.2801,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_read",
-    "value": 0.16,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_ccrcc",
-    "value": 0.2176,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_luad",
-    "value": 0.5514,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_conch_1_5",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2699,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_idc",
-    "value": 0.5508,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_prad",
-    "value": 0.3708,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_paad",
-    "value": 0.4768,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_skcm",
-    "value": 0.5538,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_coad",
-    "value": 0.301,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_read",
-    "value": 0.186,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_ccrcc",
-    "value": 0.2391,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_luad",
-    "value": 0.5399,
-    "source": "hest"
-  },
-  {
-    "modelId": "prov_gigapath",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2493,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_idc",
-    "value": 0.5702,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_prad",
-    "value": 0.314,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_paad",
-    "value": 0.4764,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_skcm",
-    "value": 0.6254,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_coad",
-    "value": 0.263,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_read",
-    "value": 0.1762,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_ccrcc",
-    "value": 0.2427,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_luad",
-    "value": 0.5511,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2565,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_idc",
-    "value": 0.5862,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_prad",
-    "value": 0.3684,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_paad",
-    "value": 0.4919,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_skcm",
-    "value": 0.6011,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_coad",
-    "value": 0.2494,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_read",
-    "value": 0.1863,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_ccrcc",
-    "value": 0.267,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_luad",
-    "value": 0.5481,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_h0_mini",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2629,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_idc",
-    "value": 0.5702,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_prad",
-    "value": 0.3309,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_paad",
-    "value": 0.4875,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_skcm",
-    "value": 0.6088,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_coad",
-    "value": 0.311,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_read",
-    "value": 0.2019,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_ccrcc",
-    "value": 0.2637,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_luad",
-    "value": 0.5459,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2594,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_idc",
-    "value": 0.5922,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_prad",
-    "value": 0.3465,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_paad",
-    "value": 0.4661,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_skcm",
-    "value": 0.6174,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_coad",
-    "value": 0.2578,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_read",
-    "value": 0.2084,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_ccrcc",
-    "value": 0.2788,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_luad",
-    "value": 0.5605,
-    "source": "hest"
-  },
-  {
-    "modelId": "paige_virchow2",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2582,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_idc",
-    "value": 0.5989,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_prad",
-    "value": 0.3645,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_paad",
-    "value": 0.4902,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_skcm",
-    "value": 0.6401,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_coad",
-    "value": 0.2925,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_read",
-    "value": 0.224,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_ccrcc",
-    "value": 0.2522,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_luad",
-    "value": 0.5586,
-    "source": "hest"
-  },
-  {
-    "modelId": "hest_uni_1_5",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2597,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_idc",
-    "value": 0.5898,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_prad",
-    "value": 0.3568,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_paad",
-    "value": 0.4999,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_skcm",
-    "value": 0.6598,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_coad",
-    "value": 0.3009,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_read",
-    "value": 0.2226,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_ccrcc",
-    "value": 0.264,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_luad",
-    "value": 0.5582,
-    "source": "hest"
-  },
-  {
-    "modelId": "mahmood_uni2_h",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2728,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_idc",
-    "value": 0.5982,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_prad",
-    "value": 0.385,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_paad",
-    "value": 0.4932,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_skcm",
-    "value": 0.6432,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_coad",
-    "value": 0.2991,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_read",
-    "value": 0.2292,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_ccrcc",
-    "value": 0.2654,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_luad",
-    "value": 0.5582,
-    "source": "hest"
-  },
-  {
-    "modelId": "bioptimus_h_optimus_0",
-    "taskId": "hest_lymph_idc",
-    "value": 0.2595,
-    "source": "hest"
-  },
-  {
     "modelId": "pathobench_atlas2",
     "taskId": "pb_brca_tp53",
     "value": 0.836,
@@ -71022,5 +70266,1193 @@
     "value": 149,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_idc",
+    "value": 0.6024,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_idc",
+    "value": 0.5976,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_idc",
+    "value": 0.5971,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_idc",
+    "value": 0.5898,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_idc",
+    "value": 0.589,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_idc",
+    "value": 0.5846,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_idc",
+    "value": 0.5823,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_idc",
+    "value": 0.5701,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_idc",
+    "value": 0.5599,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_idc",
+    "value": 0.5535,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_idc",
+    "value": 0.5515,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_idc",
+    "value": 0.5449,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_idc",
+    "value": 0.544,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_idc",
+    "value": 0.5408,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_idc",
+    "value": 0.5363,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_idc",
+    "value": 0.5352,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_idc",
+    "value": 0.5333,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_idc",
+    "value": 0.5327,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_idc",
+    "value": 0.5304,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_idc",
+    "value": 0.5248,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_idc",
+    "value": 0.4993,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_idc",
+    "value": 0.4739,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_prad",
+    "value": 0.3848,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_prad",
+    "value": 0.3808,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_prad",
+    "value": 0.3781,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_prad",
+    "value": 0.3699,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_prad",
+    "value": 0.3611,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_prad",
+    "value": 0.3569,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_prad",
+    "value": 0.3551,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_prad",
+    "value": 0.3548,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_prad",
+    "value": 0.3545,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_prad",
+    "value": 0.3529,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_prad",
+    "value": 0.3483,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_prad",
+    "value": 0.347,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_prad",
+    "value": 0.343,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_prad",
+    "value": 0.342,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_prad",
+    "value": 0.3378,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_prad",
+    "value": 0.337,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_prad",
+    "value": 0.334,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_prad",
+    "value": 0.3275,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_prad",
+    "value": 0.3044,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_prad",
+    "value": 0.2945,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_prad",
+    "value": 0.2943,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_prad",
+    "value": 0.2829,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_paad",
+    "value": 0.5159,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_paad",
+    "value": 0.5001,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_paad",
+    "value": 0.4964,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_paad",
+    "value": 0.4911,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_paad",
+    "value": 0.49,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_paad",
+    "value": 0.4807,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_paad",
+    "value": 0.4779,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_paad",
+    "value": 0.4746,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_paad",
+    "value": 0.4674,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_paad",
+    "value": 0.4601,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_paad",
+    "value": 0.457,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_paad",
+    "value": 0.4524,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_paad",
+    "value": 0.4468,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_paad",
+    "value": 0.4455,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_paad",
+    "value": 0.4425,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_paad",
+    "value": 0.4409,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_paad",
+    "value": 0.4372,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_paad",
+    "value": 0.4314,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_paad",
+    "value": 0.4277,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_paad",
+    "value": 0.4267,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_paad",
+    "value": 0.4181,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_paad",
+    "value": 0.388,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_skcm",
+    "value": 0.6606,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_skcm",
+    "value": 0.6589,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_skcm",
+    "value": 0.6454,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_skcm",
+    "value": 0.6402,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_skcm",
+    "value": 0.636,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_skcm",
+    "value": 0.6346,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_skcm",
+    "value": 0.6243,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_skcm",
+    "value": 0.5817,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_skcm",
+    "value": 0.5787,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_skcm",
+    "value": 0.5738,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_skcm",
+    "value": 0.5725,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_skcm",
+    "value": 0.5619,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_skcm",
+    "value": 0.5554,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_skcm",
+    "value": 0.5533,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_skcm",
+    "value": 0.5517,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_skcm",
+    "value": 0.5502,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_skcm",
+    "value": 0.5449,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_skcm",
+    "value": 0.5355,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_skcm",
+    "value": 0.5233,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_skcm",
+    "value": 0.5174,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_skcm",
+    "value": 0.5097,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_skcm",
+    "value": 0.4821,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_coad",
+    "value": 0.3195,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_coad",
+    "value": 0.3086,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_coad",
+    "value": 0.3079,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_coad",
+    "value": 0.304,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_coad",
+    "value": 0.3015,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_coad",
+    "value": 0.2992,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_coad",
+    "value": 0.2908,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_coad",
+    "value": 0.2826,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_coad",
+    "value": 0.2812,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_coad",
+    "value": 0.2802,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_coad",
+    "value": 0.2683,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_coad",
+    "value": 0.2623,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_coad",
+    "value": 0.2614,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_coad",
+    "value": 0.2581,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_coad",
+    "value": 0.2535,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_coad",
+    "value": 0.25,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_coad",
+    "value": 0.25,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_coad",
+    "value": 0.2489,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_coad",
+    "value": 0.2382,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_coad",
+    "value": 0.2365,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_coad",
+    "value": 0.2281,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_coad",
+    "value": 0.2057,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_read",
+    "value": 0.2421,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_read",
+    "value": 0.2223,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_read",
+    "value": 0.2216,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_read",
+    "value": 0.2074,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_read",
+    "value": 0.1981,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_read",
+    "value": 0.1961,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_read",
+    "value": 0.1902,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_read",
+    "value": 0.1856,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_read",
+    "value": 0.1836,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_read",
+    "value": 0.1749,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_read",
+    "value": 0.1623,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_read",
+    "value": 0.161,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_read",
+    "value": 0.1602,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_read",
+    "value": 0.16,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_read",
+    "value": 0.1532,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_read",
+    "value": 0.1525,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_read",
+    "value": 0.1472,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_read",
+    "value": 0.1469,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_read",
+    "value": 0.1328,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_read",
+    "value": 0.111,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_read",
+    "value": 0.0968,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_read",
+    "value": 0.0783,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_ccrcc",
+    "value": 0.2719,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_ccrcc",
+    "value": 0.2676,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_ccrcc",
+    "value": 0.2659,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_ccrcc",
+    "value": 0.2657,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_ccrcc",
+    "value": 0.264,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_ccrcc",
+    "value": 0.2586,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_ccrcc",
+    "value": 0.2533,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_ccrcc",
+    "value": 0.2463,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_ccrcc",
+    "value": 0.243,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_ccrcc",
+    "value": 0.2423,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_ccrcc",
+    "value": 0.24,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_ccrcc",
+    "value": 0.2362,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_ccrcc",
+    "value": 0.2346,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_ccrcc",
+    "value": 0.2313,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_ccrcc",
+    "value": 0.2291,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_ccrcc",
+    "value": 0.2252,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_ccrcc",
+    "value": 0.2194,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_ccrcc",
+    "value": 0.218,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_ccrcc",
+    "value": 0.2176,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_ccrcc",
+    "value": 0.2132,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_ccrcc",
+    "value": 0.2099,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_ccrcc",
+    "value": 0.1825,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_luad",
+    "value": 0.5779,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_luad",
+    "value": 0.5762,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_luad",
+    "value": 0.5685,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_luad",
+    "value": 0.5664,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_luad",
+    "value": 0.559,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_luad",
+    "value": 0.5587,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_luad",
+    "value": 0.5577,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_luad",
+    "value": 0.5513,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_luad",
+    "value": 0.5466,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_luad",
+    "value": 0.5464,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_luad",
+    "value": 0.5419,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_luad",
+    "value": 0.5415,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_luad",
+    "value": 0.5412,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_luad",
+    "value": 0.5379,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_luad",
+    "value": 0.5322,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_luad",
+    "value": 0.5183,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_luad",
+    "value": 0.5171,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_luad",
+    "value": 0.5156,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_luad",
+    "value": 0.5137,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_luad",
+    "value": 0.5053,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_luad",
+    "value": 0.503,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_luad",
+    "value": 0.4949,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2774,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni2_h",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2727,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch_1_5",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2699,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_midnight_12k",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2642,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow",
+    "taskId": "hest_lymph_idc",
+    "value": 0.261,
+    "source": "hest"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_0",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2591,
+    "source": "hest"
+  },
+  {
+    "modelId": "paige_virchow2",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2568,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_uni",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2559,
+    "source": "hest"
+  },
+  {
+    "modelId": "musk",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2545,
+    "source": "hest"
+  },
+  {
+    "modelId": "mahmood_conch",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2507,
+    "source": "hest"
+  },
+  {
+    "modelId": "lunit_vits8",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2506,
+    "source": "hest"
+  },
+  {
+    "modelId": "prov_gigapath",
+    "taskId": "hest_lymph_idc",
+    "value": 0.25,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits8",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2463,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon_v2",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2437,
+    "source": "hest"
+  },
+  {
+    "modelId": "histai_hibou_l",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2432,
+    "source": "hest"
+  },
+  {
+    "modelId": "ctranspath",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2409,
+    "source": "hest"
+  },
+  {
+    "modelId": "owkin_phikon",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2373,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb16",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2365,
+    "source": "hest"
+  },
+  {
+    "modelId": "resnet50_imagenet",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2305,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitl14",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2283,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vitb8",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2273,
+    "source": "hest"
+  },
+  {
+    "modelId": "kaiko_vits16",
+    "taskId": "hest_lymph_idc",
+    "value": 0.2249,
+    "source": "hest"
   }
 ]

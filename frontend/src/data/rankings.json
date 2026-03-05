@@ -278,60 +278,92 @@
     }
   },
   "hest": {
-    "hest_uni_1_5": {
-      "avgRank": 3.67,
+    "bioptimus_h_optimus_1": {
+      "avgRank": 2.22,
       "taskCount": 9
     },
     "bioptimus_h_optimus_0": {
-      "avgRank": 2.67,
+      "avgRank": 3.11,
       "taskCount": 9
     },
     "paige_virchow2": {
-      "avgRank": 5.33,
+      "avgRank": 5.89,
       "taskCount": 9
     },
     "mahmood_uni2_h": {
-      "avgRank": 3.0,
-      "taskCount": 9
-    },
-    "hest_h0_mini": {
-      "avgRank": 5.56,
+      "avgRank": 3.67,
       "taskCount": 9
     },
     "mahmood_uni": {
-      "avgRank": 7.56,
+      "avgRank": 9.89,
       "taskCount": 9
     },
     "paige_virchow": {
-      "avgRank": 6.33,
+      "avgRank": 5.78,
+      "taskCount": 9
+    },
+    "kaiko_midnight_12k": {
+      "avgRank": 8.78,
+      "taskCount": 9
+    },
+    "histai_hibou_l": {
+      "avgRank": 8.56,
+      "taskCount": 9
+    },
+    "kaiko_vitb8": {
+      "avgRank": 12.0,
+      "taskCount": 9
+    },
+    "kaiko_vitl14": {
+      "avgRank": 15.11,
       "taskCount": 9
     },
     "prov_gigapath": {
-      "avgRank": 7.33,
-      "taskCount": 9
-    },
-    "mahmood_conch_1_5": {
-      "avgRank": 7.78,
-      "taskCount": 9
-    },
-    "mahmood_conch": {
-      "avgRank": 10.11,
-      "taskCount": 9
-    },
-    "owkin_phikon": {
-      "avgRank": 10.56,
-      "taskCount": 9
-    },
-    "hest_remedis": {
       "avgRank": 9.0,
       "taskCount": 9
     },
+    "lunit_vits8": {
+      "avgRank": 12.78,
+      "taskCount": 9
+    },
+    "mahmood_conch_1_5": {
+      "avgRank": 10.56,
+      "taskCount": 9
+    },
+    "owkin_phikon_v2": {
+      "avgRank": 11.67,
+      "taskCount": 9
+    },
+    "mahmood_conch": {
+      "avgRank": 13.22,
+      "taskCount": 9
+    },
+    "kaiko_vitb16": {
+      "avgRank": 15.33,
+      "taskCount": 9
+    },
+    "kaiko_vits16": {
+      "avgRank": 18.44,
+      "taskCount": 9
+    },
+    "owkin_phikon": {
+      "avgRank": 14.22,
+      "taskCount": 9
+    },
+    "kaiko_vits8": {
+      "avgRank": 18.0,
+      "taskCount": 9
+    },
+    "musk": {
+      "avgRank": 17.67,
+      "taskCount": 9
+    },
     "ctranspath": {
-      "avgRank": 12.56,
+      "avgRank": 17.11,
       "taskCount": 9
     },
     "resnet50_imagenet": {
-      "avgRank": 13.56,
+      "avgRank": 20.0,
       "taskCount": 9
     }
   },

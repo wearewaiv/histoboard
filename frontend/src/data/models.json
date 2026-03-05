@@ -544,5 +544,35 @@
     "trainingMethod": "DINOv2",
     "blogUrl": "https://sophontai.com/blog/openmidnight",
     "weightsUrl": "https://huggingface.co/SophontAI/OpenMidnight"
+  },
+  {
+    "id": "lunit_vits8",
+    "name": "Lunit ViT-S/8",
+    "organization": "Lunit",
+    "architecture": "ViT-S/8",
+    "params": "22M",
+    "pretrainingData": "35K+ WSIs",
+    "publicationDate": "2023-06",
+    "license": "non-commercial",
+    "publicationType": "peer-reviewed",
+    "modelType": "vision",
+    "trainingMethod": "DINO",
+    "paperUrl": "https://openaccess.thecvf.com/content/CVPR2023/papers/Kang_Benchmarking_Self-Supervised_Learning_on_Diverse_Pathology_Datasets_CVPR_2023_paper.pdf",
+    "codeUrl": "https://github.com/lunit-io/benchmark-ssl-pathology",
+    "weightsUrl": "https://github.com/lunit-io/benchmark-ssl-pathology#pre-trained-weights"
+  },
+  {
+    "id": "resnet50_imagenet",
+    "name": "ResNet50 (ImageNet)",
+    "organization": "Meta AI",
+    "architecture": "ResNet-50",
+    "params": "25M",
+    "pretrainingData": "ImageNet-1K",
+    "publicationDate": "2015-12",
+    "license": "open-source",
+    "publicationType": "peer-reviewed",
+    "modelType": "vision",
+    "trainingMethod": "Supervised",
+    "paperUrl": "https://arxiv.org/abs/1512.03385"
   }
 ]
