@@ -368,7 +368,7 @@
     }
   },
   "pathobench": {
-    "pathobench_atlas2": {
+    "aignostics_atlas2": {
       "avgRank": 1.77,
       "taskCount": 53
     },
@@ -376,7 +376,7 @@
       "avgRank": 3.19,
       "taskCount": 53
     },
-    "pathobench_atlas": {
+    "aignostics_atlas": {
       "avgRank": 3.32,
       "taskCount": 53
     },
@@ -506,7 +506,7 @@
       "avgRank": 27.0,
       "taskCount": 6
     },
-    "hest_h0_mini": {
+    "h0_mini": {
       "avgRank": 38.0,
       "taskCount": 6
     },
@@ -632,7 +632,7 @@
       "avgRank": 2.0,
       "taskCount": 3
     },
-    "pathobench_atlas": {
+    "aignostics_atlas": {
       "avgRank": 3.0,
       "taskCount": 3
     },
@@ -640,7 +640,7 @@
       "avgRank": 4.0,
       "taskCount": 3
     },
-    "hest_h0_mini": {
+    "h0_mini": {
       "avgRank": 5.0,
       "taskCount": 3
     },
@@ -706,7 +706,7 @@
     }
   },
   "plism": {
-    "hest_h0_mini": {
+    "h0_mini": {
       "avgRank": 1.0,
       "taskCount": 4
     },

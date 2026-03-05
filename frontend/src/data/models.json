@@ -456,7 +456,7 @@
     "weightsUrl": "https://huggingface.co/MahmoodLab/TITAN"
   },
   {
-    "id": "hest_h0_mini",
+    "id": "h0_mini",
     "name": "H0-mini",
     "organization": "Bioptimus",
     "architecture": "ViT-B/14",
@@ -471,7 +471,7 @@
     "weightsUrl": "https://huggingface.co/bioptimus/H0-mini"
   },
   {
-    "id": "pathobench_atlas2",
+    "id": "aignostics_atlas2",
     "name": "Atlas 2",
     "organization": "Aignostics",
     "architecture": "ViT-G/8",
@@ -485,7 +485,7 @@
     "paperUrl": "https://arxiv.org/abs/2601.05148"
   },
   {
-    "id": "pathobench_atlas",
+    "id": "aignostics_atlas",
     "name": "Atlas",
     "organization": "Aignostics",
     "architecture": "ViT-H/14",

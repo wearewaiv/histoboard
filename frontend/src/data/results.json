@@ -62141,7 +62141,7 @@
     "specificityUpper": 0.43
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_brca_tp53",
     "value": 0.836,
     "source": "pathobench"
@@ -62153,7 +62153,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_brca_tp53",
     "value": 0.782,
     "source": "pathobench"
@@ -62171,7 +62171,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_brca_pik3ca",
     "value": 0.596,
     "source": "pathobench"
@@ -62183,7 +62183,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_brca_pik3ca",
     "value": 0.594,
     "source": "pathobench"
@@ -62201,7 +62201,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_ccrcc_bap1",
     "value": 0.7040000000000001,
     "source": "pathobench"
@@ -62213,7 +62213,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_ccrcc_bap1",
     "value": 0.705,
     "source": "pathobench"
@@ -62231,7 +62231,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_ccrcc_pbrm1",
     "value": 0.524,
     "source": "pathobench"
@@ -62243,7 +62243,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_ccrcc_pbrm1",
     "value": 0.488,
     "source": "pathobench"
@@ -62261,7 +62261,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_ccrcc_vhl",
     "value": 0.529,
     "source": "pathobench"
@@ -62273,7 +62273,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_ccrcc_vhl",
     "value": 0.48700000000000004,
     "source": "pathobench"
@@ -62291,7 +62291,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_kras",
     "value": 0.653,
     "source": "pathobench"
@@ -62303,7 +62303,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_kras",
     "value": 0.617,
     "source": "pathobench"
@@ -62321,7 +62321,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_acvr2a",
     "value": 0.845,
     "source": "pathobench"
@@ -62333,7 +62333,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_acvr2a",
     "value": 0.769,
     "source": "pathobench"
@@ -62351,7 +62351,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_apc",
     "value": 0.778,
     "source": "pathobench"
@@ -62363,7 +62363,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_apc",
     "value": 0.747,
     "source": "pathobench"
@@ -62381,7 +62381,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_arid1a",
     "value": 0.758,
     "source": "pathobench"
@@ -62393,7 +62393,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_arid1a",
     "value": 0.74,
     "source": "pathobench"
@@ -62411,7 +62411,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_msi",
     "value": 0.9390000000000001,
     "source": "pathobench"
@@ -62423,7 +62423,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_msi",
     "value": 0.846,
     "source": "pathobench"
@@ -62441,7 +62441,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_pik3ca",
     "value": 0.622,
     "source": "pathobench"
@@ -62453,7 +62453,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_pik3ca",
     "value": 0.5710000000000001,
     "source": "pathobench"
@@ -62471,7 +62471,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_setd1b",
     "value": 0.823,
     "source": "pathobench"
@@ -62483,7 +62483,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_setd1b",
     "value": 0.76,
     "source": "pathobench"
@@ -62501,7 +62501,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_tp53",
     "value": 0.725,
     "source": "pathobench"
@@ -62513,7 +62513,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_tp53",
     "value": 0.623,
     "source": "pathobench"
@@ -62531,7 +62531,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_gbm_egfr",
     "value": 0.6920000000000001,
     "source": "pathobench"
@@ -62543,7 +62543,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_gbm_egfr",
     "value": 0.591,
     "source": "pathobench"
@@ -62561,7 +62561,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_gbm_tp53",
     "value": 0.855,
     "source": "pathobench"
@@ -62573,7 +62573,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_gbm_tp53",
     "value": 0.8370000000000001,
     "source": "pathobench"
@@ -62591,7 +62591,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hnsc_casp8",
     "value": 0.6579999999999999,
     "source": "pathobench"
@@ -62603,7 +62603,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hnsc_casp8",
     "value": 0.5760000000000001,
     "source": "pathobench"
@@ -62621,7 +62621,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_lscc_keap1",
     "value": 0.574,
     "source": "pathobench"
@@ -62633,7 +62633,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_lscc_keap1",
     "value": 0.634,
     "source": "pathobench"
@@ -62651,7 +62651,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_lscc_arid1a",
     "value": 0.469,
     "source": "pathobench"
@@ -62663,7 +62663,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_lscc_arid1a",
     "value": 0.426,
     "source": "pathobench"
@@ -62681,7 +62681,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_luad_egfr",
     "value": 0.81,
     "source": "pathobench"
@@ -62693,7 +62693,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_luad_egfr",
     "value": 0.8109999999999999,
     "source": "pathobench"
@@ -62711,7 +62711,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_luad_kras",
     "value": 0.7040000000000001,
     "source": "pathobench"
@@ -62723,7 +62723,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_luad_kras",
     "value": 0.669,
     "source": "pathobench"
@@ -62741,7 +62741,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_luad_stk11",
     "value": 0.885,
     "source": "pathobench"
@@ -62753,7 +62753,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_luad_stk11",
     "value": 0.856,
     "source": "pathobench"
@@ -62771,7 +62771,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_luad_tp53",
     "value": 0.767,
     "source": "pathobench"
@@ -62783,7 +62783,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_luad_tp53",
     "value": 0.696,
     "source": "pathobench"
@@ -62801,7 +62801,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_pda_smad4",
     "value": 0.47600000000000003,
     "source": "pathobench"
@@ -62813,7 +62813,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_pda_smad4",
     "value": 0.451,
     "source": "pathobench"
@@ -62831,7 +62831,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_bctherapy_her2",
     "value": 0.6990000000000001,
     "source": "pathobench"
@@ -62843,7 +62843,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_bctherapy_her2",
     "value": 0.609,
     "source": "pathobench"
@@ -62861,7 +62861,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_brca_immune",
     "value": 0.593,
     "source": "pathobench"
@@ -62873,7 +62873,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_brca_immune",
     "value": 0.517,
     "source": "pathobench"
@@ -62891,7 +62891,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_ccrcc_immune",
     "value": 0.38299999999999995,
     "source": "pathobench"
@@ -62903,7 +62903,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_ccrcc_immune",
     "value": 0.35700000000000004,
     "source": "pathobench"
@@ -62921,7 +62921,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_coad_immune",
     "value": 0.45799999999999996,
     "source": "pathobench"
@@ -62933,7 +62933,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_coad_immune",
     "value": 0.391,
     "source": "pathobench"
@@ -62951,7 +62951,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_gbm_immune",
     "value": 0.5770000000000001,
     "source": "pathobench"
@@ -62963,7 +62963,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_gbm_immune",
     "value": 0.52,
     "source": "pathobench"
@@ -62981,7 +62981,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hnsc_immune",
     "value": 0.546,
     "source": "pathobench"
@@ -62993,7 +62993,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hnsc_immune",
     "value": 0.486,
     "source": "pathobench"
@@ -63011,7 +63011,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_pda_immune",
     "value": 0.41700000000000004,
     "source": "pathobench"
@@ -63023,7 +63023,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_pda_immune",
     "value": 0.408,
     "source": "pathobench"
@@ -63041,7 +63041,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_lscc_immune",
     "value": 0.578,
     "source": "pathobench"
@@ -63053,7 +63053,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_lscc_immune",
     "value": 0.542,
     "source": "pathobench"
@@ -63071,7 +63071,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_luad_immune",
     "value": 0.5660000000000001,
     "source": "pathobench"
@@ -63083,7 +63083,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_luad_immune",
     "value": 0.503,
     "source": "pathobench"
@@ -63101,7 +63101,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_lvi",
     "value": 0.6990000000000001,
     "source": "pathobench"
@@ -63113,7 +63113,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_lvi",
     "value": 0.693,
     "source": "pathobench"
@@ -63131,7 +63131,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_pni",
     "value": 0.74,
     "source": "pathobench"
@@ -63143,7 +63143,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_pni",
     "value": 0.718,
     "source": "pathobench"
@@ -63161,7 +63161,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_primary_met",
     "value": 0.6579999999999999,
     "source": "pathobench"
@@ -63173,7 +63173,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_primary_met",
     "value": 0.619,
     "source": "pathobench"
@@ -63191,7 +63191,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_tumor_site",
     "value": 0.775,
     "source": "pathobench"
@@ -63203,7 +63203,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_tumor_site",
     "value": 0.741,
     "source": "pathobench"
@@ -63221,7 +63221,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_vi",
     "value": 0.6759999999999999,
     "source": "pathobench"
@@ -63233,7 +63233,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_vi",
     "value": 0.669,
     "source": "pathobench"
@@ -63251,7 +63251,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_bctherapy_grade",
     "value": 0.395,
     "source": "pathobench"
@@ -63263,7 +63263,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_bctherapy_grade",
     "value": 0.298,
     "source": "pathobench"
@@ -63281,7 +63281,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hnsc_grade",
     "value": 0.361,
     "source": "pathobench"
@@ -63293,7 +63293,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hnsc_grade",
     "value": 0.298,
     "source": "pathobench"
@@ -63311,7 +63311,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_lscc_grade",
     "value": 0.22699999999999998,
     "source": "pathobench"
@@ -63323,7 +63323,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_lscc_grade",
     "value": 0.23800000000000002,
     "source": "pathobench"
@@ -63341,7 +63341,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_grade_ker",
     "value": 0.332,
     "source": "pathobench"
@@ -63353,7 +63353,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_grade_ker",
     "value": 0.247,
     "source": "pathobench"
@@ -63371,7 +63371,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_grade_nonker",
     "value": 0.237,
     "source": "pathobench"
@@ -63383,7 +63383,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_grade_nonker",
     "value": 0.20600000000000002,
     "source": "pathobench"
@@ -63401,7 +63401,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_cervix_subtype",
     "value": 0.9470000000000001,
     "source": "pathobench"
@@ -63413,7 +63413,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_cervix_subtype",
     "value": 0.95,
     "source": "pathobench"
@@ -63431,7 +63431,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_boehmk_survival",
     "value": 0.517,
     "source": "pathobench"
@@ -63443,7 +63443,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_boehmk_survival",
     "value": 0.495,
     "source": "pathobench"
@@ -63461,7 +63461,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_ccrcc_survival",
     "value": 0.556,
     "source": "pathobench"
@@ -63473,7 +63473,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_ccrcc_survival",
     "value": 0.654,
     "source": "pathobench"
@@ -63491,7 +63491,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hnsc_survival",
     "value": 0.511,
     "source": "pathobench"
@@ -63503,7 +63503,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hnsc_survival",
     "value": 0.483,
     "source": "pathobench"
@@ -63521,7 +63521,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_pda_survival",
     "value": 0.52,
     "source": "pathobench"
@@ -63533,7 +63533,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_pda_survival",
     "value": 0.507,
     "source": "pathobench"
@@ -63551,7 +63551,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_luad_survival",
     "value": 0.522,
     "source": "pathobench"
@@ -63563,7 +63563,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_luad_survival",
     "value": 0.525,
     "source": "pathobench"
@@ -63581,7 +63581,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_mbc_survival",
     "value": 0.49,
     "source": "pathobench"
@@ -63593,7 +63593,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_mbc_survival",
     "value": 0.542,
     "source": "pathobench"
@@ -63611,7 +63611,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_hancock_survival",
     "value": 0.57,
     "source": "pathobench"
@@ -63623,7 +63623,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_hancock_survival",
     "value": 0.565,
     "source": "pathobench"
@@ -63641,7 +63641,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_bctherapy_er",
     "value": 0.764,
     "source": "pathobench"
@@ -63653,7 +63653,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_bctherapy_er",
     "value": 0.6920000000000001,
     "source": "pathobench"
@@ -63671,7 +63671,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_bctherapy_rcb",
     "value": 0.337,
     "source": "pathobench"
@@ -63683,7 +63683,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_bctherapy_rcb",
     "value": 0.295,
     "source": "pathobench"
@@ -63701,7 +63701,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas2",
+    "modelId": "aignostics_atlas2",
     "taskId": "pb_mbc_recist",
     "value": 0.10300000000000001,
     "source": "pathobench"
@@ -63713,7 +63713,7 @@
     "source": "pathobench"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pb_mbc_recist",
     "value": 0.161,
     "source": "pathobench"
@@ -69259,37 +69259,37 @@
     "source": "thunder"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "thunder_knn",
     "value": 0.797,
     "source": "thunder"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "thunder_linear_prob",
     "value": 0.838,
     "source": "thunder"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "thunder_few_shot",
     "value": 0.75,
     "source": "thunder"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "thunder_segmentation",
     "value": 0.691,
     "source": "thunder"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "thunder_calibration",
     "value": 3.8,
     "source": "thunder"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "thunder_adversarial",
     "value": 34.3,
     "source": "thunder"
@@ -69367,19 +69367,19 @@
     "source": "pathorob"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pathorob_tcga_2x2",
     "value": 0.826,
     "source": "pathorob"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pathorob_camelyon",
     "value": 0.785,
     "source": "pathorob"
   },
   {
-    "modelId": "pathobench_atlas",
+    "modelId": "aignostics_atlas",
     "taskId": "pathorob_tolkach_esca",
     "value": 0.938,
     "source": "pathorob"
@@ -69403,19 +69403,19 @@
     "source": "pathorob"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "pathorob_tcga_2x2",
     "value": 0.794,
     "source": "pathorob"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "pathorob_camelyon",
     "value": 0.718,
     "source": "pathorob"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "pathorob_tolkach_esca",
     "value": 0.932,
     "source": "pathorob"
@@ -69691,25 +69691,25 @@
     "source": "pathorob"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "plism_cosine_similarity",
     "value": 0.8,
     "source": "plism"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "plism_cross_scanner",
     "value": 0.864,
     "source": "plism"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "plism_cross_staining",
     "value": 0.318,
     "source": "plism"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "plism_cross_both",
     "value": 0.183,
     "source": "plism"
@@ -70065,7 +70065,7 @@
     "retrievedAt": "2025-01-31"
   },
   {
-    "modelId": "hest_h0_mini",
+    "modelId": "h0_mini",
     "taskId": "thunder_ranksum",
     "value": 38,
     "source": "thunder",
