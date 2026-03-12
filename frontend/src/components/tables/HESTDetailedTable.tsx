@@ -46,6 +46,25 @@ export function HESTDetailedTable({
   const { resultsMap, taskStats, modelAvgRanks, modelAvgValues, sortedModels } =
     useDetailedTableData({ models, filteredTasks, results });
 
+  // Keep only models with visible results, then sort best -> worst by average metric.
+  const displayedModels = React.useMemo(() => {
+    return sortedModels
+      .filter((model) =>
+        filteredTasks.some((task) => resultsMap.get(model.id)?.has(task.id))
+      )
+      .sort((a, b) => {
+        const avgA = modelAvgValues.get(a.id) ?? Number.NEGATIVE_INFINITY;
+        const avgB = modelAvgValues.get(b.id) ?? Number.NEGATIVE_INFINITY;
+        if (avgA !== avgB) return avgB - avgA;
+
+        const rankA = modelAvgRanks.get(a.id) ?? Number.POSITIVE_INFINITY;
+        const rankB = modelAvgRanks.get(b.id) ?? Number.POSITIVE_INFINITY;
+        if (rankA !== rankB) return rankA - rankB;
+
+        return a.name.localeCompare(b.name);
+      });
+  }, [sortedModels, filteredTasks, resultsMap, modelAvgValues, modelAvgRanks]);
+
   // Dropdown options
   const organOptions = buildOrganOptions(availableOrgans);
   const taskOptions = buildTaskNameOptions(availableTaskNames);
@@ -127,14 +146,9 @@ export function HESTDetailedTable({
             </tr>
           </thead>
           <tbody>
-            {sortedModels.map((model, sortIdx) => {
+            {displayedModels.map((model, sortIdx) => {
               const modelResults = resultsMap.get(model.id);
               const avgRank = modelAvgRanks.get(model.id);
-
-              const hasResults = filteredTasks.some(
-                (task) => modelResults?.has(task.id)
-              );
-              if (!hasResults) return null;
 
               return (
                 <tr
