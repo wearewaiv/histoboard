@@ -33,7 +33,6 @@ export function Footer() {
                     className="inline-block h-5 w-auto relative -top-px"
                   />
                 </a> with participation of the Jaume Lab
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 justify-center md:justify-start">
                 <a href="https://guillaumejaume.github.io/" target="_blank" rel="noopener noreferrer">
                   <img
                     src="/jaumelab_logo.png"
@@ -41,7 +40,6 @@ export function Footer() {
                     className="inline-block h-8 w-auto relative -top-px"
                   />
                 </a> 
-              </p>
               </p>
               <p className="text-xs text-muted-foreground">
                 Last updated: {BUILD_DATE}

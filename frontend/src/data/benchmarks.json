@@ -88,7 +88,7 @@
     "githubUrl": "https://github.com/mahmoodlab/HEST",
         "paperUrl": "https://www.nature.com/articles/s41592-024-02461-y",
     "datasetUrl": "https://huggingface.co/datasets/MahmoodLab/hest",
-    "resultsUrl": "https://github.com/mahmoodlab/HEST/blob/main/README.md#hest-benchmark-results-030426",
+    "resultsUrl": "https://github.com/mahmoodlab/HEST?tab=readme-ov-file#hest-benchmark-results-030426",
     "organs": [
       "breast",
       "prostate",
