@@ -1,6 +1,6 @@
 [
   {
-    "id": "paige_virchow2",
+    "id": "paige_ai_virchow2",
     "name": "Virchow2",
     "organization": "Paige AI",
     "architecture": "ViT-H/14",
@@ -45,7 +45,7 @@
     "weightsUrl": "https://huggingface.co/bioptimus/H-optimus-0"
   },
   {
-    "id": "mahmood_uni2_h",
+    "id": "mahmood_lab_uni2",
     "name": "UNI2",
     "organization": "Mahmood Lab",
     "architecture": "ViT-H/14",
@@ -61,7 +61,7 @@
     "weightsUrl": "https://huggingface.co/MahmoodLab/UNI2-h"
   },
   {
-    "id": "mstar",
+    "id": "tsinghua_hkust_mstar",
     "name": "mSTAR",
     "organization": "Tsinghua / HKUST",
     "architecture": "ViT-L/14",
@@ -77,7 +77,7 @@
     "weightsUrl": "https://huggingface.co/Wangyh/mSTAR"
   },
   {
-    "id": "mahmood_uni",
+    "id": "mahmood_lab_uni",
     "name": "UNI",
     "organization": "Mahmood Lab",
     "architecture": "ViT-L/16",
@@ -93,7 +93,7 @@
     "weightsUrl": "https://huggingface.co/MahmoodLab/UNI"
   },
   {
-    "id": "gpfm",
+    "id": "hkust_gpfm",
     "name": "GPFM",
     "organization": "HKUST",
     "architecture": "ViT-L/14",
@@ -109,7 +109,7 @@
     "weightsUrl": "https://huggingface.co/majiabo/GPFM"
   },
   {
-    "id": "prov_gigapath",
+    "id": "microsoft_prov_gigapath",
     "name": "Prov-GigaPath",
     "organization": "Microsoft",
     "architecture": "ViT-g/14",
@@ -125,7 +125,7 @@
     "weightsUrl": "https://huggingface.co/prov-gigapath/prov-gigapath"
   },
   {
-    "id": "mahmood_conch",
+    "id": "mahmood_lab_conch",
     "name": "CONCH",
     "organization": "Mahmood Lab",
     "architecture": "ViT-B/16",
@@ -156,7 +156,7 @@
     "weightsUrl": "https://huggingface.co/owkin/phikon-v2"
   },
   {
-    "id": "mahmood_conch_1_5",
+    "id": "mahmood_lab_conch_1_5",
     "name": "CONCH 1.5",
     "organization": "Mahmood Lab",
     "architecture": "ViT-L/16",
@@ -188,7 +188,7 @@
     "weightsUrl": "https://huggingface.co/owkin/phikon"
   },
   {
-    "id": "musk",
+    "id": "stanford_university_musk",
     "name": "MUSK",
     "organization": "Stanford University",
     "architecture": "V-FFN",
@@ -204,7 +204,7 @@
     "weightsUrl": "https://huggingface.co/xiangjx/musk"
   },
   {
-    "id": "paige_virchow",
+    "id": "paige_ai_virchow",
     "name": "Virchow",
     "organization": "Paige AI",
     "architecture": "ViT-H/14",
@@ -219,7 +219,7 @@
     "weightsUrl": "https://huggingface.co/paige-ai/Virchow"
   },
   {
-    "id": "ctranspath",
+    "id": "sichuan_university_ctranspath",
     "name": "CTransPath",
     "organization": "Sichuan University",
     "architecture": "Swin-T/4",
@@ -234,7 +234,7 @@
     "codeUrl": "https://github.com/Xiyue-Wang/TransPath"
   },
   {
-    "id": "patho_clip",
+    "id": "sichuan_university_patho_clip",
     "name": "Patho-CLIP",
     "organization": "Sichuan University",
     "architecture": "ViT-L/14",
@@ -250,7 +250,7 @@
     "weightsUrl": "https://huggingface.co/WenchuanZhang/Patho-CLIP-L"
   },
   {
-    "id": "histai_hibou_l",
+    "id": "hist_ai_hibou_l",
     "name": "Hibou-L",
     "organization": "Hist.ai",
     "architecture": "ViT-L/14",
@@ -265,7 +265,7 @@
     "weightsUrl": "https://huggingface.co/histai/hibou-L"
   },
   {
-    "id": "plip",
+    "id": "stanford_plip",
     "name": "PLIP",
     "organization": "Stanford",
     "architecture": "ViT-B/32",
@@ -281,7 +281,7 @@
     "weightsUrl": "https://huggingface.co/vinid/plip"
   },
   {
-    "id": "omiclip",
+    "id": "houston_methodist_research_institute_omiclip",
     "name": "OmiCLIP",
     "organization": "Houston Methodist Research Institute",
     "architecture": "ViT-L/16",
@@ -297,7 +297,7 @@
     "weightsUrl": "https://github.com/GuangyuWangLab2021/Loki"
   },
   {
-    "id": "kaiko_midnight_12k",
+    "id": "kaiko_ai_midnight_12k",
     "name": "Midnight-12k",
     "organization": "kaiko.ai",
     "architecture": "ViT-g/14",
@@ -312,7 +312,7 @@
     "weightsUrl": "https://huggingface.co/kaiko-ai/midnight"
   },
   {
-    "id": "kaiko_vitb8",
+    "id": "kaiko_ai_kaiko_vit_b_8",
     "name": "Kaiko ViT-B/8",
     "organization": "kaiko.ai",
     "architecture": "ViT-B/8",
@@ -328,7 +328,7 @@
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
   },
   {
-    "id": "kaiko_vitl14",
+    "id": "kaiko_ai_kaiko_vit_l_14",
     "name": "Kaiko ViT-L/14",
     "organization": "kaiko.ai",
     "architecture": "ViT-L/14",
@@ -344,7 +344,7 @@
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
   },
   {
-    "id": "kaiko_vitb16",
+    "id": "kaiko_ai_kaiko_vit_b_16",
     "name": "Kaiko ViT-B/16",
     "organization": "kaiko.ai",
     "architecture": "ViT-B/16",
@@ -360,7 +360,7 @@
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
   },
   {
-    "id": "kaiko_vits8",
+    "id": "kaiko_ai_kaiko_vit_s_8",
     "name": "Kaiko ViT-S/8",
     "organization": "kaiko.ai",
     "architecture": "ViT-S/8",
@@ -376,7 +376,7 @@
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
   },
   {
-    "id": "kaiko_vits16",
+    "id": "kaiko_ai_kaiko_vit_s_16",
     "name": "Kaiko ViT-S/16",
     "organization": "kaiko.ai",
     "architecture": "ViT-S/16",
@@ -392,7 +392,7 @@
     "weightsUrl": "https://github.com/kaiko-ai/towards_large_pathology_fms"
   },
   {
-    "id": "lunit_vits16",
+    "id": "lunit_lunit_vit_s_16",
     "name": "Lunit ViT-S/16",
     "organization": "Lunit",
     "architecture": "ViT-S/16",
@@ -408,7 +408,7 @@
     "weightsUrl": "https://github.com/lunit-io/benchmark-ssl-pathology#pre-trained-weights"
   },
   {
-    "id": "stanford_hipt",
+    "id": "mahmood_lab_hipt",
     "name": "HIPT",
     "organization": "Mahmood Lab",
     "architecture": "ViT-S/16",
@@ -423,7 +423,7 @@
     "codeUrl": "https://github.com/mahmoodlab/HIPT"
   },
   {
-    "id": "stanford_quiltnet",
+    "id": "university_of_washington_quiltnet",
     "name": "QuiltNet",
     "organization": "University of Washington",
     "architecture": "ViT-B/32",
@@ -440,7 +440,7 @@
     "datasetUrl": "https://quilt1m.github.io/"
   },
   {
-    "id": "stanford_titan",
+    "id": "mahmood_lab_titan",
     "name": "TITAN",
     "organization": "Mahmood Lab",
     "architecture": "ViT-B/16",
@@ -456,7 +456,7 @@
     "weightsUrl": "https://huggingface.co/MahmoodLab/TITAN"
   },
   {
-    "id": "hest_h0_mini",
+    "id": "bioptimus_h0_mini",
     "name": "H0-mini",
     "organization": "Bioptimus",
     "architecture": "ViT-B/14",
@@ -471,7 +471,7 @@
     "weightsUrl": "https://huggingface.co/bioptimus/H0-mini"
   },
   {
-    "id": "pathobench_atlas2",
+    "id": "aignostics_atlas_2",
     "name": "Atlas 2",
     "organization": "Aignostics",
     "architecture": "ViT-G/8",
@@ -485,7 +485,7 @@
     "paperUrl": "https://arxiv.org/abs/2601.05148"
   },
   {
-    "id": "pathobench_atlas",
+    "id": "aignostics_atlas",
     "name": "Atlas",
     "organization": "Aignostics",
     "architecture": "ViT-H/14",
@@ -499,7 +499,7 @@
     "paperUrl": "https://arxiv.org/abs/2501.05409"
   },
   {
-    "id": "stamp_hibou_b",
+    "id": "hist_ai_hibou_b",
     "name": "Hibou-B",
     "organization": "Hist.ai",
     "architecture": "ViT-B/14",
@@ -514,7 +514,7 @@
     "weightsUrl": "https://huggingface.co/histai/hibou-B"
   },
   {
-    "id": "thunder_keep",
+    "id": "shanghai_university_and_others_keep",
     "name": "KEEP",
     "organization": "Shanghai University and others",
     "architecture": "ViT-L/16",
@@ -531,7 +531,7 @@
     "datasetUrl": "https://huggingface.co/datasets/Loie/KEEP_dataset"
   },
   {
-    "id": "thunder_openmidnight",
+    "id": "sophont_ai_openmidnight",
     "name": "OpenMidnight",
     "organization": "Sophont AI",
     "architecture": "ViT-g/14",
@@ -544,5 +544,345 @@
     "trainingMethod": "DINOv2",
     "blogUrl": "https://sophontai.com/blog/openmidnight",
     "weightsUrl": "https://huggingface.co/SophontAI/OpenMidnight"
+  },
+  {
+    "id": "lunit_lunit_vit_s_8",
+    "name": "Lunit ViT-S/8",
+    "organization": "Lunit",
+    "architecture": "ViT-S/8",
+    "params": "22M",
+    "pretrainingData": "35K+ WSIs",
+    "publicationDate": "2023-06",
+    "license": "non-commercial",
+    "publicationType": "peer-reviewed",
+    "modelType": "vision",
+    "trainingMethod": "DINO",
+    "paperUrl": "https://openaccess.thecvf.com/content/CVPR2023/papers/Kang_Benchmarking_Self-Supervised_Learning_on_Diverse_Pathology_Datasets_CVPR_2023_paper.pdf",
+    "codeUrl": "https://github.com/lunit-io/benchmark-ssl-pathology",
+    "weightsUrl": "https://github.com/lunit-io/benchmark-ssl-pathology#pre-trained-weights"
+  },
+  {
+    "id": "meta_ai_resnet50_imagenet",
+    "name": "ResNet50 (ImageNet)",
+    "organization": "Meta AI",
+    "architecture": "ResNet-50",
+    "params": "25M",
+    "pretrainingData": "ImageNet-1K",
+    "publicationDate": "2015-12",
+    "license": "open-source",
+    "publicationType": "peer-reviewed",
+    "modelType": "vision",
+    "trainingMethod": "Supervised",
+    "paperUrl": "https://arxiv.org/abs/1512.03385"
+  },
+  {
+    "id": "pathbench_chief",
+    "name": "Chief",
+    "organization": "PathBench",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "pathorob_ciga",
+    "name": "Ciga",
+    "organization": "PathoROB",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "pathorob_kangdino",
+    "name": "Kangdino",
+    "organization": "PathoROB",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "pathorob_retccl",
+    "name": "Retccl",
+    "organization": "PathoROB",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "pathorob_rudolfv",
+    "name": "Rudolfv",
+    "organization": "PathoROB",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "sinai_sp22m",
+    "name": "SP22M",
+    "organization": "Sinai",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "sinai_sp85m",
+    "name": "SP85M",
+    "organization": "Sinai",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stamp_dinov2_sslpath",
+    "name": "DINOV2 Sslpath",
+    "organization": "STAMP",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stamp_kaiko",
+    "name": "Kaiko",
+    "organization": "STAMP",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stamp_panakeia",
+    "name": "Panakeia",
+    "organization": "STAMP",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_align_base",
+    "name": "Align Base",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_beit3",
+    "name": "BEIT3",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_beph",
+    "name": "BEPH",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_biomedclip",
+    "name": "BIOMEDCLIP",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_blip_b16",
+    "name": "Blip B16",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_clip_b16",
+    "name": "CLIP B16",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_dino_b16",
+    "name": "Dino B16",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_dino_s16",
+    "name": "Dino S16",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_dinov2",
+    "name": "DINOV2",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_fusion",
+    "name": "Fusion",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_ibot_b16",
+    "name": "IBOT B16",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_ibot_l16",
+    "name": "IBOT L16",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_mizero_bioclinical",
+    "name": "MIZERO Bioclinical",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "stanford_mizero_pubmed",
+    "name": "MIZERO Pubmed",
+    "organization": "Stanford",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "thunder_clip_b32",
+    "name": "CLIP B32",
+    "organization": "THUNDER",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "thunder_dinov2_b",
+    "name": "DINOV2 B",
+    "organization": "THUNDER",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "thunder_dinov3_b",
+    "name": "DINOV3 B",
+    "organization": "THUNDER",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "thunder_dinov3_l",
+    "name": "DINOV3 L",
+    "organization": "THUNDER",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "thunder_dinov3_s",
+    "name": "DINOV3 S",
+    "organization": "THUNDER",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "thunder_vit_b16",
+    "name": "Vit B16",
+    "organization": "THUNDER",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
+  },
+  {
+    "id": "thunder_vit_l16",
+    "name": "Vit L16",
+    "organization": "THUNDER",
+    "architecture": "Unknown",
+    "params": "Unknown",
+    "pretrainingData": "Unknown",
+    "publicationDate": "1970-01",
+    "modelType": "vision"
   }
 ]

@@ -39,21 +39,8 @@ interface CellConfig {
   nucleusOffsetX: number;
   nucleusOffsetY: number;
   nucleusShape: number[];
-  // Chromatin clumps (hyperchromatic, irregular blobs)
-  chromatinClumps: {
-    angle: number;
-    dist: number;
-    rx: number;
-    ry: number;
-    shape: number[];
-    rotation: number;
-  }[];
-  // Nucleoli (1-3, prominent, bright magenta)
-  nucleoli: { angle: number; dist: number; radius: number }[];
-}
-
-interface CellDisplay {
-  container: Container;
+  // Nucleoli (prominent, bright magenta)
+  nucleoli: { angle: number; dist: number; radius: number; elongation: number; shape: number[]; rotation: number }[];
 }
 
 // ---------------------------------------------------------------------------
@@ -69,7 +56,6 @@ const COL_MEMBRANE = 0xc06090; // cell membrane (deeper pink)
 // Hematoxylin (nuclei / chromatin)
 const COL_NUCLEUS = 0x3a2878; // deep purple-indigo
 const COL_NUC_BORDER = 0x4a3898; // thick nuclear membrane
-const COL_CHROMATIN = 0x2a1860; // dark hyperchromatic clumps
 const COL_NUCLEOLUS = 0xc03870; // bright magenta nucleolus
 // Stroma / tissue blobs / connections
 const COL_STROMA = 0x7477b8; // lilac
@@ -98,35 +84,23 @@ function generateGranules(count: number) {
   return out;
 }
 
-function generateChromatinClumps(count: number) {
+function generateNucleoli(count: number) {
   const out: {
     angle: number;
     dist: number;
-    rx: number;
-    ry: number;
+    radius: number;
+    elongation: number;
     shape: number[];
     rotation: number;
   }[] = [];
   for (let i = 0; i < count; i++) {
     out.push({
       angle: Math.random() * Math.PI * 2,
-      dist: Math.random() * 0.6,
-      rx: 0.12 + Math.random() * 0.18, // as fraction of nucleus radius
-      ry: 0.08 + Math.random() * 0.14,
-      shape: generateShape(8, 0.15),
-      rotation: Math.random() * Math.PI * 2,
-    });
-  }
-  return out;
-}
-
-function generateNucleoli(count: number) {
-  const out: { angle: number; dist: number; radius: number }[] = [];
-  for (let i = 0; i < count; i++) {
-    out.push({
-      angle: Math.random() * Math.PI * 2,
       dist: Math.random() * 0.35,
-      radius: 0.13 + Math.random() * 0.1, // as fraction of nucleus radius
+      radius: 0.10 + Math.random() * 0.25,
+      elongation: 0.7 + Math.random() * 0.6, // oval, not round
+      shape: generateShape(10, 0.2), // irregular outline
+      rotation: Math.random() * Math.PI * 2,
     });
   }
   return out;
@@ -243,45 +217,23 @@ function buildCellGraphics(cfg: CellConfig): { container: Container } {
   nucG.position.set(nOx, nOy);
   container.addChild(nucG);
 
-  // --- Chromatin clumps (hyperchromatic, irregular blobs inside nucleus) ---
-  if (cfg.chromatinClumps.length > 0) {
-    const chromG = new Graphics();
-    for (const clump of cfg.chromatinClumps) {
-      const cx = nOx + Math.cos(clump.angle) * clump.dist * nrx;
-      const cy = nOy + Math.sin(clump.angle) * clump.dist * nry;
-      const crx = clump.rx * nrx;
-      const cry = clump.ry * nry;
-      // Draw each clump as an irregular blob
-      const clumpG = new Graphics();
-      drawOrganicPath(clumpG, crx, cry, clump.shape, clump.rotation);
-      clumpG.fill({ color: COL_CHROMATIN, alpha: alpha * 0.5 });
-      clumpG.position.set(cx, cy);
-      container.addChild(clumpG);
-    }
-    // Also small scattered chromatin specks
-    for (const clump of cfg.chromatinClumps) {
-      const sx = nOx + Math.cos(clump.angle + 0.5) * clump.dist * nrx * 0.7;
-      const sy = nOy + Math.sin(clump.angle + 0.5) * clump.dist * nry * 0.7;
-      chromG.circle(sx, sy, nrx * 0.04);
-    }
-    chromG.fill({ color: COL_CHROMATIN, alpha: alpha * 0.4 });
-    container.addChild(chromG);
-  }
-
-  // --- Nucleoli (1-3, prominent, bright magenta with subtle glow) ---
+  // --- Nucleolus (single, prominent, bright magenta with erratic shape) ---
   for (const neo of cfg.nucleoli) {
     const neoX = nOx + Math.cos(neo.angle) * neo.dist * nrx;
     const neoY = nOy + Math.sin(neo.angle) * neo.dist * nry;
-    const neoR = neo.radius * nrx;
+    const neoRx = neo.radius * nrx;
+    const neoRy = neoRx * neo.elongation;
     // Glow halo
     const halo = new Graphics();
-    halo.circle(neoX, neoY, neoR * 1.6);
+    drawOrganicPath(halo, neoRx * 1.6, neoRy * 1.6, neo.shape, neo.rotation);
     halo.fill({ color: COL_NUCLEOLUS, alpha: alpha * 0.12 });
+    halo.position.set(neoX, neoY);
     container.addChild(halo);
     // Core
     const core = new Graphics();
-    core.circle(neoX, neoY, neoR);
+    drawOrganicPath(core, neoRx, neoRy, neo.shape, neo.rotation);
     core.fill({ color: COL_NUCLEOLUS, alpha: alpha * 0.55 });
+    core.position.set(neoX, neoY);
     container.addChild(core);
   }
 
@@ -312,23 +264,18 @@ export async function initCellBackground(
   canvas.style.pointerEvents = "none";
   containerEl.appendChild(canvas);
 
-  // State
-  const configs: CellConfig[] = [];
-  const displays: CellDisplay[] = [];
-  const clusterContainers: Container[] = [];
-  const clusterOrigins: { x: number; y: number }[] = [];
-  // Per-cell mapping to cluster + local offset (for dynamic line drawing)
-  const cellClusterMap: { clusterIdx: number; lx: number; ly: number }[] = [];
-  // Per-cluster effective radii (for repulsion)
-  const clusterRadii: number[] = [];
+  // Per-cell state
+  const cellContainers: Container[] = [];
+  const cellOrigins: { x: number; y: number }[] = [];
+  const cellRadii: number[] = [];
   // Persistent repulsion offsets (smoothly accumulated across frames)
   const repulsionOffsets: { dx: number; dy: number }[] = [];
 
-  // Layers (bottom → top: stroma ECM, cells, content backdrop)
-  const stromaContainer = new Container();
+  // Layers (bottom → top: lines, cells, content backdrop)
+  const linesContainer = new Container();
   const cellsContainer = new Container();
   const backdropLayer = new Container();
-  app.stage.addChild(stromaContainer);
+  app.stage.addChild(linesContainer);
   app.stage.addChild(cellsContainer);
   app.stage.addChild(backdropLayer);
 
@@ -339,14 +286,11 @@ export async function initCellBackground(
 
     // Clear previous
     cellsContainer.removeChildren();
-    stromaContainer.removeChildren();
+    linesContainer.removeChildren();
     backdropLayer.removeChildren();
-    configs.length = 0;
-    displays.length = 0;
-    clusterContainers.length = 0;
-    clusterOrigins.length = 0;
-    cellClusterMap.length = 0;
-    clusterRadii.length = 0;
+    cellContainers.length = 0;
+    cellOrigins.length = 0;
+    cellRadii.length = 0;
     repulsionOffsets.length = 0;
 
     // Content backdrop (opaque vertical band dims cells behind text)
@@ -354,124 +298,48 @@ export async function initCellBackground(
     drawContentBackdrop(backdrop, w, h);
     backdropLayer.addChild(backdrop);
 
-    // --- Sparsely scattered cells ---
-    const CELL_DENSITY = 0.00008; // very sparse, sporadic
+    // --- Sparsely scattered individual cells ---
+    const CELL_DENSITY = 0.00008;
     const area = w * h;
     const cellCount = Math.floor(area * CELL_DENSITY);
-
-    // Collect cell positions for clustering
-    const cellPositions: { x: number; y: number }[] = [];
 
     for (let i = 0; i < cellCount; i++) {
       const cx = BORDER_MARGIN + Math.random() * (w - BORDER_MARGIN * 2);
       const cy = BORDER_MARGIN + Math.random() * (h - BORDER_MARGIN * 2);
-      cellPositions.push({ x: cx, y: cy });
-    }
 
-    // --- Group cells into clusters ---
-    const CLUSTER_RADIUS = 80;
-    const claimed = new Set<number>();
-    const clusterDefs: { cx: number; cy: number; members: { x: number; y: number }[] }[] = [];
+      const radius = 14 + Math.random() * 18;
+      const cellType: CellType = Math.random() > 0.6 ? "elongated" : "round";
+      const elongation = cellType === "elongated" ? 1.15 + Math.random() * 0.3 : 1;
+      const rotation = Math.random() * Math.PI * 2;
 
-    for (let i = 0; i < cellPositions.length; i++) {
-      if (claimed.has(i)) continue;
-      const members = [cellPositions[i]];
-      claimed.add(i);
-      for (let j = i + 1; j < cellPositions.length; j++) {
-        if (claimed.has(j)) continue;
-        const near = members.some((m) => {
-          const dx = m.x - cellPositions[j].x;
-          const dy = m.y - cellPositions[j].y;
-          return Math.sqrt(dx * dx + dy * dy) < CLUSTER_RADIUS;
-        });
-        if (near) {
-          members.push(cellPositions[j]);
-          claimed.add(j);
-        }
-      }
-      const cx = members.reduce((s, m) => s + m.x, 0) / members.length;
-      const cy = members.reduce((s, m) => s + m.y, 0) / members.length;
-      clusterDefs.push({ cx, cy, members });
-    }
+      const cfg: CellConfig = {
+        radius,
+        elongation,
+        cellType,
+        rotation,
+        baseOpacity: 0.4 + Math.random() * 0.3,
+        cellShape: generateShape(24, 0.12),
+        granules: generateGranules(4 + Math.floor(Math.random() * 6)),
+        nucleusRadiusFrac: 0.30 + Math.random() * 0.45,
+        nucleusOffsetX: (Math.random() - 0.5) * radius * 0.3,
+        nucleusOffsetY: (Math.random() - 0.5) * radius * 0.3,
+        nucleusShape: generateShape(16, 0.14),
+        nucleoli: generateNucleoli(1),
+      };
 
-    // --- Build each cluster as a single container (tissue blob + cells + lines) ---
-    for (let ci = 0; ci < clusterDefs.length; ci++) {
-      const cluster = clusterDefs[ci];
-      const group = new Container();
-      group.position.set(cluster.cx, cluster.cy);
+      const { container: cellContainer } = buildCellGraphics(cfg);
+      cellContainer.position.set(cx, cy);
+      cellsContainer.addChild(cellContainer);
 
-      // Tissue blob
-      let maxDist = 0;
-      for (const m of cluster.members) {
-        const d = Math.sqrt((m.x - cluster.cx) ** 2 + (m.y - cluster.cy) ** 2);
-        if (d > maxDist) maxDist = d;
-      }
-      const blobR = maxDist + 25 + Math.random() * 15;
-      const blobRy = blobR * (0.8 + Math.random() * 0.4);
-      const blobShape = generateShape(20, 0.15);
-      const blobRot = Math.random() * Math.PI * 2;
-
-      const haloG = new Graphics();
-      drawOrganicPath(haloG, blobR * 1.15, blobRy * 1.15, blobShape, blobRot);
-      haloG.fill({ color: COL_STROMA, alpha: 0.06 });
-      group.addChild(haloG);
-
-      const innerG = new Graphics();
-      drawOrganicPath(innerG, blobR, blobRy, blobShape, blobRot);
-      innerG.fill({ color: COL_STROMA, alpha: 0.1 });
-      group.addChild(innerG);
-
-      // Cells (positioned relative to cluster center)
-      for (const pos of cluster.members) {
-        const lx = pos.x - cluster.cx;
-        const ly = pos.y - cluster.cy;
-        cellClusterMap.push({ clusterIdx: ci, lx, ly });
-        const radius = 14 + Math.random() * 18;
-        const cellType: CellType = Math.random() > 0.6 ? "elongated" : "round";
-        const elongation = cellType === "elongated" ? 1.15 + Math.random() * 0.3 : 1;
-        const rotation = Math.random() * Math.PI * 2;
-
-        const cfg: CellConfig = {
-          radius,
-          elongation,
-          cellType,
-          rotation,
-          baseOpacity: 0.4 + Math.random() * 0.3,
-          // 24-point shape with higher irregularity → ruffled, non-circular membrane
-          cellShape: generateShape(24, 0.12),
-          // Cytoplasmic granules (scattered vesicles)
-          granules: generateGranules(4 + Math.floor(Math.random() * 6)),
-          // Large nucleus — cancer cell N:C ratio (50-70% of cell)
-          nucleusRadiusFrac: 0.50 + Math.random() * 0.20,
-          nucleusOffsetX: (Math.random() - 0.5) * radius * 0.3,
-          nucleusOffsetY: (Math.random() - 0.5) * radius * 0.3,
-          // Lobulated nucleus (16 points, high irregularity)
-          nucleusShape: generateShape(16, 0.14),
-          // Hyperchromatic chromatin clumps
-          chromatinClumps: generateChromatinClumps(3 + Math.floor(Math.random() * 4)),
-          // 1-3 prominent nucleoli
-          nucleoli: generateNucleoli(1 + Math.floor(Math.random() * 3)),
-        };
-
-        const { container: cellContainer } = buildCellGraphics(cfg);
-        cellContainer.position.set(lx, ly);
-        group.addChild(cellContainer);
-        configs.push(cfg);
-        displays.push({ container: cellContainer });
-      }
-
-      // Track cluster for animation
-      clusterContainers.push(group);
-      clusterOrigins.push({ x: cluster.cx, y: cluster.cy });
-      clusterRadii.push(blobR);
+      cellContainers.push(cellContainer);
+      cellOrigins.push({ x: cx, y: cy });
+      cellRadii.push(radius);
       repulsionOffsets.push({ dx: 0, dy: 0 });
-      cellsContainer.addChild(group);
     }
 
-    // --- Global connecting lines (redrawn each frame in tick) ---
-    // Add a persistent Graphics to stromaContainer; tick redraws it.
+    // Persistent Graphics for connecting lines (redrawn each frame)
     const linesG = new Graphics();
-    stromaContainer.addChild(linesG);
+    linesContainer.addChild(linesG);
   }
 
   // --- Initial build ---
@@ -480,8 +348,8 @@ export async function initCellBackground(
   // --- Mouse tracking (for link highlight) ---
   let mouseX = -9999;
   let mouseY = -9999;
-  const HOVER_RADIUS = 120; // px — highlight links when mouse is within this of either endpoint
-  const COL_HIGHLIGHT = 0xff5a60; // coral highlight
+  const HOVER_RADIUS = 120;
+  const COL_HIGHLIGHT = 0xff5a60;
 
   const onMouseMove = (e: MouseEvent) => {
     mouseX = e.clientX;
@@ -489,42 +357,43 @@ export async function initCellBackground(
   };
   document.addEventListener("mousemove", onMouseMove);
 
-  // --- Continuous cluster drift using noise ---
+  // --- Per-cell drift + repulsion ---
   const driftNoise = createNoise2D();
-  const DRIFT_SPEED = 0.00003; // very slow, glacial movement
-  const DRIFT_RANGE = 200; // pixels — large wander across the whole page
+  const DRIFT_SPEED = 0.00003;
+  const DRIFT_RANGE = 200;
   const CONNECTION_DIST = 120;
 
-  const REPULSION_STRENGTH = 0.05; // how fast clusters push apart per frame
-  const REPULSION_PADDING = 20; // extra gap beyond blob radii
-  const REPULSION_DECAY = 0.97; // slow decay so offsets don't accumulate forever
+  const REPULSION_STRENGTH = 0.05;
+  const REPULSION_PADDING = 10;
+  const REPULSION_DECAY = 0.97;
 
   const tickFn = () => {
     const now = performance.now();
     const t = now * DRIFT_SPEED;
+    const n = cellContainers.length;
 
-    // 1. Compute noise-based drift offsets
+    // 1. Compute per-cell noise-based drift
     const driftOffsets: { dx: number; dy: number }[] = [];
-    for (let i = 0; i < clusterContainers.length; i++) {
+    for (let i = 0; i < n; i++) {
       const dx = driftNoise(t, i * 100) * DRIFT_RANGE;
       const dy = driftNoise(t + 999, i * 100 + 50) * DRIFT_RANGE;
       driftOffsets.push({ dx, dy });
     }
 
-    // 2. Pairwise repulsion — push overlapping clusters apart
-    for (let i = 0; i < clusterContainers.length; i++) {
-      const oi = clusterOrigins[i];
+    // 2. Pairwise cell repulsion — prevent overlap
+    for (let i = 0; i < n; i++) {
+      const oi = cellOrigins[i];
       const xi = oi.x + driftOffsets[i].dx + repulsionOffsets[i].dx;
       const yi = oi.y + driftOffsets[i].dy + repulsionOffsets[i].dy;
-      for (let j = i + 1; j < clusterContainers.length; j++) {
-        const oj = clusterOrigins[j];
+      for (let j = i + 1; j < n; j++) {
+        const oj = cellOrigins[j];
         const xj = oj.x + driftOffsets[j].dx + repulsionOffsets[j].dx;
         const yj = oj.y + driftOffsets[j].dy + repulsionOffsets[j].dy;
 
         const dx = xi - xj;
         const dy = yi - yj;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const minDist = clusterRadii[i] + clusterRadii[j] + REPULSION_PADDING;
+        const minDist = cellRadii[i] + cellRadii[j] + REPULSION_PADDING;
 
         if (dist < minDist && dist > 1) {
           const overlap = minDist - dist;
@@ -539,47 +408,34 @@ export async function initCellBackground(
       }
     }
 
-    // Decay repulsion so offsets release when clusters drift apart
+    // Decay repulsion so offsets release when cells drift apart
     for (const ro of repulsionOffsets) {
       ro.dx *= REPULSION_DECAY;
       ro.dy *= REPULSION_DECAY;
     }
 
-    // 3. Set final cluster positions (noise + repulsion)
-    for (let i = 0; i < clusterContainers.length; i++) {
-      const o = clusterOrigins[i];
-      clusterContainers[i].position.set(
-        o.x + driftOffsets[i].dx + repulsionOffsets[i].dx,
-        o.y + driftOffsets[i].dy + repulsionOffsets[i].dy,
-      );
-    }
-
-    // 4. Precompute world positions of all cells
+    // 3. Set final cell positions (origin + drift + repulsion)
     const worldPos: { x: number; y: number }[] = [];
-    for (let i = 0; i < cellClusterMap.length; i++) {
-      const ci = cellClusterMap[i];
-      const co = clusterOrigins[ci.clusterIdx];
-      const d = driftOffsets[ci.clusterIdx];
-      const r = repulsionOffsets[ci.clusterIdx];
-      worldPos.push({
-        x: co.x + d.dx + r.dx + ci.lx,
-        y: co.y + d.dy + r.dy + ci.ly,
-      });
+    for (let i = 0; i < n; i++) {
+      const o = cellOrigins[i];
+      const wx = o.x + driftOffsets[i].dx + repulsionOffsets[i].dx;
+      const wy = o.y + driftOffsets[i].dy + repulsionOffsets[i].dy;
+      cellContainers[i].position.set(wx, wy);
+      worldPos.push({ x: wx, y: wy });
     }
 
-    // Redraw connecting lines with hover highlight
-    const linesG = stromaContainer.children[0] as Graphics | undefined;
+    // 4. Redraw connecting lines with hover highlight
+    const linesG = linesContainer.children[0] as Graphics | undefined;
     if (linesG) {
       linesG.clear();
-      for (let i = 0; i < worldPos.length; i++) {
+      for (let i = 0; i < n; i++) {
         const a = worldPos[i];
-        for (let j = i + 1; j < worldPos.length; j++) {
+        for (let j = i + 1; j < n; j++) {
           const b = worldPos[j];
           const ddx = a.x - b.x;
           const ddy = a.y - b.y;
           const dist = Math.sqrt(ddx * ddx + ddy * ddy);
           if (dist < CONNECTION_DIST) {
-            // Check mouse proximity to either endpoint
             const dMouseA = Math.sqrt((mouseX - a.x) ** 2 + (mouseY - a.y) ** 2);
             const dMouseB = Math.sqrt((mouseX - b.x) ** 2 + (mouseY - b.y) ** 2);
             const hoverInfluence = Math.max(
