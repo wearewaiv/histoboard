@@ -13,7 +13,7 @@ This guide helps you get oriented in the Histoboard codebase and explains how to
 ### Setup
 
 ```bash
-git clone https://github.com/afiliot/histoboard.git
+git clone https://github.com/wearewaiv/histoboard.git
 cd histoboard/frontend
 npm install
 ```

@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://afiliot.github.io/histoboard/sitemap.xml
+Sitemap: https://wearewaiv.github.io/histoboard/sitemap.xml

@@ -88,7 +88,7 @@ Add model metadata to `frontend/src/data/models.json`:
 
 ```bash
 # Clone the repository
-git clone https://github.com/afiliot/histoboard.git
+git clone https://github.com/wearewaiv/histoboard.git
 cd histoboard/frontend
 
 # Install dependencies

@@ -112,7 +112,7 @@ jobs:
             ---
 
             This is an automated message from the Histoboard benchmark monitoring system.
-            Repository: https://github.com/afiliot/histoboard
+            Repository: https://github.com/wearewaiv/histoboard
 
       - name: Commit hash updates
         run: |
