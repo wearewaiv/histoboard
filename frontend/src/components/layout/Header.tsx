@@ -40,7 +40,7 @@ export function Header() {
 
   useEffect(() => {
     const fetchStars = async () => {
-      const cacheKey = "github-stars-histoboard";
+      const cacheKey = "github-stars-wearewaiv-histoboard";
       const cacheExpiry = 1000 * 60 * 5; // 5 minutes
 
       // Check localStorage cache first
@@ -59,7 +59,7 @@ export function Header() {
 
       // Fetch from GitHub API
       try {
-        const res = await fetch("https://api.github.com/repos/afiliot/histoboard");
+        const res = await fetch("https://api.github.com/repos/wearewaiv/histoboard");
         if (res.ok) {
           const data = await res.json();
           const stars = data.stargazers_count;
@@ -104,7 +104,7 @@ export function Header() {
         <div className="ml-auto flex items-center space-x-4">
           {/* GitHub link - hide stars on small screens */}
           <a
-            href="https://github.com/afiliot/histoboard"
+            href="https://github.com/wearewaiv/histoboard"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-muted-foreground hover:text-hematoxylin-500 transition-colors"

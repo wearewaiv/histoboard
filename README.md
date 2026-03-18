@@ -13,14 +13,14 @@
 </p>
 
 <p align="center">
-  <a href="https://afiliot.github.io/histoboard">
+  <a href="https://wearewaiv.github.io/histoboard">
     <img src="https://img.shields.io/badge/Live%20Demo-histoboard-blueviolet?style=for-the-badge" alt="Live Demo">
   </a>
-  <a href="https://github.com/afiliot/histoboard/stargazers">
-    <img src="https://img.shields.io/github/stars/afiliot/histoboard?style=for-the-badge&color=yellow" alt="Stars">
+  <a href="https://github.com/wearewaiv/histoboard/stargazers">
+    <img src="https://img.shields.io/github/stars/wearewaiv/histoboard?style=for-the-badge&color=yellow" alt="Stars">
   </a>
-  <a href="https://github.com/afiliot/histoboard/network/members">
-    <img src="https://img.shields.io/github/forks/afiliot/histoboard?style=for-the-badge&color=lightblue" alt="Forks">
+  <a href="https://github.com/wearewaiv/histoboard/network/members">
+    <img src="https://img.shields.io/github/forks/wearewaiv/histoboard?style=for-the-badge&color=lightblue" alt="Forks">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green?style=for-the-badge" alt="License">
@@ -86,7 +86,7 @@ Results are checked every Sunday at midnight UTC.
 
 ```bash
 # Clone the repository
-git clone https://github.com/afiliot/histoboard.git
+git clone https://github.com/wearewaiv/histoboard.git
 cd histoboard/frontend
 
 # Install dependencies
@@ -160,7 +160,7 @@ To add a new benchmark:
 
 Contributions are welcome! Please feel free to:
 
-- Report bugs or request features via [Issues](https://github.com/afiliot/histoboard/issues)
+- Report bugs or request features via [Issues](https://github.com/wearewaiv/histoboard/issues)
 - Submit benchmark data updates via Pull Requests
 - Suggest new models or benchmarks to integrate
 
@@ -173,7 +173,7 @@ If you use Histoboard in your research, please cite:
   title={Histoboard: A Unified Dashboard for Pathology Foundation Model Benchmarks},
   author={Alexandre Filiot},
   year={2025},
-  url={https://afiliot.github.io/histoboard}
+  url={https://wearewaiv.github.io/histoboard}
 }
 ```
 

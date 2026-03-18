@@ -166,7 +166,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-wrap gap-3">
             <a
-              href="https://github.com/afiliot/histoboard/issues"
+              href="https://github.com/wearewaiv/histoboard/issues"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -176,7 +176,7 @@ export default function AboutPage() {
               </Button>
             </a>
             <a
-              href="https://github.com/afiliot/histoboard"
+              href="https://github.com/wearewaiv/histoboard"
               target="_blank"
               rel="noopener noreferrer"
             >
