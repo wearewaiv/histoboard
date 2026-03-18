@@ -52,7 +52,7 @@ DATA_SOURCES: list[DataSource] = [
     DataSource(
         id="stanford",
         name="Stanford PathBench",
-        url="https://raw.githubusercontent.com/gevaertlab/benchmarking-path-models/main/data/benchmarking_wci.csv",
+        url="https://github.com/gevaertlab/benchmarking-path-models/blob/main/data/benchmarking_updated_ncomm.csv",
         type="csv",
     ),
     # JSON-based benchmarks

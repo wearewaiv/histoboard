@@ -7,6 +7,8 @@
  * Used by: app/layout.tsx
  */
 
+import Image from "next/image";
+
 // Build-time date for "Last updated" footer text
 const BUILD_DATE = new Date().toLocaleDateString("en-US", {
   month: "long",
@@ -27,16 +29,20 @@ export function Footer() {
               <p className="text-sm text-muted-foreground flex items-center gap-1.5 justify-center md:justify-start">
                 Initiative sponsored by{" "}
                 <a href="https://www.wearewaiv.com" target="_blank" rel="noopener noreferrer">
-                  <img
+                  <Image
                     src="/waiv_logo.png"
                     alt="Waiv"
+                    height={177}
+                    width={520}
                     className="inline-block h-5 w-auto relative -top-px"
                   />
                 </a> with participation of the Jaume Lab
                 <a href="https://guillaumejaume.github.io/" target="_blank" rel="noopener noreferrer">
-                  <img
+                  <Image
                     src="/jaumelab_logo.png"
                     alt="Jaume Lab"
+                    height={558}
+                    width={623}
                     className="inline-block h-8 w-auto relative -top-px"
                   />
                 </a> 
