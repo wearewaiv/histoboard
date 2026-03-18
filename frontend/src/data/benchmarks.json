@@ -62,7 +62,7 @@
     "url": "https://pathbench.stanford.edu",
     "githubUrl": "https://github.com/gevaertlab/benchmarking-path-models",
     "paperUrl": "https://www.medrxiv.org/content/10.1101/2025.05.08.25327250v1",
-    "resultsUrl": "https://github.com/gevaertlab/benchmarking-path-models/blob/main/data/benchmarking_wci.csv",
+    "resultsUrl": "https://github.com/gevaertlab/benchmarking-path-models/blob/main/data/benchmarking_updated_ncomm.csv",
     "organs": [
       "lung",
       "brain",

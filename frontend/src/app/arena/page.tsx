@@ -36,28 +36,6 @@ const tasks = tasksData as Task[];
 const results = resultsData as Result[];
 const benchmarks = benchmarksData as Benchmark[];
 
-const MAX_MODELS = 5;
-
-// Get unique task types (based on benchmark category)
-function getTaskTypes(): string[] {
-  return ["calibration", "patch-level", "robustness", "segmentation", "slide-level"];
-}
-
-// Map task to its type based on benchmark
-function getTaskType(task: Task, benchmarkMap: Map<string, Benchmark>): string {
-  const benchmark = benchmarkMap.get(task.benchmarkId);
-  if (!benchmark) return "unknown";
-
-  const categories = Array.isArray(benchmark.category) ? benchmark.category : [benchmark.category];
-
-  if (categories.includes("calibration")) return "calibration";
-  if (categories.includes("robustness")) return "robustness";
-  if (categories.includes("segmentation")) return "segmentation";
-  if (categories.includes("patch-level")) return "patch-level";
-  if (categories.includes("slide-level")) return "slide-level";
-
-  return "slide-level"; // default
-}
 
 export default function ArenaPage() {
   // Create benchmark map for quick lookup
@@ -68,7 +46,6 @@ export default function ArenaPage() {
   // Extract filter options
   const organs = useMemo(() => getUniqueGroupedOrgans(tasks), []);
   const categories = useMemo(() => getUniqueGroupedCategories(tasks), []);
-  const taskTypes = useMemo(() => getTaskTypes(), []);
 
   // Model selection state
   const [selectedModelIds, setSelectedModelIds] = useState<Set<string>>(new Set());
@@ -76,7 +53,6 @@ export default function ArenaPage() {
 
   // Task filter states
   const [selectedOrgans, setSelectedOrgans] = useState<Set<string>>(() => new Set(organs));
-  const [selectedTaskTypes, setSelectedTaskTypes] = useState<Set<string>>(() => new Set(taskTypes));
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(() => new Set(categories));
 
   // Filter and sort models by search query (alphabetically by name)
@@ -139,14 +115,12 @@ export default function ArenaPage() {
   // Filter tasks based on selected filters
   const filteredTasksByFilters = useMemo(() => {
     return tasks.filter((t) => {
-      const taskType = getTaskType(t, benchmarkMap);
       return (
         expandedSelectedOrgans.has(t.organ.toLowerCase()) &&
-        selectedTaskTypes.has(taskType) &&
         expandedSelectedCategories.has(t.category as string)
       );
     });
-  }, [expandedSelectedOrgans, selectedTaskTypes, expandedSelectedCategories, benchmarkMap]);
+  }, [expandedSelectedOrgans, expandedSelectedCategories]);
 
   // Further filter to only tasks where ALL selected models have results
   const filteredTasks = useMemo(() => {
@@ -161,17 +135,19 @@ export default function ArenaPage() {
     });
   }, [filteredTasksByFilters, selectedModels, resultsMap]);
 
-  // Toggle model selection (with max limit)
+  // Toggle model selection
   const toggleModel = (modelId: string) => {
     setSelectedModelIds((prev) => {
       const next = new Set(prev);
-      if (next.has(modelId)) {
-        next.delete(modelId);
-      } else if (next.size < MAX_MODELS) {
-        next.add(modelId);
-      }
+      if (next.has(modelId)) next.delete(modelId);
+      else next.add(modelId);
       return next;
     });
+  };
+
+  // Select all currently visible (filtered) models
+  const selectAllModels = () => {
+    setSelectedModelIds(new Set(filteredModels.map((m) => m.id)));
   };
 
   // Toggle filter helpers
@@ -180,15 +156,6 @@ export default function ArenaPage() {
       const next = new Set(prev);
       if (next.has(organ)) next.delete(organ);
       else next.add(organ);
-      return next;
-    });
-  };
-
-  const toggleTaskType = (taskType: string) => {
-    setSelectedTaskTypes((prev) => {
-      const next = new Set(prev);
-      if (next.has(taskType)) next.delete(taskType);
-      else next.add(taskType);
       return next;
     });
   };
@@ -205,7 +172,6 @@ export default function ArenaPage() {
   // Reset all filters
   const resetFilters = () => {
     setSelectedOrgans(new Set(organs));
-    setSelectedTaskTypes(new Set(taskTypes));
     setSelectedCategories(new Set(categories));
   };
 
@@ -291,15 +257,6 @@ export default function ArenaPage() {
     return stats;
   }, [selectedModels, filteredTasks, resultsMap]);
 
-  // Task type label mapping
-  const taskTypeLabels: Record<string, string> = {
-    "calibration": "Calibration",
-    "patch-level": "Patch-level classification",
-    "robustness": "Robustness",
-    "segmentation": "Segmentation",
-    "slide-level": "Slide-level classification",
-  };
-
   // Count benchmarks with filtered tasks
   const benchmarkCount = useMemo(() => {
     const benchmarkIds = new Set(filteredTasks.map((t) => t.benchmarkId));
@@ -311,7 +268,7 @@ export default function ArenaPage() {
       <div className="mb-8 text-center">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Arena</h1>
         <p className="mt-2 text-sm sm:text-base text-muted-foreground">
-          Compare 2-5 models head-to-head across all benchmarks
+          Compare models head-to-head across all benchmarks
         </p>
       </div>
 
@@ -345,14 +302,11 @@ export default function ArenaPage() {
             <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 border rounded-lg bg-muted/30">
               {filteredModels.map((model) => {
                 const isSelected = selectedModelIds.has(model.id);
-                const isDisabled = !isSelected && selectedModelIds.size >= MAX_MODELS;
-
                 return (
                   <Button
                     key={model.id}
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    disabled={isDisabled}
                     onClick={() => toggleModel(model.id)}
                     className="text-xs"
                   >
@@ -364,16 +318,18 @@ export default function ArenaPage() {
 
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                {selectedModelIds.size}/{MAX_MODELS} models selected
-                {selectedModelIds.size >= MAX_MODELS && (
-                  <span className="ml-2 text-amber-600">(maximum reached)</span>
-                )}
+                {selectedModelIds.size} model{selectedModelIds.size !== 1 ? "s" : ""} selected
               </p>
-              {selectedModelIds.size > 0 && (
-                <Button variant="ghost" size="sm" onClick={clearModels}>
-                  Clear selection
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={selectAllModels}>
+                  Select all
                 </Button>
-              )}
+                {selectedModelIds.size > 0 && (
+                  <Button variant="ghost" size="sm" onClick={clearModels}>
+                    Reset
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </CardContent>
@@ -401,17 +357,6 @@ export default function ArenaPage() {
               onToggle={toggleOrgan}
               onSelectAll={() => setSelectedOrgans(new Set(organs))}
               onClearAll={() => setSelectedOrgans(new Set())}
-            />
-            <MultiSelectDropdown
-              label="Task Types"
-              options={taskTypes.map((type) => ({
-                id: type,
-                label: taskTypeLabels[type] || type,
-              })).sort((a, b) => a.label.localeCompare(b.label))}
-              selectedIds={selectedTaskTypes}
-              onToggle={toggleTaskType}
-              onSelectAll={() => setSelectedTaskTypes(new Set(taskTypes))}
-              onClearAll={() => setSelectedTaskTypes(new Set())}
             />
             <MultiSelectDropdown
               label="Task Categories"
@@ -442,7 +387,7 @@ export default function ArenaPage() {
               <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">Select at least 2 models</h3>
               <p className="text-muted-foreground max-w-md">
-                Choose 2-5 models from the selection above to compare their performance across benchmarks.
+                Choose at least 2 models from the selection above to compare their performance across benchmarks.
               </p>
             </div>
           </CardContent>
