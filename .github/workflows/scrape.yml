@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   monitor:
@@ -125,9 +126,19 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
+            BRANCH="chore/update-benchmark-hashes-$(date +%Y%m%d%H%M%S)"
+            git checkout -b "$BRANCH"
             git commit -m "chore: update benchmark source hashes [skip ci]"
-            git push
+            git push origin "$BRANCH"
+            gh pr create \
+              --title "chore: update benchmark source hashes" \
+              --body "Automated update of benchmark source hashes from the monitor workflow." \
+              --base main \
+              --head "$BRANCH" \
+              --label "automated" || true
           fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Send failure notification
         if: failure()
