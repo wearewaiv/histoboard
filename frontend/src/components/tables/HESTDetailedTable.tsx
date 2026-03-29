@@ -90,7 +90,7 @@ export function HESTDetailedTable({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
-              Patch-level classification
+              Gene expression prediction
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -16,6 +16,8 @@
 export interface BenchmarkRef {
   id: string;
   name: string;
+  /** When avgScore is used, whether higher is better. Defaults to true. */
+  scoreHigherIsBetter?: boolean;
 }
 
 // =============================================================================
@@ -36,7 +38,7 @@ export const BENCHMARK_REFS: BenchmarkRef[] = [
   { id: "pathobench", name: "Patho-Bench" },
   { id: "sinai", name: "Sinai" },
   { id: "stamp", name: "STAMP" },
-  { id: "thunder", name: "THUNDER" },
+  { id: "thunder", name: "THUNDER", scoreHigherIsBetter: false },
   { id: "pathorob", name: "PathoROB" },
   { id: "plism", name: "Plismbench" },
 ];
@@ -52,9 +54,9 @@ export const BENCHMARK_REFS: BenchmarkRef[] = [
  * @returns Medal emoji string or null
  */
 export function getMedal(rank: number): string | null {
-  if (rank === 1) return "\u{1F947}";
-  if (rank === 2) return "\u{1F948}";
-  if (rank === 3) return "\u{1F949}";
+  if (rank === 1) return "🥇";
+  if (rank === 2) return "🥈";
+  if (rank === 3) return "🥉";
   return null;
 }
 
@@ -65,7 +67,7 @@ export function getMedal(rank: number): string | null {
 /** Shape of the rankings data from rankings.json. */
 type RankingsData = Record<
   string,
-  Record<string, { avgRank: number; taskCount: number }>
+  Record<string, { avgRank: number; avgScore?: number; taskCount: number }>
 >;
 
 /** Result of computeBenchmarkRanks for a single benchmark. */
@@ -76,9 +78,16 @@ export interface BenchmarkRankData {
 
 /**
  * Compute integer ranks per benchmark from rankings data.
- * For each benchmark, sorts models by avgRank and assigns 1-based integer ranks.
  *
- * @param rankings - Rankings data: benchmarkId -> modelId -> { avgRank, taskCount }
+ * When entries include `avgScore`, sorts by avgScore (descending by default;
+ * ascending when `scoreHigherIsBetter` is explicitly `false` on the benchmark,
+ * e.g. THUNDER rank sum where lower is better).
+ * Otherwise falls back to sorting by `avgRank` ascending (computed per-task ranks).
+ *
+ * Models missing an `avgScore` in a score-based benchmark are pushed to the end
+ * via ±Infinity sentinels rather than defaulting to 0.
+ *
+ * @param rankings - Rankings data: benchmarkId -> modelId -> { avgRank, avgScore?, taskCount }
  * @returns Per-benchmark rank maps keyed by benchmark ID
  */
 export function computeBenchmarkRanks(
@@ -90,9 +99,19 @@ export function computeBenchmarkRanks(
     const benchmarkData = rankings[benchmark.id];
     if (!benchmarkData) continue;
 
-    const modelsWithRank = Object.entries(benchmarkData)
-      .map(([modelId, data]) => ({ modelId, avgRank: data.avgRank }))
-      .sort((a, b) => a.avgRank - b.avgRank);
+    const entries = Object.entries(benchmarkData);
+    const useAvgScore = entries.some(([, data]) => data.avgScore !== undefined);
+    const higherIsBetter = benchmark.scoreHigherIsBetter !== false;
+
+    const modelsWithRank = entries
+      .map(([modelId, data]) => ({ modelId, avgRank: data.avgRank, avgScore: data.avgScore }))
+      .sort((a, b) =>
+        useAvgScore
+          ? higherIsBetter
+            ? (b.avgScore ?? Number.NEGATIVE_INFINITY) - (a.avgScore ?? Number.NEGATIVE_INFINITY)
+            : (a.avgScore ?? Number.POSITIVE_INFINITY) - (b.avgScore ?? Number.POSITIVE_INFINITY)
+          : a.avgRank - b.avgRank
+      );
 
     const rankMap = new Map<string, number>();
     modelsWithRank.forEach((item, index) => {

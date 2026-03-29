@@ -109,18 +109,24 @@ interface StanfordDetailedTableProps {
   modelRankings: { modelId: string; overallRank: number }[];
 }
 
-type MetricType =
+/** The four metrics selectable in the Stanford table header. */
+type StanfordMetric =
   | "auroc"
   | "balanced_accuracy"
   | "sensitivity"
   | "specificity";
 
-const METRIC_OPTIONS: { value: MetricType; label: string }[] = [
+const METRIC_OPTIONS: { value: StanfordMetric; label: string }[] = [
   { value: "auroc", label: "AUROC" },
   { value: "balanced_accuracy", label: "Balanced Accuracy" },
   { value: "sensitivity", label: "Sensitivity" },
   { value: "specificity", label: "Specificity" },
 ];
+
+/** Returns the display label for a given Stanford metric selection. */
+function getMetricLabel(metric: StanfordMetric): string {
+  return METRIC_OPTIONS.find((m) => m.value === metric)?.label ?? metric;
+}
 
 const CLASSIFICATION_LEVELS = ["Slide", "Patch"];
 
@@ -148,7 +154,7 @@ export function StanfordDetailedTable({
   const categories = useSetToggle(availableCategories);
   const taskNamesFilter = useSetToggle(availableTaskNames);
   const levels = useSetToggle<string>(CLASSIFICATION_LEVELS);
-  const [selectedMetric, setSelectedMetric] = useState<MetricType>("auroc");
+  const [selectedMetric, setSelectedMetric] = useState<StanfordMetric>("auroc");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Extract the selected metric value from a result
@@ -265,10 +271,21 @@ export function StanfordDetailedTable({
     return map;
   }, [results]);
 
-  // Get metric display label
-  const getMetricLabel = (metric: MetricType): string => {
-    return METRIC_OPTIONS.find((m) => m.value === metric)?.label || metric;
-  };
+  // Filter to models with visible results, then sort by mean selected metric desc.
+  // Tiebreakers: avg task rank asc → name alphabetical. Consistent with global leaderboard.
+  const displayedModels = useMemo(() => {
+    return sortedModels
+      .filter((model) => filteredTasks.some((task) => resultsMap.get(model.id)?.has(task.id)))
+      .sort((a, b) => {
+        const avgA = modelAvgValues.get(a.id) ?? Number.NEGATIVE_INFINITY;
+        const avgB = modelAvgValues.get(b.id) ?? Number.NEGATIVE_INFINITY;
+        if (avgA !== avgB) return avgB - avgA;
+        const rankA = modelAvgRanks.get(a.id) ?? Number.POSITIVE_INFINITY;
+        const rankB = modelAvgRanks.get(b.id) ?? Number.POSITIVE_INFINITY;
+        if (rankA !== rankB) return rankA - rankB;
+        return a.name.localeCompare(b.name);
+      });
+  }, [sortedModels, filteredTasks, resultsMap, modelAvgValues, modelAvgRanks]);
 
   return (
     <div>
@@ -290,7 +307,7 @@ export function StanfordDetailedTable({
           <DropdownMenuContent align="start">
             <DropdownMenuRadioGroup
               value={selectedMetric}
-              onValueChange={(value) => setSelectedMetric(value as MetricType)}
+              onValueChange={(value) => setSelectedMetric(value as StanfordMetric)}
             >
               {METRIC_OPTIONS.map((option) => (
                 <DropdownMenuRadioItem key={option.value} value={option.value}>
@@ -395,14 +412,9 @@ export function StanfordDetailedTable({
             </tr>
           </thead>
           <tbody>
-            {sortedModels.map((model, sortIdx) => {
+            {displayedModels.map((model, sortIdx) => {
               const modelResults = resultsMap.get(model.id);
               const avgRank = modelAvgRanks.get(model.id);
-
-              const hasResults = filteredTasks.some((task) =>
-                modelResults?.has(task.id)
-              );
-              if (!hasResults) return null;
 
               return (
                 <tr

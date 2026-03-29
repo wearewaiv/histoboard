@@ -86,7 +86,7 @@ export function PLISMDetailedTable({
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <MultiSelectDropdown
-          label="Indications"
+          label="Task Categories"
           options={categoryOptions}
           selectedIds={categories.selected}
           onToggle={categories.toggle}

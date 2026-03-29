@@ -15,6 +15,7 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import type { Model, Benchmark } from "@/types";
 import { cn } from "@/lib/utils";
+import { getMedal } from "@/lib/benchmarkConfig";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ChevronUp, ChevronDown, Search, X } from "lucide-react";
@@ -35,12 +36,6 @@ type SortConfig = {
   direction: "asc" | "desc";
 } | null;
 
-function getMedal(rank: number): string | null {
-  if (rank === 1) return "🥇";
-  if (rank === 2) return "🥈";
-  if (rank === 3) return "🥉";
-  return null;
-}
 
 function getLicenseBadge(license: string): { label: string; className: string } {
   switch (license) {
