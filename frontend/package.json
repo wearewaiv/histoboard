@@ -18,9 +18,8 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0",
     "next": "^16.2.1",
-    "pixi.js": "^8.17.1",
+    "pixi.js": "^8.17.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "simplex-noise": "^4.0.3",
@@ -36,9 +35,10 @@
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^10.1.0",
-    "eslint-config-next": "^16.2.1",
+    "eslint-config-next": "^16.1.6",
+    "lucide-react": "^0.577.0",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
-    "typescript": "^6.0.2"
+    "typescript": "^5.9.3"
   }
 }

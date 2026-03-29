@@ -36,7 +36,7 @@ Histoboard provides a **unified view** of pathology foundation model performance
 | Metric | Count |
 |--------|-------|
 | Benchmarks | 10 |
-| Models | 35 |
+| Models | 40+ |
 | Evaluation Tasks | 400+ |
 | Organs/Indications | 20+ |
 
