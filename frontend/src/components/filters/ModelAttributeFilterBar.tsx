@@ -19,8 +19,6 @@ import {
   getWsiDataSizeCategoryLabel,
   getImageCaptionCategoryLabel,
   getLicenseLabel,
-  getModelTypeLabel,
-  getPublicationTypeLabel,
 } from "@/lib/modelFilters";
 import type { UseModelAttributeFiltersReturn } from "@/hooks/useModelAttributeFilters";
 
@@ -45,18 +43,12 @@ export function ModelAttributeFilterBar({
     selectedHistologyPatches,
     selectedMethodCategories,
     selectedLicenses,
-    selectedYears,
-    selectedModelTypes,
-    selectedPublicationTypes,
     toggleSizeCategory,
     toggleWsiDataSizeCategory,
     toggleImageCaptionCategory,
     toggleHistologyPatches,
     toggleMethodCategory,
     toggleLicense,
-    toggleYear,
-    toggleModelType,
-    togglePublicationType,
     selectAllSizeCategories,
     clearAllSizeCategories,
     selectAllDataSizeCategories,
@@ -65,12 +57,6 @@ export function ModelAttributeFilterBar({
     clearAllMethodCategories,
     selectAllLicenses,
     clearAllLicenses,
-    selectAllYears,
-    clearAllYears,
-    selectAllModelTypes,
-    clearAllModelTypes,
-    selectAllPublicationTypes,
-    clearAllPublicationTypes,
     resetAllFilters,
   } = filters;
 
@@ -145,20 +131,6 @@ export function ModelAttributeFilterBar({
         onClearAll={clearAllMethodCategories}
       />
 
-      {/* Model Type Dropdown */}
-      <MultiSelectDropdown
-        label="Type"
-        size={size}
-        options={filterOptions.modelTypes.map((type) => ({
-          id: type,
-          label: getModelTypeLabel(type),
-        }))}
-        selectedIds={selectedModelTypes}
-        onToggle={toggleModelType}
-        onSelectAll={selectAllModelTypes}
-        onClearAll={clearAllModelTypes}
-      />
-
       {/* License Dropdown */}
       <MultiSelectDropdown
         label="License"
@@ -171,34 +143,6 @@ export function ModelAttributeFilterBar({
         onToggle={toggleLicense}
         onSelectAll={selectAllLicenses}
         onClearAll={clearAllLicenses}
-      />
-
-      {/* Publication Year Dropdown */}
-      <MultiSelectDropdown
-        label="Year"
-        size={size}
-        options={filterOptions.publicationYears.map((year) => ({
-          id: year,
-          label: year,
-        }))}
-        selectedIds={selectedYears}
-        onToggle={toggleYear}
-        onSelectAll={selectAllYears}
-        onClearAll={clearAllYears}
-      />
-
-      {/* Publication Type Dropdown */}
-      <MultiSelectDropdown
-        label="Publication"
-        size={size}
-        options={filterOptions.publicationTypes.map((pubType) => ({
-          id: pubType,
-          label: getPublicationTypeLabel(pubType),
-        }))}
-        selectedIds={selectedPublicationTypes}
-        onToggle={togglePublicationType}
-        onSelectAll={selectAllPublicationTypes}
-        onClearAll={clearAllPublicationTypes}
       />
 
       <Button

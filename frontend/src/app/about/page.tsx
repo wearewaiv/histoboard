@@ -8,7 +8,16 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, BookOpen, Database, Trophy, Swords } from "lucide-react";
+import { ExternalLink, BookOpen, Database, Trophy, Swords } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+function GithubIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+    </svg>
+  );
+}
 
 import benchmarksData from "@/data/benchmarks.json";
 import modelsData from "@/data/models.json";
@@ -28,6 +37,19 @@ const stats = {
   taskCount: tasks.length,
   modelCount: models.length,
   organs: groupedOrgans,
+};
+
+const BENCHMARK_METHODOLOGY: Record<string, { metric: string; source: "official" | "computed"; lowerIsBetter?: boolean }> = {
+  eva:        { metric: "Average metric across 13 tasks",                    source: "computed" },
+  pathbench:  { metric: "Average task rank across 229 tasks",            source: "computed", lowerIsBetter: true },
+  stanford:   { metric: "Average AUROC across 41 tasks",                    source: "official" },
+  hest:       { metric: "Average Pearson's R across 9 different organs",    source: "official" },
+  pathobench: { metric: "Average task rank across 53 tasks",             source: "computed", lowerIsBetter: true },
+  sinai:      { metric: "Average AUROC across 22 tasks",                    source: "official" },
+  stamp:      { metric: "Average task rank across 31 tasks",             source: "computed", lowerIsBetter: true },
+  thunder:    { metric: "Rank sum across 6 tasks",                       source: "official", lowerIsBetter: true },
+  pathorob:   { metric: "Robustness index across 3 scenarios",           source: "official" },
+  plism:      { metric: "Aggregate robustness score",                    source: "official" },
 };
 
 export default function AboutPage() {
@@ -128,7 +150,7 @@ export default function AboutPage() {
       </Card>
 
       {/* How Rankings Work Section */}
-      <Card className="mb-8">
+      <Card id="how-rankings-work" className="mb-8">
         <CardHeader>
           <CardTitle>How Rankings Work</CardTitle>
         </CardHeader>
@@ -138,8 +160,52 @@ export default function AboutPage() {
             <Link href="/leaderboard" className="text-primary hover:underline font-medium">
               main leaderboard
             </Link>{" "}
-            displays the rankings of each foundation model based on the official benchmarks.
+            ranks models per benchmark using either the benchmark&rsquo;s own aggregate score or a metric we compute
+            ourselves. When a benchmark provides an official aggregate (e.g. a robustness index or rank sum), we follow
+            it directly. Otherwise, we average per-task ranks to compute an overall ranking metric for that benchmark.
           </p>
+          <div className="overflow-x-auto rounded-lg border">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b bg-muted">
+                  <th className="px-3 py-2 text-left font-semibold">Benchmark</th>
+                  <th className="px-3 py-2 text-left font-semibold">Ranking metric</th>
+                  <th className="px-3 py-2 text-center font-semibold">Source</th>
+                  <th className="px-3 py-2 text-center font-semibold">Direction</th>
+                </tr>
+              </thead>
+              <tbody>
+                {benchmarks
+                  .filter((b) => BENCHMARK_METHODOLOGY[b.id])
+                  .map((benchmark, i) => {
+                    const meta = BENCHMARK_METHODOLOGY[benchmark.id];
+                    return (
+                      <tr key={benchmark.id} className={cn("border-b last:border-0", i % 2 === 0 ? "bg-background" : "bg-muted/30")}>
+                        <td className="px-3 py-2 font-medium">
+                          <a href={benchmark.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
+                            {benchmark.shortName}
+                          </a>
+                        </td>
+                        <td className="px-3 py-2 text-muted-foreground">{meta.metric}</td>
+                        <td className="px-3 py-2 text-center">
+                          <span className={cn(
+                            "inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border",
+                            meta.source === "official"
+                              ? "bg-blue-50 text-blue-700 border-blue-200"
+                              : "bg-amber-50 text-amber-700 border-amber-200"
+                          )}>
+                            {meta.source === "official" ? "Official" : "Computed"}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 text-center text-muted-foreground">
+                          {meta.lowerIsBetter ? "↓ lower" : "↑ higher"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
           <p className="text-muted-foreground text-justify">
             For detailed per-task results, visit the individual{" "}
             <Link href="/benchmarks" className="text-primary hover:underline font-medium">
@@ -171,7 +237,7 @@ export default function AboutPage() {
               rel="noopener noreferrer"
             >
               <Button variant="outline" size="sm">
-                <Github className="mr-2 h-4 w-4" />
+                <GithubIcon className="mr-2 h-4 w-4" />
                 Open an Issue
               </Button>
             </a>

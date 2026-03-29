@@ -39,20 +39,6 @@ const results = resultsData as Result[];
 // Pre-compute correct integer ranks per benchmark (respects avgScore when present)
 const benchmarkRankData = computeBenchmarkRanks(rankings);
 
-// Methodology metadata displayed in the summary table above the leaderboard
-const BENCHMARK_METHODOLOGY: Record<string, { metric: string; source: "official" | "computed"; lowerIsBetter?: boolean }> = {
-  eva:        { metric: "Mean AUROC across 13 tasks",          source: "computed" },
-  pathbench:  { metric: "Avg. task rank across 229 tasks",     source: "computed",  lowerIsBetter: true },
-  stanford:   { metric: "Mean AUROC across 41 tasks",          source: "computed" },
-  hest:       { metric: "Mean Pearson r across 9 tissues",     source: "official" },
-  pathobench: { metric: "Avg. task rank across 53 tasks",      source: "computed",  lowerIsBetter: true },
-  sinai:      { metric: "Mean AUROC across 22 tasks",          source: "computed" },
-  stamp:      { metric: "Avg. task rank across 31 tasks",      source: "computed",  lowerIsBetter: true },
-  thunder:    { metric: "Rank sum across 6 tasks",             source: "official",  lowerIsBetter: true },
-  pathorob:   { metric: "Robustness Index across 3 scenarios", source: "official" },
-  plism:      { metric: "Aggregate robustness score",          source: "official" },
-};
-
 export default function LeaderboardPage() {
   const filters = useLeaderboardFilters(models, benchmarks, rankings);
   const { effectiveSelectedIds } = filters;
@@ -98,50 +84,6 @@ export default function LeaderboardPage() {
         </p>
       </div>
 
-      {/* Ranking methodology summary */}
-      <div className="mb-6 overflow-x-auto rounded-lg border">
-        <table className="w-full text-xs">
-          <thead>
-            <tr className="border-b bg-muted">
-              <th className="px-3 py-2 text-left font-semibold">Benchmark</th>
-              <th className="px-3 py-2 text-left font-semibold">Ranking metric</th>
-              <th className="px-3 py-2 text-center font-semibold">Source</th>
-              <th className="px-3 py-2 text-center font-semibold">Direction</th>
-            </tr>
-          </thead>
-          <tbody>
-            {benchmarks
-              .filter((b) => BENCHMARK_METHODOLOGY[b.id])
-              .map((benchmark, i) => {
-              const meta = BENCHMARK_METHODOLOGY[benchmark.id];
-              return (
-                <tr key={benchmark.id} className={cn("border-b last:border-0", i % 2 === 0 ? "bg-background" : "bg-muted/30")}>
-                  <td className="px-3 py-2 font-medium">
-                    <a href={benchmark.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
-                      {benchmark.shortName}
-                    </a>
-                  </td>
-                  <td className="px-3 py-2 text-muted-foreground">{meta.metric}</td>
-                  <td className="px-3 py-2 text-center">
-                    <span className={cn(
-                      "inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border",
-                      meta.source === "official"
-                        ? "bg-blue-50 text-blue-700 border-blue-200"
-                        : "bg-amber-50 text-amber-700 border-amber-200"
-                    )}>
-                      {meta.source === "official" ? "Official" : "Computed"}
-                    </span>
-                  </td>
-                  <td className="px-3 py-2 text-center text-muted-foreground">
-                    {meta.lowerIsBetter ? "↓ lower" : "↑ higher"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
       <Card>
         <CardContent className="pt-6">
               {/* Mobile filter toggle */}
@@ -175,12 +117,20 @@ export default function LeaderboardPage() {
                     allModelCount={models.length}
                   />
                 </div>
-                <Link
-                  href="/benchmarks"
-                  className="text-sm text-primary hover:underline flex items-center gap-1 ml-auto self-start mt-1"
-                >
-                  View metrics →
-                </Link>
+                <div className="flex flex-col items-end gap-1 ml-auto self-start mt-1">
+                  <Link
+                    href="/benchmarks"
+                    className="text-sm text-primary hover:underline flex items-center gap-1"
+                  >
+                    View metrics →
+                  </Link>
+                  <Link
+                    href="/about#how-rankings-work"
+                    className="text-sm text-primary hover:underline flex items-center gap-1"
+                  >
+                    View methodology →
+                  </Link>
+                </div>
               </div>
 
               <LeaderboardTable
