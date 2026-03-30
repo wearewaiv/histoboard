@@ -421,10 +421,6 @@ Always list all dependencies. A common mistake is depending on a `.selected` Set
 
 React compares by reference, not by value. Two `Set` objects with the same elements are **not equal**. `useSetToggle` handles this correctly (creates a new Set on every mutation). But if you're comparing Sets manually, use size + subset checks.
 
-### "File has not been read yet" Error
-
-When using the `Write` tool, you must `Read` the file first in the same session. If you get this error after a context reset, re-read the file before writing.
-
 ## Debugging
 
 ### Development Server
@@ -474,7 +470,7 @@ npm run build
 
 ### Deployment
 
-The static files in `frontend/out/` are deployed to **Cloudflare Pages**. Any static hosting service works (GitHub Pages, Netlify, Vercel static export, etc.).
+The static files in `frontend/out/` are deployed to **GitHub Pages** via the CI workflow. Any static hosting service works (Cloudflare Pages, Netlify, Vercel static export, etc.).
 
 ### Base Path
 

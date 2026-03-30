@@ -29,14 +29,14 @@
 
 ---
 
-## What is Histoboard ?
+## What is Histoboard?
 
-Histoboard provides a **unified view** of pathology foundation model performance across multiple benchmarks. It enables researchers and practitioners to make informed decisions when selecting models for computational pathology applications. Data sources are taken directly from the official benchmarks or papers. 
+Histoboard provides a **unified view** of pathology foundation model performance across multiple benchmarks. It enables researchers and practitioners to make informed decisions when selecting models for computational pathology applications. Data sources are taken directly from the official benchmarks or papers.
 
 | Metric | Count |
 |--------|-------|
 | Benchmarks | 10 |
-| Models | 40+ |
+| Models | 45+ |
 | Evaluation Tasks | 400+ |
 | Organs/Indications | 20+ |
 
@@ -45,7 +45,7 @@ Histoboard provides a **unified view** of pathology foundation model performance
 - **Leaderboard** — Compare models across all benchmarks with detailed per-task rankings
 - **Arena** — Head-to-head comparison of 2-5 models with win/tie/loss statistics
 - **Model Profiles** — Detailed view of each model's performance, architecture, and metadata
-- **Direct comparison** — Visualize the relationship between model size and performance
+- **Scaling Laws** — Visualize the relationship between model size and performance
 - **Timeline** — Track model releases over time
 
 ## Supported Benchmarks
@@ -73,7 +73,7 @@ Results are checked every Sunday at midnight UTC.
 | Styling | Tailwind CSS, shadcn/ui, Radix UI |
 | Charts | Vega-Lite v5 (via vega-embed) |
 | Data | Static JSON (pre-processed) |
-| Hosting | Cloudflare Pages |
+| Hosting | GitHub Pages |
 
 ## Quick Start
 
@@ -147,8 +147,10 @@ To add a new benchmark:
 2. Add task definitions to `frontend/src/data/tasks.json`
 3. Add model results to `frontend/src/data/results.json`
 4. Compute and add rankings to `frontend/src/data/rankings.json`
-5. Create a detailed table component in `frontend/src/components/tables/`
-6. Update the leaderboard page to include the new tab
+5. Create a table component in `frontend/src/components/tables/`
+6. Register the table component in `frontend/src/app/benchmarks/[id]/page.tsx`
+
+The leaderboard and benchmarks index auto-update from `benchmarks.json` — no extra wiring needed. See [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) for a full walkthrough.
 
 ## Documentation
 
