@@ -159,7 +159,7 @@ export function THUNDERDetailedTable({
     if (taskId === "thunder_calibration") return "ECE (%)";
     if (taskId === "thunder_adversarial") return "ASR (%)";
     if (taskId === "thunder_segmentation") return "Dice";
-    return "Balanced accuracy";
+    return "F1-score";
   }
 
   // Build options for dropdowns

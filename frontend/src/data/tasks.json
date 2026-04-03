@@ -3280,7 +3280,7 @@
     "name": "KNN Classification",
     "category": "Classification",
     "organ": "multi-organ",
-    "metric": "balanced_accuracy"
+    "metric": "f1_score"
   },
   {
     "id": "thunder_linear_prob",
@@ -3288,7 +3288,7 @@
     "name": "Linear Probing",
     "category": "Classification",
     "organ": "multi-organ",
-    "metric": "balanced_accuracy"
+    "metric": "f1_score"
   },
   {
     "id": "thunder_few_shot",
@@ -3296,7 +3296,7 @@
     "name": "Few-shot Learning",
     "category": "Classification",
     "organ": "multi-organ",
-    "metric": "balanced_accuracy"
+    "metric": "f1_score"
   },
   {
     "id": "thunder_segmentation",

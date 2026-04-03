@@ -19,6 +19,7 @@ import rankingsData from "@/data/rankings.json";
 
 import type { Model, Task, Benchmark } from "@/types";
 import { countUniqueOrgans } from "@/lib/organGroups";
+import { computeBenchmarkRanks } from "@/lib/benchmarkConfig";
 import { useEffect, useRef } from "react";
 
 const models = modelsData as Model[];
@@ -37,16 +38,22 @@ export default function HomePage() {
   // Models to exclude from rankings (e.g., benchmark-specific baselines)
   const EXCLUDED_MODEL_IDS = new Set(["hest_uni_1_5"]);
 
-  // Get top 5 models for each benchmark
+  // Pre-compute benchmark ranks using the shared utility (respects avgScore and
+  // scoreHigherIsBetter per benchmark, e.g. THUNDER uses official rank sum)
+  const benchmarkRanks = computeBenchmarkRanks(rankings);
+
+  // Get top N models for a benchmark, using pre-computed benchmark-aware ranks
   const getTopModels = (benchmarkId: string, limit: number = 5) => {
-    return Object.entries(rankings[benchmarkId] || {})
+    const rankData = benchmarkRanks[benchmarkId];
+    if (!rankData) return [];
+    return [...rankData.ranks.entries()]
       .filter(([modelId]) => !EXCLUDED_MODEL_IDS.has(modelId))
-      .sort((a, b) => a[1].avgRank - b[1].avgRank)
+      .sort((a, b) => a[1] - b[1])
       .slice(0, limit)
-      .map(([modelId, data], index) => ({
+      .map(([modelId, rank]) => ({
         modelId,
-        rank: index + 1,
-        avgRank: data.avgRank,
+        rank,
+        avgRank: rankings[benchmarkId]?.[modelId]?.avgRank ?? 0,
         model: models.find(m => m.id === modelId),
       }));
   };
