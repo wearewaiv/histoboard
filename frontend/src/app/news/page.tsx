@@ -1,0 +1,110 @@
+/**
+ * News Page (/news)
+ *
+ * Chronological log of Histoboard updates: new models, benchmark refreshes,
+ * feature additions, and data corrections.
+ */
+
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
+
+interface NewsItem {
+  date: string;
+  entries: {
+    text: string;
+    links?: { label: string; href: string }[];
+  }[];
+}
+
+const NEWS: NewsItem[] = [
+  {
+    date: "2026-04-05",
+    entries: [
+      {
+        text: "Updated PathoROB benchmark results with two new models: H-Optimus-1 and GenBio-PathFM. Check latest results for",
+        links: [
+          { label: "PathoROB", href: "/benchmarks/pathorob" },
+        ],
+      },
+      {
+        text: "Added GenBio-PathFM to the Models catalogue (ViT-g/14, 1.1B params, trained with DINO + JEPA on 177k+ WSIs). Check it on",
+        links: [
+          { label: "the Models page", href: "/models/genbio_ai_genbio_pathfm" },
+        ],
+      },
+    ],
+  },
+];
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function isExternal(href: string): boolean {
+  return href.startsWith("http");
+}
+
+export default function NewsPage() {
+  return (
+    <div className="container mx-auto px-4 py-10 max-w-3xl">
+      <h1 className="text-3xl font-bold mb-2">News</h1>
+      <p className="text-muted-foreground mb-10">
+        Latest updates to Histoboard — new models, benchmark refreshes, and feature additions.
+      </p>
+
+      <ol className="relative border-l border-border ml-3">
+        {NEWS.map((item) => (
+          <li key={item.date} className="mb-10 ml-6">
+            {/* Timeline dot */}
+            <span className="absolute -left-[9px] mt-1.5 h-4 w-4 rounded-full border-2 border-background bg-hematoxylin-500" />
+
+            <time className="mb-2 block text-sm font-semibold text-hematoxylin-600">
+              {formatDate(item.date)}
+            </time>
+
+            <div className="rounded-lg border bg-card p-4 shadow-sm">
+              <ul className="list-disc list-inside space-y-2">
+                {item.entries.map((entry, i) => (
+                  <li key={i} className="text-sm text-foreground leading-relaxed">
+                    {entry.text}
+                    {entry.links && entry.links.length > 0 && (
+                      <span className="ml-1 inline-flex flex-wrap gap-1">
+                        {entry.links.map((link) =>
+                          isExternal(link.href) ? (
+                            <a
+                              key={link.href}
+                              href={link.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-0.5 text-primary hover:underline"
+                            >
+                              {link.label}
+                              <ExternalLink className="h-3 w-3" />
+                            </a>
+                          ) : (
+                            <Link
+                              key={link.href}
+                              href={link.href}
+                              className="text-primary hover:underline"
+                            >
+                              {link.label}
+                            </Link>
+                          )
+                        )}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}

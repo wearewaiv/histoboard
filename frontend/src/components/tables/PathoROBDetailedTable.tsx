@@ -27,6 +27,26 @@ import { buildOrganOptions, buildTaskNameOptions } from "@/lib/tableUtils";
 import { useSimpleTaskFiltering } from "@/hooks";
 import { useDetailedTableData } from "@/hooks/useDetailedTableData";
 
+// Footnotes for results sourced from external publications rather than
+// the PathoROB authors' own benchmarking study.
+const FOOTNOTES: { text: string; url: string }[] = [
+  {
+    text: "Results taken from Atlas 2 preprint",
+    url: "https://arxiv.org/pdf/2601.05148",
+  },
+  {
+    text: "Results taken from GenBio-PathFM preprint",
+    url: "https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf",
+  },
+];
+
+// Map model ID → 1-based footnote index (into FOOTNOTES array above)
+const MODEL_FOOTNOTE: Record<string, number> = {
+  aignostics_atlas_2: 1,
+  bioptimus_h_optimus_1: 2,
+  genbio_ai_genbio_pathfm: 2,
+};
+
 interface PathoROBDetailedTableProps {
   models: Model[];
   tasks: Task[];
@@ -100,7 +120,7 @@ export function PathoROBDetailedTable({
         Robustness Index values - higher values indicate better robustness to distribution shifts.
       </p>
 
-      <div className="overflow-x-auto overflow-y-auto max-h-[70vh] border rounded-lg">
+      <div className="overflow-x-auto overflow-y-auto max-h-[65vh] border rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="sticky top-0 z-20">
             <tr className="border-b bg-muted">
@@ -153,6 +173,11 @@ export function PathoROBDetailedTable({
                       >
                         {model.name}
                       </Link>
+                      {MODEL_FOOTNOTE[model.id] !== undefined && (
+                        <sup className="text-[10px] text-muted-foreground ml-0.5">
+                          [{MODEL_FOOTNOTE[model.id]}]
+                        </sup>
+                      )}
                     </div>
                   </td>
                   <td className="px-2 py-2 text-center tabular-nums bg-muted/30 font-semibold">
@@ -191,6 +216,21 @@ export function PathoROBDetailedTable({
             })}
           </tbody>
         </table>
+      </div>
+      <div className="mt-3 space-y-1">
+        {FOOTNOTES.map((fn, i) => (
+          <p key={i} className="text-xs text-muted-foreground">
+            <span className="font-medium">[{i + 1}]</span>{" "}
+            <a
+              href={fn.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              {fn.text}
+            </a>
+          </p>
+        ))}
       </div>
     </div>
   );

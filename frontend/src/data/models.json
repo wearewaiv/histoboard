@@ -708,5 +708,21 @@
     "trainingMethod": "DINOv2",
     "paperUrl": "https://arxiv.org/abs/2408.00380",
     "weightsUrl": "https://huggingface.co/LGAI-EXAONE/EXAONEPath"
+  },
+  {
+    "id": "genbio_ai_genbio_pathfm",
+    "name": "GenBio-PathFM",
+    "organization": "GenBio AI",
+    "architecture": "ViT-g/14",
+    "params": "1.1B",
+    "pretrainingData": "177k+ WSIs",
+    "publicationDate": "2026-03",
+    "license": "non-commercial",
+    "publicationType": "preprint",
+    "modelType": "vision",
+    "trainingMethod": "DINO + JEPA",
+    "paperUrl": "https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1",
+    "weightsUrl": "https://huggingface.co/genbio-ai/genbio-pathfm",
+    "codeUrl": "https://github.com/genbio-ai/genbio-pathfm"
   }
 ]

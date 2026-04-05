@@ -63905,5 +63905,41 @@
     "taskId": "pathorob_tolkach_esca",
     "value": 0.964,
     "source": "pathorob"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "pathorob_tcga_2x2",
+    "value": 0.838,
+    "source": "pathorob"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "pathorob_camelyon",
+    "value": 0.865,
+    "source": "pathorob"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "pathorob_tolkach_esca",
+    "value": 0.96,
+    "source": "pathorob"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "pathorob_tcga_2x2",
+    "value": 0.853,
+    "source": "pathorob"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "pathorob_camelyon",
+    "value": 0.645,
+    "source": "pathorob"
+  },
+  {
+    "modelId": "bioptimus_h_optimus_1",
+    "taskId": "pathorob_tolkach_esca",
+    "value": 0.944,
+    "source": "pathorob"
   }
 ]
