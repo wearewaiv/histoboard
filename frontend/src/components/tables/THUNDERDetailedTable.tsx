@@ -213,7 +213,7 @@ export function THUNDERDetailedTable({
                   className="px-2 py-2 text-center font-semibold min-w-[90px] max-w-[150px] bg-muted"
                 >
                   <div className="text-xs whitespace-normal leading-tight">
-                    {task.name}
+                    {task.name}{LOWER_IS_BETTER_TASKS.includes(task.id) && " ↓"}
                   </div>
                   <div className="text-[10px] text-muted-foreground font-normal whitespace-nowrap mt-0.5">
                     {getMetricLabel(task.id)}

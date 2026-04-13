@@ -12,11 +12,23 @@ interface NewsItem {
   date: string;
   entries: {
     text: string;
-    links?: { label: string; href: string }[];
+    links?: { label: string; href: string; suffix?: string }[];
   }[];
 }
 
 const NEWS: NewsItem[] = [
+  {
+    date: "2026-04-13",
+    entries: [
+      {
+        text: "Updated Plismbench and THUNDER benchmark results with GenBio-PathFM. Check latest results for",
+        links: [
+          { label: "Plismbench", href: "/benchmarks/plism", suffix: " and" },
+          { label: "THUNDER", href: "/benchmarks/thunder" },
+        ],
+      },
+    ],
+  },
   {
     date: "2026-04-05",
     entries: [
@@ -27,7 +39,7 @@ const NEWS: NewsItem[] = [
         ],
       },
       {
-        text: "Added GenBio-PathFM to the Models catalogue (ViT-g/14, 1.1B params, trained with DINO + JEPA on 177k+ WSIs). Check it on",
+        text: "Added GenBio-PathFM to the Models catalogue (ViT-g/16, 1.1B params, trained with DinoV3 + JEPA on 177k+ WSIs). Check it on",
         links: [
           { label: "the Models page", href: "/models/genbio_ai_genbio_pathfm" },
         ],
@@ -76,24 +88,28 @@ export default function NewsPage() {
                       <span className="ml-1 inline-flex flex-wrap gap-1">
                         {entry.links.map((link) =>
                           isExternal(link.href) ? (
-                            <a
-                              key={link.href}
-                              href={link.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-0.5 text-primary hover:underline"
-                            >
-                              {link.label}
-                              <ExternalLink className="h-3 w-3" />
-                            </a>
+                            <span key={link.href} className="inline-flex items-center gap-0.5">
+                              <a
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-0.5 text-primary hover:underline"
+                              >
+                                {link.label}
+                                <ExternalLink className="h-3 w-3" />
+                              </a>
+                              {link.suffix}
+                            </span>
                           ) : (
-                            <Link
-                              key={link.href}
-                              href={link.href}
-                              className="text-primary hover:underline"
-                            >
-                              {link.label}
-                            </Link>
+                            <span key={link.href} className="inline-flex items-center gap-0.5">
+                              <Link
+                                href={link.href}
+                                className="text-primary hover:underline"
+                              >
+                                {link.label}
+                              </Link>
+                              {link.suffix}
+                            </span>
                           )
                         )}
                       </span>

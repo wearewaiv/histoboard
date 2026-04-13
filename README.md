@@ -59,7 +59,7 @@ Histoboard provides a **unified view** of pathology foundation model performance
 | [Patho-Bench](https://github.com/mahmoodlab/Patho-Bench) | 95 | Slide-level classification |
 | [Sinai](https://github.com/sinai-computational-pathology/SSL_tile_benchmarks) | 22 | Slide-level classification |
 | [STAMP](https://github.com/KatherLab/STAMP-Benchmark) | 31 | Slide-level classification |
-| [THUNDER](https://github.com/MICS-Lab/thunder) | 6 | Patch-level classification, Calibration, Robustness, Segmentation |
+| [THUNDER](https://mics-lab.github.io/thunder/) | 6 | Patch-level classification, Calibration, Robustness, Segmentation |
 | [PathoROB](https://github.com/bifold-pathomics/PathoROB) | 3 | Robustness |
 | [Plismbench](https://github.com/owkin/plism-benchmark) | 4 | Robustness |
 
