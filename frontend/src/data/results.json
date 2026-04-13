@@ -60271,6 +60271,42 @@
     "source": "thunder"
   },
   {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "thunder_knn",
+    "value": 0.834,
+    "source": "thunder"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "thunder_linear_prob",
+    "value": 0.853,
+    "source": "thunder"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "thunder_few_shot",
+    "value": 0.794,
+    "source": "thunder"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "thunder_segmentation",
+    "value": 0.682,
+    "source": "thunder"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "thunder_calibration",
+    "value": 4.2,
+    "source": "thunder"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "thunder_adversarial",
+    "value": 34.9,
+    "source": "thunder"
+  },
+  {
     "modelId": "paige_ai_virchow2",
     "taskId": "pathorob_tcga_2x2",
     "value": 0.822,
@@ -60991,158 +61027,189 @@
     "source": "plism"
   },
   {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "plism_cosine_similarity",
+    "value": 0.768,
+    "source": "plism"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "plism_cross_scanner",
+    "value": 0.709,
+    "source": "plism"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "plism_cross_staining",
+    "value": 0.408,
+    "source": "plism"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "plism_cross_both",
+    "value": 0.203,
+    "source": "plism"
+  },
+  {
     "modelId": "mahmood_lab_uni2",
     "taskId": "thunder_ranksum",
-    "value": 18,
+    "value": 19,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "paige_ai_virchow2",
     "taskId": "thunder_ranksum",
-    "value": 27,
+    "value": 30,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "bioptimus_h0_mini",
     "taskId": "thunder_ranksum",
-    "value": 38,
+    "value": 41,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "kaiko_ai_midnight_12k",
     "taskId": "thunder_ranksum",
-    "value": 40,
+    "value": 44,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "mahmood_lab_uni",
     "taskId": "thunder_ranksum",
-    "value": 41,
+    "value": 46,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "bioptimus_h_optimus_1",
     "taskId": "thunder_ranksum",
-    "value": 47,
+    "value": 52,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "shanghai_university_and_others_keep",
     "taskId": "thunder_ranksum",
-    "value": 48,
+    "value": 53,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "bioptimus_h_optimus_0",
     "taskId": "thunder_ranksum",
-    "value": 52,
+    "value": 57,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "microsoft_prov_gigapath",
     "taskId": "thunder_ranksum",
-    "value": 56,
+    "value": 61,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "hist_ai_hibou_b",
     "taskId": "thunder_ranksum",
-    "value": 61,
+    "value": 66,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "hist_ai_hibou_l",
     "taskId": "thunder_ranksum",
-    "value": 61,
+    "value": 66,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "paige_ai_virchow",
     "taskId": "thunder_ranksum",
-    "value": 64,
+    "value": 69,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "kaiko_ai_vit_b_16",
     "taskId": "thunder_ranksum",
-    "value": 67,
+    "value": 73,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "sophont_ai_openmidnight",
     "taskId": "thunder_ranksum",
-    "value": 70,
+    "value": 75,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "kaiko_ai_vit_s_16",
     "taskId": "thunder_ranksum",
-    "value": 73,
+    "value": 79,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "mahmood_lab_conch",
     "taskId": "thunder_ranksum",
-    "value": 74,
+    "value": 78,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "mahmood_lab_conch_1_5",
     "taskId": "thunder_ranksum",
-    "value": 76,
+    "value": 81,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "owkin_phikon",
     "taskId": "thunder_ranksum",
-    "value": 78,
+    "value": 83,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "owkin_phikon_v2",
     "taskId": "thunder_ranksum",
-    "value": 84,
+    "value": 89,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "stanford_university_musk",
     "taskId": "thunder_ranksum",
-    "value": 98,
+    "value": 103,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "stanford_plip",
     "taskId": "thunder_ranksum",
-    "value": 129,
+    "value": 135,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
   },
   {
     "modelId": "university_of_washington_quiltnet",
     "taskId": "thunder_ranksum",
-    "value": 129,
+    "value": 135,
     "source": "thunder",
     "retrievedAt": "2025-01-31"
+  },
+  {
+    "modelId": "genbio_ai_genbio_pathfm",
+    "taskId": "thunder_ranksum",
+    "value": 30,
+    "source": "thunder",
+    "retrievedAt": "2026-04-13"
   },
   {
     "modelId": "bioptimus_h_optimus_1",

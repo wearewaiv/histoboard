@@ -188,7 +188,7 @@
     "url": "https://mics-lab.github.io/thunder/",
     "githubUrl": "https://github.com/MICS-Lab/thunder",
     "paperUrl": "https://arxiv.org/abs/2507.07860",
-    "resultsUrl": "https://github.com/MICS-Lab/thunder/blob/main/docs/leaderboards.md",
+    "resultsUrl": "https://mics-lab.github.io/thunder/leaderboards/",
     "organs": [
       "multi-organ"
     ],
