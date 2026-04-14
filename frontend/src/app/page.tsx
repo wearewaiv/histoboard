@@ -42,14 +42,14 @@ export default function HomePage() {
   // scoreHigherIsBetter per benchmark, e.g. THUNDER uses official rank sum)
   const benchmarkRanks = computeBenchmarkRanks(rankings);
 
-  // Get top N models for a benchmark, using pre-computed benchmark-aware ranks
-  const getTopModels = (benchmarkId: string, limit: number = 5) => {
+  // Get top N models for a benchmark, using pre-computed benchmark-aware ranks.
+  // Includes all models whose rank is ≤ maxRank so tied positions are fully represented.
+  const getTopModels = (benchmarkId: string, maxRank: number = 3) => {
     const rankData = benchmarkRanks[benchmarkId];
     if (!rankData) return [];
     return [...rankData.ranks.entries()]
-      .filter(([modelId]) => !EXCLUDED_MODEL_IDS.has(modelId))
+      .filter(([modelId, rank]) => !EXCLUDED_MODEL_IDS.has(modelId) && rank <= maxRank)
       .sort((a, b) => a[1] - b[1])
-      .slice(0, limit)
       .map(([modelId, rank]) => ({
         modelId,
         rank,
@@ -64,7 +64,7 @@ export default function HomePage() {
     topModels: getTopModels(benchmark.id, 3),
   }));
 
-  const MEDALS = ["🥇", "🥈", "🥉"];
+  const MEDALS: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
 
   // Podium Card Component (shows top 3 with medals)
   const PodiumCard = ({ benchmark, topModels }: { benchmark: Benchmark; topModels: ReturnType<typeof getTopModels> }) => {
@@ -81,9 +81,9 @@ export default function HomePage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-1.5">
-          {topModels.map((entry, idx) => (
+          {topModels.map((entry) => (
             <div key={entry.modelId} className="flex items-center gap-2">
-              <span className="text-base">{MEDALS[idx]}</span>
+              <span className="text-base">{MEDALS[entry.rank]}</span>
               <Link
                 href={`/models/${entry.modelId}`}
                 className="text-sm font-medium text-primary hover:underline truncate"

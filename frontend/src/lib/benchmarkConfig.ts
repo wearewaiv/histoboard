@@ -113,9 +113,19 @@ export function computeBenchmarkRanks(
           : a.avgRank - b.avgRank
       );
 
+    // Assign tied ranks: models with the same score share the same rank position
     const rankMap = new Map<string, number>();
     modelsWithRank.forEach((item, index) => {
-      rankMap.set(item.modelId, index + 1);
+      if (index === 0) {
+        rankMap.set(item.modelId, 1);
+        return;
+      }
+      const prev = modelsWithRank[index - 1];
+      const prevRank = rankMap.get(prev.modelId)!;
+      const tied = useAvgScore
+        ? item.avgScore === prev.avgScore
+        : item.avgRank === prev.avgRank;
+      rankMap.set(item.modelId, tied ? prevRank : index + 1);
     });
 
     result[benchmark.id] = {
