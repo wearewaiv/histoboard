@@ -10,7 +10,7 @@
  * @module components/charts/ScalingLawsChart
  */
 
-import { useMemo } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import {
   buildScalingLawsData,
   ALL_PERFORMANCE_BENCHMARKS,
@@ -53,6 +53,7 @@ export function ScalingLawsChart({
     ALL_ROBUSTNESS_BENCHMARKS.map((b) => b.id),
     { initialSelection: Array.from(DEFAULT_SELECTED_ROBUSTNESS) },
   );
+  const [excludedModelIds, setExcludedModelIds] = useState<Set<string>>(new Set());
 
   // -- Derived labels --
   const xAxisLabel = useBenchmarkAxisLabel(
@@ -67,9 +68,41 @@ export function ScalingLawsChart({
   );
 
   // -- Data --
-  const dataPoints = useMemo(
+  const allDataPoints = useMemo(
     () => buildScalingLawsData(models, tasks, results, perf.selected, robust.selected),
     [models, tasks, results, perf.selected, robust.selected],
+  );
+  // Reset exclusions whenever the set of available models changes (e.g. benchmark switch)
+  const availableModelKey = useMemo(
+    () => allDataPoints.map((d) => d.modelId).sort().join(","),
+    [allDataPoints],
+  );
+  useEffect(() => { setExcludedModelIds(new Set()); }, [availableModelKey]);
+
+  const availableModelOptions = useMemo(
+    () => allDataPoints.map((d) => ({ id: d.modelId, label: d.modelName })),
+    [allDataPoints],
+  );
+  const selectedModelIds = useMemo(
+    () => new Set(allDataPoints.map((d) => d.modelId).filter((id) => !excludedModelIds.has(id))),
+    [allDataPoints, excludedModelIds],
+  );
+  const toggleModel = useCallback((id: string) => {
+    setExcludedModelIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
+  const selectAllModels = useCallback(() => setExcludedModelIds(new Set()), []);
+  const clearAllModels = useCallback(
+    () => setExcludedModelIds(new Set(allDataPoints.map((d) => d.modelId))),
+    [allDataPoints],
+  );
+
+  const dataPoints = useMemo(
+    () => allDataPoints.filter((d) => !excludedModelIds.has(d.modelId)),
+    [allDataPoints, excludedModelIds],
   );
 
   const paramRange = useMemo(() => {
@@ -159,6 +192,18 @@ export function ScalingLawsChart({
             onToggle={perf.toggle}
             onSelectAll={perf.selectAll}
             onClearAll={perf.clearAll}
+            size="sm"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">Models:</span>
+          <MultiSelectDropdown
+            label="Models"
+            options={availableModelOptions}
+            selectedIds={selectedModelIds}
+            onToggle={toggleModel}
+            onSelectAll={selectAllModels}
+            onClearAll={clearAllModels}
             size="sm"
           />
         </div>

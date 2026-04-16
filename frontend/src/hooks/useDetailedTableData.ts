@@ -51,6 +51,8 @@ export interface UseDetailedTableDataOptions<R extends Result = Result> {
  */
 export interface ResultsMapValue {
   value: number;
+  ciLower?: number;
+  ciUpper?: number;
 }
 
 /**
@@ -125,7 +127,10 @@ export function useDetailedTableData<R extends Result = Result>({
       }
       const value = getMetricValue(result);
       if (value !== undefined) {
-        map.get(result.modelId)!.set(result.taskId, { value });
+        const entry: ResultsMapValue = { value };
+        if (result.ciLower !== undefined) entry.ciLower = result.ciLower;
+        if (result.ciUpper !== undefined) entry.ciUpper = result.ciUpper;
+        map.get(result.modelId)!.set(result.taskId, entry);
       }
     }
     return map;

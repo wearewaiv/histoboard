@@ -23,8 +23,8 @@
   },
   {
     "id": "pathbench",
-    "name": "PathBench",
-    "shortName": "PathBench",
+    "name": "HKUST PathBench",
+    "shortName": "HKUST PathBench",
     "category": [
       "pathology",
       "H&E"
@@ -53,7 +53,7 @@
   {
     "id": "stanford",
     "name": "Stanford PathBench",
-    "shortName": "Stanford",
+    "shortName": "Stanford PathBench",
     "category": [
       "pathology",
       "H&E"
@@ -132,7 +132,7 @@
   {
     "id": "sinai",
     "name": "Sinai SSL Benchmark",
-    "shortName": "Sinai",
+    "shortName": "Sinai SSL",
     "category": [
       "pathology",
       "H&E"
@@ -235,5 +235,28 @@
       "multi-organ"
     ],
     "taskCount": 4
+  },
+  {
+    "id": "pfm_densebench",
+    "name": "PFM-DenseBench",
+    "shortName": "PFM-DenseBench",
+    "category": [
+      "pathology",
+      "segmentation",
+      "H&E"
+    ],
+    "description": "Dense prediction benchmark evaluating pathology foundation models on 18 segmentation datasets covering nuclear, tissue, and gland segmentation tasks. Rankings are average ranks across datasets (lower is better).",
+    "url": "https://m4a1tastegood.github.io/PFM-DenseBench/leaderboard.html",
+    "githubUrl": "https://github.com/lingxitong/PFM_Segmentation",
+    "paperUrl": "https://arxiv.org/abs/2602.03887",
+    "resultsUrl": "https://raw.githubusercontent.com/m4a1tastegood/PFM-DenseBench/main/data_computed/stats.json",
+    "organs": [
+      "multi-organ",
+      "breast",
+      "colon",
+      "lung",
+      "kidney"
+    ],
+    "taskCount": 18
   }
 ]

@@ -32,15 +32,16 @@ export interface BenchmarkRef {
  */
 export const BENCHMARK_REFS: BenchmarkRef[] = [
   { id: "eva", name: "EVA" },
-  { id: "pathbench", name: "PathBench" },
-  { id: "stanford", name: "Stanford" },
+  { id: "pathbench", name: "HKUST PathBench" },
+  { id: "stanford", name: "Stanford PathBench" },
   { id: "hest", name: "HEST" },
   { id: "pathobench", name: "Patho-Bench" },
-  { id: "sinai", name: "Sinai" },
+  { id: "sinai", name: "Sinai SSL" },
   { id: "stamp", name: "STAMP" },
   { id: "thunder", name: "THUNDER", scoreHigherIsBetter: false },
   { id: "pathorob", name: "PathoROB" },
   { id: "plism", name: "Plismbench" },
+  { id: "pfm_densebench", name: "PFM-DenseBench", scoreHigherIsBetter: false },
 ];
 
 // =============================================================================

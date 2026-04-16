@@ -17,12 +17,10 @@ import type { UseLeaderboardFiltersReturn } from "@/hooks/useLeaderboardFilters"
 
 interface LeaderboardFiltersProps {
   filters: UseLeaderboardFiltersReturn;
-  allModelCount: number;
 }
 
 export function LeaderboardFilters({
   filters,
-  allModelCount,
 }: LeaderboardFiltersProps) {
   return (
     <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -41,9 +39,6 @@ export function LeaderboardFilters({
           onClearAll={filters.clearAllModels}
         />
 
-        <span className="text-xs text-muted-foreground">
-          ({filters.effectiveSelectedIds.size}/{allModelCount} models)
-        </span>
       </ModelAttributeFilterBar>
     </div>
   );

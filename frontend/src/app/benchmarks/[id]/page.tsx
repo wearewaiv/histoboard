@@ -23,6 +23,7 @@ import { STAMPDetailedTable } from "@/components/tables/STAMPDetailedTable";
 import { THUNDERDetailedTable } from "@/components/tables/THUNDERDetailedTable";
 import { PathoROBDetailedTable } from "@/components/tables/PathoROBDetailedTable";
 import { PLISMDetailedTable } from "@/components/tables/PLISMDetailedTable";
+import { PFMDenseBenchDetailedTable } from "@/components/tables/PFMDenseBenchDetailedTable";
 
 import modelsData from "@/data/models.json";
 import tasksData from "@/data/tasks.json";
@@ -68,6 +69,7 @@ const benchmarkTableMap: Record<string, React.ComponentType<{
   thunder: THUNDERDetailedTable,
   pathorob: PathoROBDetailedTable,
   plism: PLISMDetailedTable,
+  pfm_densebench: PFMDenseBenchDetailedTable,
 };
 
 export function generateStaticParams() {

@@ -258,6 +258,10 @@ export interface Result {
   source: string;
   /** When the result was collected (ISO format) */
   retrievedAt: string;
+  /** Lower bound of the confidence interval (optional) */
+  ciLower?: number;
+  /** Upper bound of the confidence interval (optional) */
+  ciUpper?: number;
 }
 
 // =============================================================================

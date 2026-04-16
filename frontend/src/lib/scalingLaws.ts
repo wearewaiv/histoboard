@@ -106,11 +106,12 @@ const INVERTED_BENCHMARKS = new Set(["thunder"]);
  */
 export const ALL_PERFORMANCE_BENCHMARKS: BenchmarkOption[] = [
   { id: "eva", label: "EVA" },
-  { id: "pathbench", label: "PathBench" },
-  { id: "stanford", label: "Stanford" },
+  { id: "pathbench", label: "HKUST PathBench" },
+  { id: "stanford", label: "Stanford PathBench" },
   { id: "hest", label: "HEST" },
   { id: "pathobench", label: "Patho-Bench" },
-  { id: "sinai", label: "Sinai" },
+  { id: "pfm_densebench", label: "PFM-DenseBench" },
+  { id: "sinai", label: "Sinai SSL" },
   { id: "stamp", label: "STAMP" },
   { id: "thunder", label: "THUNDER" },
 ];
@@ -121,13 +122,15 @@ export const ALL_PERFORMANCE_BENCHMARKS: BenchmarkOption[] = [
 export const ALL_BENCHMARKS: BenchmarkOption[] = [
   // Performance benchmarks
   { id: "eva", label: "EVA" },
-  { id: "pathbench", label: "PathBench" },
-  { id: "stanford", label: "Stanford" },
+  { id: "pathbench", label: "HKUST PathBench" },
+  { id: "stanford", label: "Stanford PathBench" },
   { id: "hest", label: "HEST" },
   { id: "pathobench", label: "Patho-Bench" },
-  { id: "sinai", label: "Sinai" },
+  { id: "sinai", label: "Sinai SSL" },
   { id: "stamp", label: "STAMP" },
   { id: "thunder", label: "THUNDER" },
+  // Segmentation benchmarks
+  { id: "pfm_densebench", label: "PFM-DenseBench" },
   // Robustness benchmarks
   { id: "pathorob", label: "PathoROB" },
   { id: "plism", label: "Plismbench" },
@@ -136,12 +139,12 @@ export const ALL_BENCHMARKS: BenchmarkOption[] = [
 /**
  * Default selection for the model size vs performance chart.
  */
-export const DEFAULT_SIZE_PERF_BENCHMARKS = new Set(["eva"]);
+export const DEFAULT_SIZE_PERF_BENCHMARKS = new Set(["thunder", "pfm_densebench", "pathbench"]);
 
 /**
  * Default selection for performance benchmarks.
  */
-export const DEFAULT_SELECTED_BENCHMARKS = new Set(["eva"]);
+export const DEFAULT_SELECTED_BENCHMARKS = new Set(["thunder", "pfm_densebench", "pathbench"]);
 
 // =============================================================================
 // Utility Functions

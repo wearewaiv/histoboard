@@ -724,5 +724,20 @@
     "paperUrl": "https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1",
     "weightsUrl": "https://huggingface.co/genbio-ai/genbio-pathfm",
     "codeUrl": "https://github.com/genbio-ai/genbio-pathfm"
+  },
+  {
+    "id": "ai4pathology_pathorchestra",
+    "name": "PathOrchestra",
+    "organization": "AI4Pathology",
+    "architecture": "ViT-L/16",
+    "params": "307M",
+    "pretrainingData": "+300K WSIs",
+    "publicationDate": "2025-03",
+    "license": "non-commercial",
+    "publicationType": "preprint",
+    "modelType": "vision",
+    "trainingMethod": "DINOv2",
+    "paperUrl": "https://arxiv.org/abs/2503.24345",
+    "weightsUrl": "https://huggingface.co/AI4Pathology/PathOrchestra"
   }
 ]

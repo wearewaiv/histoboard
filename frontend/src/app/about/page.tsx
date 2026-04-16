@@ -40,16 +40,17 @@ const stats = {
 };
 
 const BENCHMARK_METHODOLOGY: Record<string, { metric: string; source: "official" | "computed"; lowerIsBetter?: boolean }> = {
-  eva:        { metric: "Average metric across 13 tasks",                    source: "computed" },
-  pathbench:  { metric: "Average task rank across 229 tasks",            source: "computed", lowerIsBetter: true },
-  stanford:   { metric: "Average AUROC across 41 tasks",                    source: "official" },
-  hest:       { metric: "Average Pearson's R across 9 different organs",    source: "official" },
-  pathobench: { metric: "Average task rank across 53 tasks",             source: "computed", lowerIsBetter: true },
-  sinai:      { metric: "Average AUROC across 22 tasks",                    source: "official" },
-  stamp:      { metric: "Average task rank across 31 tasks",             source: "computed", lowerIsBetter: true },
-  thunder:    { metric: "Rank sum across 6 tasks",                       source: "official", lowerIsBetter: true },
-  pathorob:   { metric: "Robustness index across 3 scenarios",           source: "official" },
-  plism:      { metric: "Aggregate robustness score",                    source: "official" },
+  eva:             { metric: "Average metric across 13 tasks",                              source: "computed" },
+  hest:            { metric: "Average Pearson's R across 9 different organs",              source: "official" },
+  pathbench:       { metric: "Average task rank across 229 tasks",                         source: "computed", lowerIsBetter: true },
+  pathobench:      { metric: "Average task rank across 53 tasks",                          source: "computed", lowerIsBetter: true },
+  pathorob:        { metric: "Robustness index across 3 scenarios",                        source: "official" },
+  pfm_densebench:  { metric: "Average rank across 18 segmentation datasets × 5 methods",  source: "official", lowerIsBetter: true },
+  plism:           { metric: "Aggregate robustness score",                                 source: "official" },
+  sinai:           { metric: "Average AUROC across 22 tasks",                              source: "official" },
+  stamp:           { metric: "Average task rank across 31 tasks",                          source: "computed", lowerIsBetter: true },
+  stanford:        { metric: "Average AUROC across 41 tasks",                              source: "official" },
+  thunder:         { metric: "Rank sum across 6 tasks",                                    source: "official", lowerIsBetter: true },
 };
 
 export default function AboutPage() {
@@ -64,53 +65,30 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-muted-foreground text-justify">
-            Foundation models have transformed computational pathology. Trained on large-scale histopathology datasets
-            through self-supervised learning, these models learn general-purpose visual representations from digitized
-            tissue slides. Once trained, they can be adapted to a wide range of downstream tasks&mdash;cancer detection
-            and grading, biomarker prediction, survival analysis, tissue segmentation&mdash;often matching or exceeding
-            task-specific approaches. Beyond purely visual encoders, multi-modal models that integrate additional
-            data sources—pathology reports, genomic profiles, clinical metadata—are expanding the scope of what
-            foundation models can achieve in this domain.
+            The pathology foundation model landscape is growing fast, but comparing models across benchmarks remains
+            fragmented and time-consuming. <strong>Histoboard</strong> aggregates results from published benchmarks
+            into a single, accessible interface — giving the community a clear comparative view of existing models.
           </p>
+          <div className="aspect-video w-full rounded-lg overflow-hidden">
+            <iframe
+              src="https://www.youtube.com/embed/s-y_r7jWFE8"
+              title="Meet Histoboard"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
           <p className="text-muted-foreground text-justify">
-            As the number of pathology foundation models grows, so does the need for rigorous evaluation. Yet the field
-            currently faces a{" "}
+            For the full story behind Histoboard, read our{" "}
             <a
-              href="https://www.nature.com/articles/s41591-025-03637-3"
+              href="https://wearewaiv.com/blog/meet-histoboard-your-interactive-map-for-navigating-foundation-models-for-pathology"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline font-medium"
             >
-              benchmarking crisis
-            </a>{" "}
-            (Mahmood, 2025): the lack of standardized evaluation protocols makes it difficult to reliably assess model
-            strengths, robustness, limitations, and readiness for clinical deployment.
-          </p>
-          <p className="text-muted-foreground text-justify">
-            Ideally, the community would converge on a single, comprehensive, publicly available benchmark against which
-            all models could be evaluated. We are not there yet. Many benchmarks rely on proprietary or
-            restricted-access data, and individual labs often develop their own internal evaluation suites, further
-            fragmenting the landscape. Recent community-driven initiatives such as{" "}
-            <a
-              href="https://huggingface.co/datasets/MahmoodLab/Patho-Bench"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Patho-Bench
+              blog post
             </a>
-             {" "}propose clinically relevant tasks built on public datasets and represent important steps toward greater
-            transparency, reproducibility, and continued progress (Zhang, 2025).
-          </p>
-          <p className="text-muted-foreground text-justify">
-            Until a unified benchmark emerges, <strong>Histoboard</strong> aims to bridge the gap by aggregating
-            results from published benchmarks into a single, accessible interface. Our goal is to provide the community
-            with a clear comparative view of existing models and to advocate for more publicly available evaluation
-            datasets.
-          </p>
-          <p className="text-muted-foreground text-justify">
-            If you are aware of public benchmarks that should be included, or have suggestions for improving pathology
-            model evaluation, we welcome your contributions.
+            .
           </p>
         </CardContent>
       </Card>
@@ -177,14 +155,15 @@ export default function AboutPage() {
               <tbody>
                 {benchmarks
                   .filter((b) => BENCHMARK_METHODOLOGY[b.id])
+                  .sort((a, b) => a.shortName.localeCompare(b.shortName))
                   .map((benchmark, i) => {
                     const meta = BENCHMARK_METHODOLOGY[benchmark.id];
                     return (
                       <tr key={benchmark.id} className={cn("border-b last:border-0", i % 2 === 0 ? "bg-background" : "bg-muted/30")}>
                         <td className="px-3 py-2 font-medium">
-                          <a href={benchmark.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-primary">
+                          <Link href={`/benchmarks/${benchmark.id}`} className="hover:underline text-primary">
                             {benchmark.shortName}
-                          </a>
+                          </Link>
                         </td>
                         <td className="px-3 py-2 text-muted-foreground">{meta.metric}</td>
                         <td className="px-3 py-2 text-center">

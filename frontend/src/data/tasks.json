@@ -3377,5 +3377,149 @@
     "category": "Combined Robustness",
     "organ": "multi-organ",
     "metric": "top10_accuracy"
+  },
+  {
+    "id": "pfm_densebench_conic2022",
+    "benchmarkId": "pfm_densebench",
+    "name": "CoNIC2022",
+    "category": "Nuclear Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_kumar",
+    "benchmarkId": "pfm_densebench",
+    "name": "Kumar",
+    "category": "Nuclear Segmentation",
+    "organ": "multi-organ",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_ebhi",
+    "benchmarkId": "pfm_densebench",
+    "name": "EBHI",
+    "category": "Nuclear Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_cosas24",
+    "benchmarkId": "pfm_densebench",
+    "name": "COSAS24",
+    "category": "Nuclear Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_cpm17",
+    "benchmarkId": "pfm_densebench",
+    "name": "CPM17",
+    "category": "Nuclear Segmentation",
+    "organ": "multi-organ",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_janowczyk",
+    "benchmarkId": "pfm_densebench",
+    "name": "Janowczyk",
+    "category": "Nuclear Segmentation",
+    "organ": "breast",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_wsss4luad",
+    "benchmarkId": "pfm_densebench",
+    "name": "WSSS4LUAD",
+    "category": "Tissue Segmentation",
+    "organ": "lung",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_cocahis",
+    "benchmarkId": "pfm_densebench",
+    "name": "CoCaHis",
+    "category": "Tissue Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_cpm15",
+    "benchmarkId": "pfm_densebench",
+    "name": "CPM15",
+    "category": "Nuclear Segmentation",
+    "organ": "multi-organ",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_bcss",
+    "benchmarkId": "pfm_densebench",
+    "name": "BCSS",
+    "category": "Tissue Segmentation",
+    "organ": "breast",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_crag",
+    "benchmarkId": "pfm_densebench",
+    "name": "CRAG",
+    "category": "Gland Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_consep",
+    "benchmarkId": "pfm_densebench",
+    "name": "CoNSeP",
+    "category": "Nuclear Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_lizard",
+    "benchmarkId": "pfm_densebench",
+    "name": "Lizard",
+    "category": "Nuclear Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_rings",
+    "benchmarkId": "pfm_densebench",
+    "name": "RINGS",
+    "category": "Gland Segmentation",
+    "organ": "kidney",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_pannuke",
+    "benchmarkId": "pfm_densebench",
+    "name": "PanNuke",
+    "category": "Nuclear Segmentation",
+    "organ": "multi-organ",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_nucls",
+    "benchmarkId": "pfm_densebench",
+    "name": "NuCLS",
+    "category": "Nuclear Segmentation",
+    "organ": "breast",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_tnbc",
+    "benchmarkId": "pfm_densebench",
+    "name": "TNBC",
+    "category": "Nuclear Segmentation",
+    "organ": "breast",
+    "metric": "mDice"
+  },
+  {
+    "id": "pfm_densebench_glas",
+    "benchmarkId": "pfm_densebench",
+    "name": "GlaS",
+    "category": "Gland Segmentation",
+    "organ": "colon",
+    "metric": "mDice"
   }
 ]

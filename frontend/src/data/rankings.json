@@ -849,5 +849,75 @@
       "taskCount": 9,
       "avgScore": 0.3252
     }
+  },
+  "pfm_densebench": {
+    "bioptimus_h_optimus_0": {
+      "avgRank": 4.08,
+      "taskCount": 18
+    },
+    "bioptimus_h_optimus_1": {
+      "avgRank": 4.36,
+      "taskCount": 18
+    },
+    "mahmood_lab_uni2": {
+      "avgRank": 5.03,
+      "taskCount": 18
+    },
+    "paige_ai_virchow": {
+      "avgRank": 6.46,
+      "taskCount": 18
+    },
+    "kaiko_ai_vit_l_14": {
+      "avgRank": 7.64,
+      "taskCount": 18
+    },
+    "lunit_vit_s_8": {
+      "avgRank": 7.71,
+      "taskCount": 18
+    },
+    "mahmood_lab_uni": {
+      "avgRank": 7.77,
+      "taskCount": 18
+    },
+    "mahmood_lab_conch_1_5": {
+      "avgRank": 7.97,
+      "taskCount": 18
+    },
+    "hist_ai_hibou_l": {
+      "avgRank": 8.29,
+      "taskCount": 18
+    },
+    "microsoft_prov_gigapath": {
+      "avgRank": 8.36,
+      "taskCount": 18
+    },
+    "mahmood_lab_conch": {
+      "avgRank": 9.61,
+      "taskCount": 18
+    },
+    "paige_ai_virchow2": {
+      "avgRank": 10.08,
+      "taskCount": 18
+    },
+    "owkin_phikon_v2": {
+      "avgRank": 10.76,
+      "taskCount": 18
+    },
+    "owkin_phikon": {
+      "avgRank": 11.24,
+      "taskCount": 18
+    },
+    "ai4pathology_pathorchestra": {
+      "avgRank": 12.83,
+      "taskCount": 18
+    },
+    "kaiko_ai_midnight_12k": {
+      "avgRank": 14.61,
+      "taskCount": 18
+    },
+    "stanford_university_musk": {
+      "avgRank": 16.21,
+      "taskCount": 18
+    }
   }
 }

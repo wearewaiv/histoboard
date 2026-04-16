@@ -18,6 +18,18 @@ interface NewsItem {
 
 const NEWS: NewsItem[] = [
   {
+    date: "2026-04-15",
+    entries: [
+      {
+        text: "Added PFM-DenseBench, a dense prediction benchmark evaluating 17 pathology foundation models across 18 segmentation datasets (nuclear, tissue, and gland segmentation). Also added PathOrchestra (AI4Pathology) to the Models catalogue. Check the benchmark on",
+        links: [
+          { label: "PFM-DenseBench", href: "/benchmarks/pfm_densebench", suffix: " and the model on" },
+          { label: "the Models page", href: "/models/ai4pathology_pathorchestra" },
+        ],
+      },
+    ],
+  },
+  {
     date: "2026-04-13",
     entries: [
       {

@@ -15,7 +15,6 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import type { Model, Benchmark } from "@/types";
 import { cn } from "@/lib/utils";
-import { getMedal } from "@/lib/benchmarkConfig";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ChevronUp, ChevronDown, Search, X } from "lucide-react";
@@ -58,7 +57,11 @@ export function LeaderboardTable({
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
   const [sortByBenchmarkCount, setSortByBenchmarkCount] = useState<"asc" | "desc" | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const modelMap = new Map(models.map((m) => [m.id, m]));
+  const modelMap = useMemo(() => new Map(models.map((m) => [m.id, m])), [models]);
+  const sortedBenchmarks = useMemo(
+    () => [...benchmarks].sort((a, b) => a.shortName.localeCompare(b.shortName)),
+    [benchmarks]
+  );
 
   // Compute integer ranks per benchmark (1, 2, 3, ...) based on avgRank
   const benchmarkIntegerRanks = useMemo(() => {
@@ -202,29 +205,27 @@ export function LeaderboardTable({
         {/* Scroll indicator for mobile */}
         <div className="table-scroll-indicator" />
         <div className="overflow-x-auto max-h-[70vh]">
-        <table className="w-full border-collapse text-xs md:text-sm">
+        <table className="w-full border-collapse text-[11px]">
           <thead className="sticky top-0 z-20">
             <tr className="border-b bg-muted">
-              <th className="sticky left-0 z-30 bg-muted px-2 md:px-4 py-2 md:py-3 text-left font-semibold min-w-[140px] md:min-w-[180px]">Model</th>
-            {benchmarks.map((benchmark) => (
+              <th className="sticky left-0 z-30 bg-muted px-2 py-2 text-left font-semibold min-w-[140px]">Model</th>
+            {sortedBenchmarks.map((benchmark) => (
               <th
                 key={benchmark.id}
-                className="px-2 md:px-4 py-2 md:py-3 text-center font-semibold"
+                className="px-1 py-2 text-center font-semibold"
               >
                 <button
                   onClick={() => handleSort(benchmark.id)}
                   className="inline-flex items-center gap-1 hover:text-primary transition-colors"
                   title={`Sort by ${benchmark.shortName} rank`}
                 >
-                  <a
-                    href={benchmark.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href={`/benchmarks/${benchmark.id}`}
                     className="hover:underline"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {benchmark.shortName}
-                  </a>
+                  </Link>
                   <span className="flex flex-col">
                     <ChevronUp
                       className={cn(
@@ -248,14 +249,13 @@ export function LeaderboardTable({
                 </button>
               </th>
             ))}
-              <th className="px-2 md:px-4 py-2 md:py-3 text-center font-semibold">
+              <th className="px-1 py-2 text-center font-semibold">
                 <button
                   onClick={handleBenchmarkCountSort}
                   className="inline-flex items-center gap-1 hover:text-primary transition-colors"
                   title="Sort by number of benchmarks"
                 >
-                  <span className="hidden md:inline"># Benchmarks</span>
-                  <span className="md:hidden">#</span>
+                  <span>#</span>
                   <span className="flex flex-col">
                     <ChevronUp
                       className={cn(
@@ -276,9 +276,6 @@ export function LeaderboardTable({
                   </span>
                 </button>
               </th>
-              <th className="hidden md:table-cell px-4 py-3 text-left font-semibold">
-                Organization
-              </th>
           </tr>
         </thead>
         <tbody>
@@ -291,7 +288,7 @@ export function LeaderboardTable({
                 key={ranking.modelId as string}
                 className="border-b transition-colors hover:bg-muted/50"
               >
-                <td className="sticky left-0 z-10 bg-background px-2 md:px-4 py-2 md:py-3 border-r">
+                <td className="sticky left-0 z-10 bg-background px-2 py-2 border-r">
                   <div className="flex items-center gap-1 md:gap-2">
                     <Link
                       href={`/models/${ranking.modelId}`}
@@ -315,40 +312,34 @@ export function LeaderboardTable({
                     {model.architecture} ({model.params})
                   </div>
                 </td>
-                {benchmarks.map((benchmark) => {
+                {sortedBenchmarks.map((benchmark) => {
                   const integerRank = benchmarkIntegerRanks[benchmark.id]?.get(ranking.modelId as string);
                   const total = benchmarkModelCounts[benchmark.id];
-                  const medal = integerRank ? getMedal(integerRank) : null;
 
                   return (
-                    <td key={benchmark.id} className="px-2 md:px-4 py-2 md:py-3 text-center">
+                    <td key={benchmark.id} className="px-1 py-2 text-center">
                       {integerRank !== undefined ? (
-                        <div className="flex items-center justify-center gap-1">
-                          {medal && <span className="text-lg">{medal}</span>}
-                          <Badge
-                            variant={integerRank <= 3 ? "default" : "secondary"}
-                            className={cn(
-                              integerRank === 1 && "bg-yellow-500 hover:bg-yellow-600",
-                              integerRank === 2 && "bg-gray-400 hover:bg-gray-500",
-                              integerRank === 3 && "bg-amber-600 hover:bg-amber-700"
-                            )}
-                          >
-                            {integerRank}<span className="text-[0.7em] opacity-70">/{total}</span>
-                          </Badge>
-                        </div>
+                        <Badge
+                          variant={integerRank <= 3 ? "default" : "secondary"}
+                          className={cn(
+                            "text-[10px] px-1.5",
+                            integerRank === 1 && "bg-yellow-500 hover:bg-yellow-600",
+                            integerRank === 2 && "bg-gray-400 hover:bg-gray-500",
+                            integerRank === 3 && "bg-amber-600 hover:bg-amber-700"
+                          )}
+                        >
+                          {integerRank}<span className="opacity-70">/{total}</span>
+                        </Badge>
                       ) : (
                         <span className="text-muted-foreground">-</span>
                       )}
                     </td>
                   );
                 })}
-                <td className="px-2 md:px-4 py-2 md:py-3 text-center">
-                  <Badge variant="outline" className="font-medium">
+                <td className="px-1 py-2 text-center">
+                  <Badge variant="outline" className="font-medium text-[10px] px-1.5">
                     {ranking.benchmarkCount || 0}
                   </Badge>
-                </td>
-                <td className="hidden md:table-cell px-4 py-3 text-muted-foreground">
-                  {model.organization}
                 </td>
               </tr>
             );

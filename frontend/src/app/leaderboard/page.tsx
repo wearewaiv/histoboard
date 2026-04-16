@@ -70,9 +70,11 @@ export default function LeaderboardPage() {
       .filter((e) => e.benchmarkCount > 0);
   }, []);
 
-  // Filter rankings based on effective selected models
+  // Filter rankings based on effective selected models, pre-sorted by benchmark count desc
   const filteredModelRankings = useMemo(() => {
-    return modelRankings.filter((ranking) => effectiveSelectedIds.has(ranking.modelId));
+    return modelRankings
+      .filter((ranking) => effectiveSelectedIds.has(ranking.modelId))
+      .sort((a, b) => ((b.benchmarkCount as number) || 0) - ((a.benchmarkCount as number) || 0));
   }, [modelRankings, effectiveSelectedIds]);
 
   return (
@@ -114,7 +116,6 @@ export default function LeaderboardPage() {
                 <div className="flex-1">
                   <LeaderboardFilters
                     filters={filters}
-                    allModelCount={models.length}
                   />
                 </div>
                 <div className="flex flex-col items-end gap-1 ml-auto self-start mt-1">

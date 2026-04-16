@@ -11,6 +11,50 @@
 import type { Result } from "./index";
 
 /**
+ * PFM-DenseBench result with all 8 segmentation metrics.
+ * `value` / `ciLower` / `ciUpper` hold the primary Mean Dice metric
+ * (inherited from Result). All other metrics are optional extras averaged
+ * across the 5 adaptation methods (Frozen, DoRA, LoRA, CNN, Transformer).
+ */
+export interface PFMDenseBenchResult extends Result {
+  /**
+   * Average mDice rank across the 5 adaptation methods (rank 1 = best).
+   * This is the primary metric shown on the official PFM-DenseBench leaderboard.
+   */
+  mDiceAvgRank?: number;
+  /** Standard deviation of per-method mDice ranks (spread across methods). */
+  mDiceRankStd?: number;
+  /** Mean IoU */
+  mIoU?: number;
+  mIoULower?: number;
+  mIoUUpper?: number;
+  /** Per-pixel accuracy */
+  pixelAccuracy?: number;
+  pixelAccuracyLower?: number;
+  pixelAccuracyUpper?: number;
+  /** Mean per-class accuracy */
+  meanAccuracy?: number;
+  meanAccuracyLower?: number;
+  meanAccuracyUpper?: number;
+  /** Frequency-weighted IoU */
+  frequencyWeightedIoU?: number;
+  frequencyWeightedIoULower?: number;
+  frequencyWeightedIoUUpper?: number;
+  /** Mean per-class precision */
+  meanPrecision?: number;
+  meanPrecisionLower?: number;
+  meanPrecisionUpper?: number;
+  /** Mean per-class recall */
+  meanRecall?: number;
+  meanRecallLower?: number;
+  meanRecallUpper?: number;
+  /** Mean per-class F1 */
+  meanF1?: number;
+  meanF1Lower?: number;
+  meanF1Upper?: number;
+}
+
+/**
  * Comprehensive result with multiple metric variants.
  * Used by Stanford PathBench which reports multiple metrics per task.
  */

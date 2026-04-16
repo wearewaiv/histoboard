@@ -10,7 +10,7 @@
  * @module components/charts/ModelSizePerformanceChart
  */
 
-import { useMemo } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import {
   buildSizePerformanceData,
   ALL_BENCHMARKS,
@@ -49,6 +49,7 @@ export function ModelSizePerformanceChart({
     ALL_BENCHMARKS.map((b) => b.id),
     { initialSelection: Array.from(DEFAULT_SIZE_PERF_BENCHMARKS) },
   );
+  const [excludedModelIds, setExcludedModelIds] = useState<Set<string>>(new Set());
 
   // -- Derived labels --
   const yAxisLabel = useBenchmarkAxisLabel(
@@ -58,9 +59,41 @@ export function ModelSizePerformanceChart({
   );
 
   // -- Data --
-  const dataPoints = useMemo(
+  const allDataPoints = useMemo(
     () => buildSizePerformanceData(models, tasks, results, bench.selected),
     [models, tasks, results, bench.selected],
+  );
+  // Reset exclusions whenever the set of available models changes (e.g. benchmark switch)
+  const availableModelKey = useMemo(
+    () => allDataPoints.map((d) => d.modelId).sort().join(","),
+    [allDataPoints],
+  );
+  useEffect(() => { setExcludedModelIds(new Set()); }, [availableModelKey]);
+
+  const availableModelOptions = useMemo(
+    () => allDataPoints.map((d) => ({ id: d.modelId, label: d.modelName })),
+    [allDataPoints],
+  );
+  const selectedModelIds = useMemo(
+    () => new Set(allDataPoints.map((d) => d.modelId).filter((id) => !excludedModelIds.has(id))),
+    [allDataPoints, excludedModelIds],
+  );
+  const toggleModel = useCallback((id: string) => {
+    setExcludedModelIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
+  const selectAllModels = useCallback(() => setExcludedModelIds(new Set()), []);
+  const clearAllModels = useCallback(
+    () => setExcludedModelIds(new Set(allDataPoints.map((d) => d.modelId))),
+    [allDataPoints],
+  );
+
+  const dataPoints = useMemo(
+    () => allDataPoints.filter((d) => !excludedModelIds.has(d.modelId)),
+    [allDataPoints, excludedModelIds],
   );
 
   const regression = useMemo(() => {
@@ -134,6 +167,18 @@ export function ModelSizePerformanceChart({
             onToggle={bench.toggle}
             onSelectAll={bench.selectAll}
             onClearAll={bench.clearAll}
+            size="sm"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">Models:</span>
+          <MultiSelectDropdown
+            label="Models"
+            options={availableModelOptions}
+            selectedIds={selectedModelIds}
+            onToggle={toggleModel}
+            onSelectAll={selectAllModels}
+            onClearAll={clearAllModels}
             size="sm"
           />
         </div>

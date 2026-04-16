@@ -43,13 +43,14 @@ export default function HomePage() {
   const benchmarkRanks = computeBenchmarkRanks(rankings);
 
   // Get top N models for a benchmark, using pre-computed benchmark-aware ranks.
-  // Includes all models whose rank is ≤ maxRank so tied positions are fully represented.
-  const getTopModels = (benchmarkId: string, maxRank: number = 3) => {
+  // Returns at most maxDisplay models sorted by rank (ties preserved in rank order).
+  const getTopModels = (benchmarkId: string, maxDisplay: number = 4) => {
     const rankData = benchmarkRanks[benchmarkId];
     if (!rankData) return [];
     return [...rankData.ranks.entries()]
-      .filter(([modelId, rank]) => !EXCLUDED_MODEL_IDS.has(modelId) && rank <= maxRank)
+      .filter(([modelId]) => !EXCLUDED_MODEL_IDS.has(modelId))
       .sort((a, b) => a[1] - b[1])
+      .slice(0, maxDisplay)
       .map(([modelId, rank]) => ({
         modelId,
         rank,
@@ -58,13 +59,24 @@ export default function HomePage() {
       }));
   };
 
-  // Get top 3 for each benchmark
-  const podiums = benchmarks.map(benchmark => ({
-    benchmark,
-    topModels: getTopModels(benchmark.id, 3),
-  }));
+  // Get top 4 for each benchmark, sorted A→Z by shortName
+  const podiums = [...benchmarks]
+    .sort((a, b) => a.shortName.localeCompare(b.shortName))
+    .map(benchmark => ({
+      benchmark,
+      topModels: getTopModels(benchmark.id, 4),
+    }));
 
-  const MEDALS: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
+  // Medals by unique-rank position: tied models share the same medal,
+  // and the next distinct rank moves to the next medal slot.
+  // e.g. THUNDER ranks [1,2,2,4] → unique slots [🥇,🥈,🥉] → rank4 gets 🥉
+  // e.g. normal ranks [1,2,3,4] → unique slots [🥇,🥈,🥉,🍫]
+  const SLOT_MEDALS: string[] = ["🥇", "🥈", "🥉", "🍫"];
+  const getMedal = (rank: number, topModels: { rank: number }[]) => {
+    const uniqueRanks = [...new Set(topModels.map(e => e.rank))];
+    const slotIndex = uniqueRanks.indexOf(rank);
+    return SLOT_MEDALS[slotIndex] ?? "🍫";
+  };
 
   // Podium Card Component (shows top 3 with medals)
   const PodiumCard = ({ benchmark, topModels }: { benchmark: Benchmark; topModels: ReturnType<typeof getTopModels> }) => {
@@ -83,7 +95,7 @@ export default function HomePage() {
         <CardContent className="space-y-1.5">
           {topModels.map((entry) => (
             <div key={entry.modelId} className="flex items-center gap-2">
-              <span className="text-base">{MEDALS[entry.rank]}</span>
+              <span className="text-base">{getMedal(entry.rank, topModels)}</span>
               <Link
                 href={`/models/${entry.modelId}`}
                 className="text-sm font-medium text-primary hover:underline truncate"

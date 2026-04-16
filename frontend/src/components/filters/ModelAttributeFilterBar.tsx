@@ -145,6 +145,8 @@ export function ModelAttributeFilterBar({
         onClearAll={clearAllLicenses}
       />
 
+      {children}
+
       <Button
         variant="outline"
         size="sm"
@@ -153,8 +155,6 @@ export function ModelAttributeFilterBar({
       >
         Reset All
       </Button>
-
-      {children}
     </>
   );
 }
