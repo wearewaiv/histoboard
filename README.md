@@ -35,8 +35,8 @@ Histoboard provides a **unified view** of pathology foundation model performance
 
 | Metric | Count |
 |--------|-------|
-| Benchmarks | 10 |
-| Models | 45+ |
+| Benchmarks | 11 |
+| Models | 48 |
 | Evaluation Tasks | 400+ |
 | Organs/Indications | 20+ |
 
@@ -47,6 +47,7 @@ Histoboard provides a **unified view** of pathology foundation model performance
 - **Model Profiles** — Detailed view of each model's performance, architecture, and metadata
 - **Scaling Laws** — Visualize the relationship between model size and performance
 - **Timeline** — Track model releases over time
+- **News** — Chronological log of updates: new models, benchmark refreshes, and feature additions
 
 ## Supported Benchmarks
 
@@ -62,6 +63,7 @@ Histoboard provides a **unified view** of pathology foundation model performance
 | [THUNDER](https://mics-lab.github.io/thunder/) | 6 | Patch-level classification, Calibration, Robustness, Segmentation |
 | [PathoROB](https://github.com/bifold-pathomics/PathoROB) | 3 | Robustness |
 | [Plismbench](https://github.com/owkin/plism-benchmark) | 4 | Robustness |
+| [PFM-DenseBench](https://github.com/lingxitong/PFM_Segmentation) | 18 | Segmentation |
 
 Results are checked every Sunday at midnight UTC.
 
@@ -69,7 +71,7 @@ Results are checked every Sunday at midnight UTC.
 
 | Component | Technology |
 |-----------|------------|
-| Frontend | Next.js 15, React 19, TypeScript |
+| Frontend | Next.js 16, React 19, TypeScript |
 | Styling | Tailwind CSS, shadcn/ui, Radix UI |
 | Charts | Vega-Lite v5 (via vega-embed) |
 | Data | Static JSON (pre-processed) |
