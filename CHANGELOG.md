@@ -1,5 +1,59 @@
 # Changelog
 
+## 2026-04-15
+
+### Benchmarks added
+
+| Benchmark | Tasks | Description |
+|---|---|---|
+| PFM-DenseBench (`pfm_densebench`) | 18 | Dense prediction benchmark: nuclear, tissue, and gland segmentation across 18 datasets |
+
+### Models added
+
+| Model ID | Name | Organization |
+|---|---|---|
+| `ai4pathology_pathorchestra` | PathOrchestra | AI4Pathology (ViT-L/16, 307M, DINOv2, 300K+ WSIs) |
+
+### Features
+
+- **PFM-DenseBench table**: multi-metric selector (9 metrics); default view shows mDICE Rank (avg rank ± SD across 5 adaptation methods); other metrics show avg value + 95% CI; inverted color scale (lower rank = greener)
+- Extended `Result` type with optional `ciLower`/`ciUpper` fields for confidence interval display
+
+---
+
+## 2026-04-13
+
+### Data updates
+
+- Plismbench: added GenBio-PathFM results; rankings recomputed
+- THUNDER: added GenBio-PathFM results; rankings recomputed
+
+### Bug fixes
+
+- THUNDER: tied models now receive a shared rank (previously each got the next sequential rank)
+
+---
+
+## 2026-04-05
+
+### Models added
+
+| Model ID | Name | Organization |
+|---|---|---|
+| `genbio_ai_genbio_pathfm` | GenBio-PathFM | GenBio AI (ViT-g/16, 1.1B, DINOv3 + JEPA, 177k+ WSIs) |
+
+### Data updates
+
+- PathoROB: added results for GenBio-PathFM and H-Optimus-1 (3 tasks each); source footnotes added for results from external preprints
+- PathoROB rankings recomputed across all 23 models
+- Stanford source hash updated
+
+### Features
+
+- **News page** (`/news`): chronological timeline of Histoboard updates (new models, benchmark refreshes, feature additions)
+
+---
+
 ## 2026-03-18
 
 ### Models removed

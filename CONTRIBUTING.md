@@ -52,7 +52,9 @@ To add a new benchmark, you'll need to:
    }
    ```
 
-4. **Create a detailed results table component** (optional but recommended) in `frontend/src/components/tables/`.
+4. **Add rankings** in `frontend/src/data/rankings.json` — pre-computed average ranks per model.
+
+5. **Create a detailed results table component** in `frontend/src/components/tables/` and register it in `frontend/src/app/benchmarks/[id]/page.tsx`. See the [Developer Guide](DEVELOPER_GUIDE.md) for a full walkthrough.
 
 ### Adding a New Model
 
@@ -70,6 +72,7 @@ Add model metadata to `frontend/src/data/models.json`:
   "license": "open-source",
   "publicationType": "peer-reviewed",
   "modelType": "vision",
+  "trainingMethod": "DINOv2",
   "paperUrl": "https://arxiv.org/abs/...",
   "weightsUrl": "https://huggingface.co/..."
 }

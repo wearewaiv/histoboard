@@ -4,7 +4,7 @@ This document describes the high-level architecture of Histoboard, a pathology f
 
 ## System Overview
 
-Histoboard is a **static-first web application**. All benchmark data lives in JSON files that are imported at build time — there are no runtime API calls or database queries. The build produces a static HTML export deployed to Cloudflare Pages.
+Histoboard is a **static-first web application**. All benchmark data lives in JSON files that are imported at build time — there are no runtime API calls or database queries. The build produces a static HTML export deployed to GitHub Pages.
 
 ```
 JSON data files ──build──> Static HTML/JS ──deploy──> Cloudflare Pages
@@ -44,7 +44,7 @@ histoboard/
 │   │   ├── scrapers/               # Benchmark-specific scrapers
 │   │   ├── normalizers/            # Model ID normalization
 │   │   ├── exporters/              # JSON export to frontend/src/data/
-│   │   ├── config.py               # Data source definitions (10 benchmarks)
+│   │   ├── config.py               # Data source definitions (11 benchmarks)
 │   │   ├── main.py                 # Scraper orchestration
 │   │   └── monitor.py              # Weekly change detection via SHA256 hashes
 │   └── data/                       # Snapshots, hashes, change reports
@@ -75,18 +75,18 @@ Benchmark ─────────> Result <──── Task
 
 | File | Records | Description |
 |------|---------|-------------|
-| `models.json` | ~35 | Foundation model metadata (architecture, params, license, training data, URLs) |
-| `benchmarks.json` | 10 | Benchmark definitions (name, category, task count, source URLs) |
+| `models.json` | ~48 | Foundation model metadata (architecture, params, license, training data, URLs) |
+| `benchmarks.json` | 11 | Benchmark definitions (name, category, task count, source URLs) |
 | `tasks.json` | 400+ | Individual evaluation tasks (organ, metric, category, benchmark link) |
-| `results.json` | ~14,000 | Performance scores — one record per (model, task) pair |
-| `rankings.json` | ~350 | Pre-computed average ranks per (model, benchmark) pair |
+| `results.json` | ~7,700 | Performance scores — one record per (model, task) pair |
+| `rankings.json` | ~190 | Pre-computed average ranks per (model, benchmark) pair |
 
 ### Key Type Definitions (`types/index.ts`)
 
-- **`Model`** — ID, name, organization, architecture, params (string like "307M"), license (`open-source` | `non-commercial` | `closed-source`), training metadata, publication URLs
+- **`Model`** — ID, name, organization, architecture, params (string like "307M"), license (`open-source` | `non-commercial` | `closed-source`), modelType (`vision` | `vision-language`), trainingMethod, publication URLs
 - **`Benchmark`** — ID, name, shortName, category array, organ list, task count
 - **`Task`** — ID, name, benchmarkId, organ, metric (e.g. "balanced_accuracy"), category (e.g. "patch-level")
-- **`Result`** — modelId, taskId, value (float), rank (int), source (benchmark ID), retrievedAt
+- **`Result`** — modelId, taskId, value (float), rank (int), source (benchmark ID), retrievedAt; optional `ciLower`/`ciUpper` for confidence intervals
 - **`ModelRanking`** — Pre-computed average rank + task count per model per benchmark
 
 ## Data Flow
@@ -138,9 +138,10 @@ Pages using dynamic routes (`[id]`) export `generateStaticParams()` to pre-rende
 | `/models` | Model Browser | Card grid with attribute filters and search |
 | `/models/[id]` | Model Detail | Profile page with metadata, badges, per-benchmark rankings |
 | `/arena` | Arena | Head-to-head comparison of 2–5 models with task filters |
-| `/benchmarks` | Benchmark Index | Overview cards for all 10 benchmarks |
+| `/benchmarks` | Benchmark Index | Overview cards for all 11 benchmarks |
 | `/benchmarks/[id]` | Benchmark Detail | Per-benchmark results table (dispatches to custom component) |
 | `/timeline` | Timeline | Model release dates visualized chronologically |
+| `/news` | News | Chronological log of updates: new models, benchmark refreshes, feature additions |
 | `/about` | About | Project description, benchmark summaries, methodology |
 
 ### Layer 2: Hooks (`hooks/`)
@@ -193,7 +194,7 @@ React components that receive data and render UI. No business logic — that liv
 
 | Directory | Components | Description |
 |-----------|-----------|-------------|
-| `tables/` | 11 files | Benchmark result tables (1 leaderboard + 10 benchmark-specific) |
+| `tables/` | 12 files | Benchmark result tables (1 leaderboard + 11 benchmark-specific) |
 | `charts/` | 4 files | Vega-Lite chart wrappers and chart-specific data assembly |
 | `filters/` | 1 file | `ModelAttributeFilterBar` — 7 filter dropdowns shared across pages |
 | `leaderboard/` | 1 file | `LeaderboardFilters` — composes `ModelAttributeFilterBar` + model selector |
@@ -290,7 +291,7 @@ The dropdown shows "Indications (5/8)" in its trigger, with Select All / Clear A
 
 ## Benchmark Table Pattern
 
-Each of the 10 benchmarks has a dedicated table component. Most follow this standard pattern:
+Each of the 11 benchmarks has a dedicated table component. Most follow this standard pattern:
 
 ```typescript
 function MyBenchmarkDetailedTable({ models, tasks, results }) {
@@ -335,10 +336,11 @@ function MyBenchmarkDetailedTable({ models, tasks, results }) {
 | **PathoROB / PLISM** | Sorted by average value (descending) instead of average rank |
 | **THUNDER** | Manual data computation: lower-is-better metrics (ECE, ASR), rank sum sort |
 | **STAMP** | Standard pattern with search |
+| **PFM-DenseBench** | Multi-metric selector (9 options); default shows mDICE Rank (avg rank ± SD); other metrics show avg value + 95% CI; inverted color scale (lower rank = greener); uses extended `PFMDenseBenchResult` type |
 
 ## Scraper System
 
-The Python scraper monitors 10 benchmark data sources for changes.
+The Python scraper monitors 11 benchmark data sources for changes.
 
 ### Pipeline
 
