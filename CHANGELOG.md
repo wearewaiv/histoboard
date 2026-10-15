@@ -2,6 +2,12 @@
 
 ## 2026-10-15
 
+### Models added
+
+| Model ID | Name | Organization |
+|---|---|---|
+| `caris_hero` | HERO | Caris Life Sciences (ViT-G/14, 1.1B, DINOv2 + Gram anchoring, 575K WSIs; model card only, no benchmark results yet) |
+
 ### Data updates
 
 - PathoROB: added results for RudolfV-2, RudolfV-2-B and RudolfV-2-S (3 tasks each, from the RudolfV 2 preprint, footnoted like the other externally sourced rows); rankings recomputed across all 26 models; the benchmark's paper link now points to the Nature Communications publication

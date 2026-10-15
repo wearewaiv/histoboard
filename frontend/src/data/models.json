@@ -832,5 +832,19 @@
     "trainingMethod": "DINO",
     "paperUrl": "https://arxiv.org/abs/2603.14187",
     "weightsUrl": "https://huggingface.co/waticlems/Prost40M"
+  },
+  {
+    "id": "caris_hero",
+    "name": "HERO",
+    "organization": "Caris Life Sciences",
+    "architecture": "ViT-G/14",
+    "params": "1.1B",
+    "pretrainingData": "575K WSIs",
+    "publicationDate": "2026-09",
+    "license": "closed-source",
+    "publicationType": "preprint",
+    "modelType": "vision",
+    "trainingMethod": "DINOv2 + Gram anchoring",
+    "paperUrl": "https://arxiv.org/abs/2609.35943"
   }
 ]
