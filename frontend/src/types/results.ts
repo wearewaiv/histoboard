@@ -113,6 +113,8 @@ export interface CromaResult extends Result {
   bioBacc?: number;
   /** Balanced accuracy of a k-NN classifier predicting the center. Diagnostic. */
   confBacc?: number;
+  /** Disclosed pretraining overlaps this cohort's own source data. */
+  exposed?: boolean;
 
   // --- `croma_aggregate` row only -----------------------------------------
   /** Mean rank across the three cohorts by median CRoMa. */

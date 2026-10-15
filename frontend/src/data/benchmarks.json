@@ -209,7 +209,7 @@
     "description": "Robustness benchmark evaluating pathology foundation models across domain shift scenarios including TCGA 2x2 splits, Camelyon, and Tolkach ESCA datasets.",
     "url": "https://github.com/bifold-pathomics/PathoROB",
     "githubUrl": "https://github.com/bifold-pathomics/PathoROB",
-    "paperUrl": "https://arxiv.org/abs/2507.17845",
+    "paperUrl": "https://www.nature.com/articles/s41467-026-73923-2",
     "datasetUrl": "https://huggingface.co/collections/bifold-pathomics/pathorob",
     "resultsUrl": "https://github.com/bifold-pathomics/PathoROB#leaderboard-robustness-index",
     "organs": [

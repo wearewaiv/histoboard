@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-15
+
+### Data updates
+
+- PathoROB: added results for RudolfV-2, RudolfV-2-B and RudolfV-2-S (3 tasks each, from the RudolfV 2 preprint, footnoted like the other externally sourced rows); rankings recomputed across all 26 models; the benchmark's paper link now points to the Nature Communications publication
+- CRoMa: H-optimus-0, H-optimus-1, Prov-GigaPath, GPFM and mSTAR were republished upstream under their authors' preprocessing recipes. The shared k moved on TCGA-4x4 (71 → 81) and Tolkach-ESCA (61 → 71), so RI and MaRI shift for every encoder on those two cohorts, and conf bacc was republished for all. Mean ranks also shift because Mettle (Slideflow Labs) joined the official panel; it is not listed on Histoboard
+- CRoMa and PathoROB source hashes updated
+
+### Features
+
+- **CRoMa table**: CAMELYON and Charité data-overlap badges beside the TCGA one, from the per-cohort `exposed` flag CRoMa now publishes
+
+---
+
 ## 2026-08-24
 
 ### Benchmarks added

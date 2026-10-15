@@ -50,6 +50,27 @@ import {
 /** Virtual task carrying the panel-level ranks and flags (not a cohort). */
 const AGGREGATE_TASK_ID = "croma_aggregate";
 
+const EXPOSURE_BADGE_CLASSES =
+  "rounded bg-orange-100 px-1 text-[9px] font-medium text-orange-800";
+
+/**
+ * Per-cohort data-overlap badges, named after each cohort's source. TCGA-4×4
+ * is left out: the panel-level `tcgaExposed` flag already badges it.
+ */
+const COHORT_EXPOSURE_BADGES = [
+  {
+    taskId: "croma_camelyon",
+    label: "CAMELYON",
+    title: "Disclosed pretraining overlaps CAMELYON, the source of the Camelyon cohort",
+  },
+  {
+    taskId: "croma_tolkach_esca",
+    label: "Charité",
+    title:
+      "Institutional or source-domain overlap with Charité, the source of the Tolkach ESCA cohort",
+  },
+];
+
 // ---------------------------------------------------------------------------
 // Metric types
 // ---------------------------------------------------------------------------
@@ -368,12 +389,23 @@ export function CromaDetailedTable({
                       )}
                       {panel?.tcgaExposed && (
                         <span
-                          className="rounded bg-orange-100 px-1 text-[9px] font-medium text-orange-800"
+                          className={EXPOSURE_BADGE_CLASSES}
                           title="Disclosed pretraining overlaps TCGA, one of the three cohorts"
                         >
                           TCGA
                         </span>
                       )}
+                      {COHORT_EXPOSURE_BADGES.filter(
+                        (b) => modelResults?.get(b.taskId)?.exposed
+                      ).map((b) => (
+                        <span
+                          key={b.taskId}
+                          className={EXPOSURE_BADGE_CLASSES}
+                          title={b.title}
+                        >
+                          {b.label}
+                        </span>
+                      ))}
                     </div>
                   </td>
                   <td className={TD_AVG_CLASSES}>
@@ -442,11 +474,13 @@ export function CromaDetailedTable({
           the tail rank at once. It is a set, not an order.
         </p>
         <p className="text-xs text-muted-foreground">
-          <span className="rounded bg-orange-100 px-1 text-[9px] font-medium text-orange-800">
-            TCGA
-          </span>{" "}
-          marks encoders whose disclosed pretraining overlaps TCGA, one of the
-          three cohorts behind these ranks.
+          <span className={EXPOSURE_BADGE_CLASSES}>TCGA</span> marks encoders
+          whose disclosed pretraining overlaps TCGA, one of the three cohorts
+          behind these ranks.{" "}
+          <span className={EXPOSURE_BADGE_CLASSES}>CAMELYON</span> and{" "}
+          <span className={EXPOSURE_BADGE_CLASSES}>Charité</span> mark the same
+          overlap with the sources of the Camelyon and Tolkach ESCA cohorts (for
+          Charité, an institutional or source-domain overlap).
         </p>
         <p className="text-xs text-muted-foreground">
           CRoMa also scores DINOv2-B as a natural-image calibration floor and
