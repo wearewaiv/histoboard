@@ -2,8 +2,9 @@
 snapshots/
 reports/
 
+# Per-run CI scratch, only read later in the same job. Tracking it made every
+# weekly run differ from main, so the monitor pushed a branch each time.
+changes_detected.json
+
 # Keep the hashes file to track state
 !source_hashes.json
-
-# Keep changes detection file
-!changes_detected.json

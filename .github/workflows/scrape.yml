@@ -139,12 +139,16 @@ jobs:
             git checkout -b "$BRANCH"
             git commit -m "chore: update benchmark source hashes [skip ci]"
             git push origin "$BRANCH"
+            # Opening the PR also needs the org-level "Allow GitHub Actions to
+            # create and approve pull requests" setting. Warn rather than pass
+            # silently, so a pushed branch never sits unnoticed.
             gh pr create \
               --title "chore: update benchmark source hashes" \
               --body "Automated update of benchmark source hashes and PFM-DenseBench / CRoMa results data from the monitor workflow." \
               --base main \
               --head "$BRANCH" \
-              --label "automated" || true
+              --label "automated" \
+              || echo "::warning title=Benchmark PR not opened::Pushed $BRANCH but could not open a PR for it. Open it manually: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/pull/new/$BRANCH"
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

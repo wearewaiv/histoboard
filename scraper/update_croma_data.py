@@ -181,6 +181,26 @@ def rounded(value: float | None, digits: int = 6) -> float | None:
     return None if value is None else round(value, digits)
 
 
+def keep_unchanged_timestamps(entries: list[dict], previous: list[dict]) -> None:
+    """Reuse the stored `retrievedAt` of entries whose data did not change.
+
+    Re-stamping every entry on each run rewrote results.json even when the
+    source was untouched, so the weekly monitor pushed a no-op branch.
+    """
+    def without_timestamp(entry: dict) -> dict:
+        return {k: v for k, v in entry.items() if k != "retrievedAt"}
+
+    by_key = {(e["modelId"], e["taskId"]): e for e in previous}
+    for entry in entries:
+        old = by_key.get((entry["modelId"], entry["taskId"]))
+        if (
+            old
+            and "retrievedAt" in old
+            and without_timestamp(old) == without_timestamp(entry)
+        ):
+            entry["retrievedAt"] = old["retrievedAt"]
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -306,6 +326,9 @@ def main() -> None:
         results: list[dict] = json.load(f)
 
     kept = [r for r in results if r.get("source") != BENCHMARK_ID]
+    keep_unchanged_timestamps(
+        entries, [r for r in results if r.get("source") == BENCHMARK_ID]
+    )
     results_out = kept + entries + aggregate_entries
 
     with open(RESULTS_PATH, "w") as f:
