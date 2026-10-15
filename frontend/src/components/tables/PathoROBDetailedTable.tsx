@@ -35,6 +35,10 @@ const FOOTNOTES: { text: string; url: string }[] = [
     url: "https://arxiv.org/pdf/2601.05148",
   },
   {
+    text: "Results taken from RudolfV 2 preprint",
+    url: "https://cdn.prod.website-files.com/67adb01f31489469b513304a/6a74e2f9f1d4aef06489a3f1_RudolfV_2_260806.pdf",
+  },
+  {
     text: "Results taken from GenBio-PathFM preprint",
     url: "https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf",
   },
@@ -43,8 +47,11 @@ const FOOTNOTES: { text: string; url: string }[] = [
 // Map model ID → 1-based footnote index (into FOOTNOTES array above)
 const MODEL_FOOTNOTE: Record<string, number> = {
   aignostics_atlas_2: 1,
-  bioptimus_h_optimus_1: 2,
-  genbio_ai_genbio_pathfm: 2,
+  aignostics_rudolfv_2: 2,
+  aignostics_rudolfv_2_b: 2,
+  aignostics_rudolfv_2_s: 2,
+  bioptimus_h_optimus_1: 3,
+  genbio_ai_genbio_pathfm: 3,
 };
 
 interface PathoROBDetailedTableProps {

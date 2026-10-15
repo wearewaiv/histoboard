@@ -9,7 +9,8 @@ Fetches the committed publication CSVs from:
                            per-cohort median CRoMa + LTM10 pairs
   - camelyon.csv         ┐
   - tcga-4x4.csv         ├ per-cohort diagnostics: bio/conf balanced accuracy,
-  - tolkach-esca.csv     ┘ RI, MaRI, delta, F(0), support
+  - tolkach-esca.csv     ┘ RI, MaRI, delta, F(0), support, and whether the
+                           encoder's pretraining overlaps the cohort's source
 
 CRoMa (Cross-confounder Robustness Margin) is a signed margin in (-1, 1),
 neutral at 0: it measures how much of a model's neighbourhood structure is
@@ -243,6 +244,9 @@ def main() -> None:
                     value = rounded(to_float(cohort_row.get(src_col)))
                     if value is not None:
                         entry[field] = value
+                # Pretraining overlaps this cohort's own source (CAMELYON,
+                # TCGA or Charité); CRoMa shades these rows orange.
+                entry["exposed"] = to_bool(cohort_row.get("exposed"))
 
             # The per-cohort CSVs dropped their `delta` column upstream
             # (2026-08); it's exactly mari - ri, so derive it locally rather

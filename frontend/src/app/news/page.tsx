@@ -18,6 +18,23 @@ interface NewsItem {
 
 const NEWS: NewsItem[] = [
   {
+    date: "2026-10-15",
+    entries: [
+      {
+        text: "Updated PathoROB with the RudolfV-2 family (Aignostics), using results from the RudolfV 2 preprint. PathoROB itself is now published in Nature Communications. Check latest results for",
+        links: [
+          { label: "PathoROB", href: "/benchmarks/pathorob" },
+        ],
+      },
+      {
+        text: "Refreshed CRoMa: five encoders were re-scored under their authors' preprocessing recipes, and CAMELYON and Charité data-overlap badges now sit beside the TCGA one. Check the benchmark on",
+        links: [
+          { label: "CRoMa", href: "/benchmarks/croma" },
+        ],
+      },
+    ],
+  },
+  {
     date: "2026-08-24",
     entries: [
       {

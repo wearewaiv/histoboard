@@ -526,117 +526,132 @@
   },
   "pathorob": {
     "aignostics_atlas": {
-      "avgRank": 5.33,
+      "avgRank": 8.33,
       "taskCount": 3,
       "avgScore": 0.85
     },
     "aignostics_atlas_2": {
-      "avgRank": 1.0,
+      "avgRank": 1.5,
       "taskCount": 3,
       "avgScore": 0.928
     },
     "aignostics_rudolfv": {
-      "avgRank": 20.0,
+      "avgRank": 23.0,
       "taskCount": 3,
       "avgScore": 0.489
     },
+    "aignostics_rudolfv_2": {
+      "avgRank": 2.5,
+      "taskCount": 3,
+      "avgScore": 0.907
+    },
+    "aignostics_rudolfv_2_b": {
+      "avgRank": 4.5,
+      "taskCount": 3,
+      "avgScore": 0.896
+    },
+    "aignostics_rudolfv_2_s": {
+      "avgRank": 2.0,
+      "taskCount": 3,
+      "avgScore": 0.917
+    },
     "bioptimus_h0_mini": {
-      "avgRank": 8.5,
+      "avgRank": 11.5,
       "taskCount": 3,
       "avgScore": 0.815
     },
     "bioptimus_h_optimus_0": {
-      "avgRank": 9.33,
+      "avgRank": 12.33,
       "taskCount": 3,
       "avgScore": 0.812
     },
     "bioptimus_h_optimus_1": {
-      "avgRank": 6.33,
+      "avgRank": 9.17,
       "taskCount": 3,
       "avgScore": 0.814
     },
     "genbio_ai_genbio_pathfm": {
-      "avgRank": 2.33,
+      "avgRank": 5.0,
       "taskCount": 3,
       "avgScore": 0.888
     },
     "kaiko_ai_vit_b_8": {
-      "avgRank": 14.0,
+      "avgRank": 17.0,
       "taskCount": 3,
       "avgScore": 0.602
     },
     "lunit_vit_s_16": {
-      "avgRank": 18.0,
+      "avgRank": 21.0,
       "taskCount": 3,
       "avgScore": 0.512
     },
     "mahmood_lab_conch": {
-      "avgRank": 6.5,
+      "avgRank": 9.5,
       "taskCount": 3,
       "avgScore": 0.812
     },
     "mahmood_lab_conch_1_5": {
-      "avgRank": 4.5,
+      "avgRank": 7.5,
       "taskCount": 3,
       "avgScore": 0.852
     },
     "mahmood_lab_hipt": {
-      "avgRank": 17.0,
+      "avgRank": 20.0,
       "taskCount": 3,
       "avgScore": 0.663
     },
     "mahmood_lab_uni": {
-      "avgRank": 14.67,
+      "avgRank": 17.67,
       "taskCount": 3,
       "avgScore": 0.598
     },
     "mahmood_lab_uni2": {
-      "avgRank": 10.67,
+      "avgRank": 13.67,
       "taskCount": 3,
       "avgScore": 0.757
     },
     "microsoft_prov_gigapath": {
-      "avgRank": 16.0,
+      "avgRank": 19.0,
       "taskCount": 3,
       "avgScore": 0.63
     },
     "owkin_phikon": {
-      "avgRank": 19.67,
+      "avgRank": 22.67,
       "taskCount": 3,
       "avgScore": 0.476
     },
     "owkin_phikon_v2": {
-      "avgRank": 20.0,
+      "avgRank": 23.0,
       "taskCount": 3,
       "avgScore": 0.469
     },
     "paige_ai_virchow": {
-      "avgRank": 8.83,
+      "avgRank": 11.83,
       "taskCount": 3,
       "avgScore": 0.815
     },
     "paige_ai_virchow2": {
-      "avgRank": 4.33,
+      "avgRank": 7.33,
       "taskCount": 3,
       "avgScore": 0.861
     },
     "sichuan_ctranspath": {
-      "avgRank": 17.67,
+      "avgRank": 20.67,
       "taskCount": 3,
       "avgScore": 0.543
     },
     "sichuan_retccl": {
-      "avgRank": 17.0,
+      "avgRank": 20.0,
       "taskCount": 3,
       "avgScore": 0.596
     },
     "stanford_university_musk": {
-      "avgRank": 12.67,
+      "avgRank": 15.67,
       "taskCount": 3,
       "avgScore": 0.707
     },
     "toronto_ciga": {
-      "avgRank": 21.67,
+      "avgRank": 24.67,
       "taskCount": 3,
       "avgScore": 0.446
     }
@@ -989,119 +1004,119 @@
   },
   "croma": {
     "aignostics_rudolfv_2": {
-      "avgRank": 4.5,
+      "avgRank": 4.67,
       "taskCount": 3,
-      "avgScore": 4.5
+      "avgScore": 4.67
     },
     "aignostics_rudolfv_2_b": {
-      "avgRank": 5.5,
+      "avgRank": 6.0,
       "taskCount": 3,
-      "avgScore": 5.5
+      "avgScore": 6.0
     },
     "aignostics_rudolfv_2_s": {
-      "avgRank": 4.33,
+      "avgRank": 4.67,
       "taskCount": 3,
-      "avgScore": 4.33
+      "avgScore": 4.67
     },
     "bioptimus_h0_mini": {
-      "avgRank": 12.0,
+      "avgRank": 12.67,
       "taskCount": 3,
-      "avgScore": 12.0
+      "avgScore": 12.67
     },
     "bioptimus_h_optimus_0": {
-      "avgRank": 12.33,
+      "avgRank": 12.83,
       "taskCount": 3,
-      "avgScore": 12.33
+      "avgScore": 12.83
     },
     "bioptimus_h_optimus_1": {
-      "avgRank": 9.33,
+      "avgRank": 10.33,
       "taskCount": 3,
-      "avgScore": 9.33
+      "avgScore": 10.33
     },
     "genbio_ai_genbio_pathfm": {
-      "avgRank": 8.5,
+      "avgRank": 9.17,
       "taskCount": 3,
-      "avgScore": 8.5
+      "avgScore": 9.17
     },
     "hist_ai_hibou_b": {
-      "avgRank": 20.5,
+      "avgRank": 21.83,
       "taskCount": 3,
-      "avgScore": 20.5
+      "avgScore": 21.83
     },
     "hist_ai_hibou_l": {
-      "avgRank": 24.17,
+      "avgRank": 25.33,
       "taskCount": 3,
-      "avgScore": 24.17
+      "avgScore": 25.33
     },
     "hkust_gpfm": {
-      "avgRank": 18.33,
+      "avgRank": 18.83,
       "taskCount": 3,
-      "avgScore": 18.33
+      "avgScore": 18.83
     },
     "kaiko_ai_midnight_12k": {
-      "avgRank": 12.17,
+      "avgRank": 13.0,
       "taskCount": 3,
-      "avgScore": 12.17
+      "avgScore": 13.0
     },
     "mahmood_lab_conch": {
-      "avgRank": 9.17,
+      "avgRank": 9.67,
       "taskCount": 3,
-      "avgScore": 9.17
+      "avgScore": 9.67
     },
     "mahmood_lab_conch_1_5": {
-      "avgRank": 7.5,
+      "avgRank": 8.17,
       "taskCount": 3,
-      "avgScore": 7.5
+      "avgScore": 8.17
     },
     "mahmood_lab_uni": {
-      "avgRank": 16.0,
+      "avgRank": 16.5,
       "taskCount": 3,
-      "avgScore": 16.0
+      "avgScore": 16.5
     },
     "mahmood_lab_uni2": {
-      "avgRank": 13.33,
+      "avgRank": 14.0,
       "taskCount": 3,
-      "avgScore": 13.33
+      "avgScore": 14.0
     },
     "microsoft_prov_gigapath": {
-      "avgRank": 17.33,
+      "avgRank": 18.17,
       "taskCount": 3,
-      "avgScore": 17.33
+      "avgScore": 18.17
     },
     "owkin_phikon": {
-      "avgRank": 21.67,
+      "avgRank": 22.67,
       "taskCount": 3,
-      "avgScore": 21.67
+      "avgScore": 22.67
     },
     "owkin_phikon_v2": {
-      "avgRank": 22.5,
+      "avgRank": 23.5,
       "taskCount": 3,
-      "avgScore": 22.5
+      "avgScore": 23.5
     },
     "paige_ai_virchow": {
-      "avgRank": 12.17,
+      "avgRank": 13.0,
       "taskCount": 3,
-      "avgScore": 12.17
+      "avgScore": 13.0
     },
     "paige_ai_virchow2": {
-      "avgRank": 9.17,
+      "avgRank": 10.0,
       "taskCount": 3,
-      "avgScore": 9.17
+      "avgScore": 10.0
     },
     "radboud_prost40m": {
-      "avgRank": 24.0,
+      "avgRank": 25.0,
       "taskCount": 3,
-      "avgScore": 24.0
+      "avgScore": 25.0
     },
     "stanford_university_musk": {
-      "avgRank": 14.5,
+      "avgRank": 15.33,
       "taskCount": 3,
-      "avgScore": 14.5
+      "avgScore": 15.33
     },
     "tsinghua_hkust_mstar": {
-      "avgRank": 14.33,
+      "avgRank": 17.0,
       "taskCount": 3,
-      "avgScore": 14.33
+      "avgScore": 17.0
     },
     "waiv_mascaret": {
       "avgRank": 1.67,
@@ -1109,9 +1124,9 @@
       "avgScore": 1.67
     },
     "waiv_phaet": {
-      "avgRank": 10.0,
+      "avgRank": 10.67,
       "taskCount": 3,
-      "avgScore": 10.0
+      "avgScore": 10.67
     }
   }
 }
