@@ -32,6 +32,12 @@ const NEWS: NewsItem[] = [
           { label: "CRoMa", href: "/benchmarks/croma" },
         ],
       },
+      {
+        text: "Added HERO (Caris Life Sciences) to the Models catalogue (ViT-G/14, 1.1B params, trained with DINOv2 + Gram anchoring on 575K WSIs). Check it on",
+        links: [
+          { label: "the Models page", href: "/models/caris_hero" },
+        ],
+      },
     ],
   },
   {
