@@ -107,6 +107,26 @@ def dataset_to_task_id(dataset_name: str) -> str:
     return f"pfm_densebench_{normalized}"
 
 
+def keep_unchanged_timestamps(entries: list[dict], previous: list[dict]) -> None:
+    """Reuse the stored `retrievedAt` of entries whose data did not change.
+
+    Re-stamping every entry on each run rewrote results.json even when the
+    source was untouched, so the weekly monitor pushed a no-op branch.
+    """
+    def without_timestamp(entry: dict) -> dict:
+        return {k: v for k, v in entry.items() if k != "retrievedAt"}
+
+    by_key = {(e["modelId"], e["taskId"]): e for e in previous}
+    for entry in entries:
+        old = by_key.get((entry["modelId"], entry["taskId"]))
+        if (
+            old
+            and "retrievedAt" in old
+            and without_timestamp(old) == without_timestamp(entry)
+        ):
+            entry["retrievedAt"] = old["retrievedAt"]
+
+
 def main():
     # ------------------------------------------------------------------
     # 1. Fetch all 5 method files
@@ -246,14 +266,15 @@ def main():
     with open(RESULTS_PATH) as f:
         results: list[dict] = json.load(f)
 
-    kept = [
-        r for r in results
-        if not (
+    def is_replaced(r: dict) -> bool:
+        return (
             r.get("source") == "pfm_densebench"
             and r.get("taskId") != "pfm_densebench_avgrank"
         )
-    ]
+
+    kept = [r for r in results if not is_replaced(r)]
     inserted = list(new_entries.values())
+    keep_unchanged_timestamps(inserted, [r for r in results if is_replaced(r)])
     results_out = kept + inserted
 
     with open(RESULTS_PATH, "w") as f:
